@@ -1,0 +1,35 @@
+{
+    "number of eateries": 2,
+    "eateries": [
+        {
+            "name": "Green olive",
+            "number of dishes": 2,
+            "dishes": [
+                {
+                    "dish 1": {
+                        "calories": 400,
+                        "protein": 30
+                    }
+                },
+                {
+                    "dish 2": {
+                        "colories": 300,
+                        "protein": 20
+                    }    
+                }
+            ]
+        },
+        {
+            "name": "PDC",
+            "number of dishes": 1,
+            "dishes": [
+                {
+                    "dish 1": {
+                        "calories": 400,
+                        "protein": 30
+                    }
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,17 @@
+{
+    "numberOfExercises": 3,
+    "exercises": [
+        {
+            "name": "Running",
+            "machineUse": false
+        },
+        {
+            "name": "Plank",
+            "machineUse": false
+        },
+        {
+            "name": "Bench press",
+            "machineUse": true
+        }
+    ]
+}
