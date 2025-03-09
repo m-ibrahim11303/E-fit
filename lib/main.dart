@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'diet_screen.dart';
 import 'exercise_screen.dart';
 import 'settings_screen.dart';
+import 'forum_screen.dart';
 
 void main() {
   runApp(FitnessApp());
@@ -173,29 +174,6 @@ class _CustomButton extends StatelessWidget {
               ),
             ],
           ),
-        ),
-      ),
-    );
-  }
-}
-
-// Forum screen
-class ForumScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('Forums')),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(Icons.forum, size: 60, color: Colors.grey),
-            SizedBox(height: 20),
-            Text(
-              'Forum Feature (Placeholder)',
-              style: TextStyle(fontSize: 20, color: Colors.grey),
-            ),
-          ],
         ),
       ),
     );
