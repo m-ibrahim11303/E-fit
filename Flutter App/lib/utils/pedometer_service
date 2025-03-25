@@ -1,0 +1,45 @@
+import 'dart:async';
+import 'package:pedometer/pedometer.dart';
+import 'package:permission_handler/permission_handler.dart';
+
+class PedometerService {
+  late Stream<StepCount> _stepCountStream;
+  late Stream<PedestrianStatus> _pedestrianStatusStream;
+
+  String _status = 'unknown';
+  String _steps = '0';
+
+  final Function(String) onStatusChanged;
+  final Function(String) onStepsChanged;
+
+  PedometerService({required this.onStatusChanged, required this.onStepsChanged});
+
+  Future<bool> _checkActivityRecognitionPermission() async {
+    PermissionStatus status = await Permission.activityRecognition.request();
+    return status == PermissionStatus.granted;
+  }
+
+  Future<void> initPedometer() async {
+    if (!await _checkActivityRecognitionPermission()) {
+      return;
+    }
+
+    _pedestrianStatusStream = Pedometer.pedestrianStatusStream;
+    _pedestrianStatusStream.listen((event) {
+      _status = event.status;
+      onStatusChanged(_status);
+    }).onError((error) {
+      _status = 'Pedestrian Status not available';
+      onStatusChanged(_status);
+    });
+
+    _stepCountStream = Pedometer.stepCountStream;
+    _stepCountStream.listen((event) {
+      _steps = event.steps.toString();
+      onStepsChanged(_steps);
+    }).onError((error) {
+      _steps = 'Step Count not available';
+      onStepsChanged(_steps);
+    });
+  }
+}

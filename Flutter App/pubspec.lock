@@ -203,3 +203,8 @@ packages:
 sdks:
   dart: ">=3.6.1 <4.0.0"
   flutter: ">=3.18.0-18.0.pre.54"
+  
+dependencies:
+  flutter:
+    sdk: flutter
+  pedometer: ^3.0.0
