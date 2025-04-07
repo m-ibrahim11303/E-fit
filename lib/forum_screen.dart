@@ -34,13 +34,13 @@ class ForumScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Forums'),
-        backgroundColor: Colors.deepPurple,
+        backgroundColor: Color(0xFF562634),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           // Future: Navigate to a new post creation screen.
         },
-        backgroundColor: Colors.deepPurple,
+        backgroundColor: Color(0xFF562634),
         child: Icon(Icons.add),
       ),
       body: Container(
@@ -88,7 +88,7 @@ class ForumScreen extends StatelessWidget {
                         child: ElevatedButton(
                           onPressed: () {},
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.deepPurple,
+                            backgroundColor: Color(0xFF562634),
                             foregroundColor: Colors.white,
                           ),
                           child: Text('Post'),
@@ -115,7 +115,7 @@ class ForumScreen extends StatelessWidget {
                     Row(
                       children: [
                         CircleAvatar(
-                          backgroundColor: Colors.deepPurple,
+                          backgroundColor: Color(0xFF562634),
                           child: Text(
                             post['username'][0],
                             style: TextStyle(color: Colors.white),

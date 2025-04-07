@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'diet_screen.dart';
-import 'exercise_screen.dart';
+import 'diet_screens/diet_screen.dart';
+import 'exercise_screens/exercise_screen.dart';
 import 'settings_screen.dart';
 import 'forum_screen.dart';
+import 'analytics_screen.dart';
 
 void main() {
   runApp(FitnessApp());
@@ -12,109 +13,129 @@ class FitnessApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Fitness App',
-      theme: ThemeData(primarySwatch: Colors.blue),
       home: HomeScreen(),
     );
   }
 }
 
-// Home screen
 class HomeScreen extends StatelessWidget {
+  final List<String> imageUrls = [
+    'https://example.com/top-image1.jpg',
+    'https://example.com/top-image2.jpg',
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [Colors.red.shade900, Colors.deepOrange.shade300],
-          ),
-        ),
+        color: Colors.white,
         child: Column(
           children: [
-            // App Bar with Settings Button
-            Padding(
-              padding: EdgeInsets.only(top: 40, right: 20),
-              child: Align(
-                alignment: Alignment.topRight,
-                child: IconButton(
-                  icon: Icon(Icons.settings, size: 30, color: Colors.white),
-                  onPressed:
-                      () => Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (_) => SettingsScreen()),
+            // Top Section with Vertical Images
+            Expanded(
+              flex: 2,
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Column(
+                  children: [
+                    // App Bar
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        IconButton(
+                          icon: Icon(Icons.settings, size: 30, color: Colors.black),
+                          onPressed: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (_) => SettingsScreen()),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 20),
+                    // Vertical Image Stack
+                    Expanded(
+                      child: Column(
+                        children: [
+                          Expanded(
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(vertical: 8.0),
+                              child: Image.network(
+                                imageUrls[0],
+                                fit: BoxFit.cover,
+                                loadingBuilder: (context, child, loadingProgress) {
+                                  if (loadingProgress == null) return child;
+                                  return Center(child: CircularProgressIndicator());
+                                },
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(vertical: 8.0),
+                              child: Image.network(
+                                imageUrls[1],
+                                fit: BoxFit.cover,
+                                loadingBuilder: (context, child, loadingProgress) {
+                                  if (loadingProgress == null) return child;
+                                  return Center(child: CircularProgressIndicator());
+                                },
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
+                    ),
+                  ],
                 ),
               ),
             ),
-            SizedBox(height: 20),
-            // App Title
-            Text(
-              'E-fit',
-              style: TextStyle(
-                fontSize: 32,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              ),
-            ),
-            SizedBox(height: 40),
-            // Scrollable Buttons
+            // Bottom Section with 2x2 Grid Buttons
             Expanded(
+              flex: 3,
               child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20),
-                child: ListView(
-                  shrinkWrap: true,
+                padding: const EdgeInsets.all(20.0),
+                child: GridView.count(
+                  crossAxisCount: 2,
+                  mainAxisSpacing: 20,
+                  crossAxisSpacing: 20,
+                  childAspectRatio: 1.2,
                   children: [
                     _CustomButton(
                       icon: Icons.fitness_center,
                       label: 'Exercises',
-                      color: Colors.orange.shade400,
-                      onPressed:
-                          () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => ExercisesScreen(),
-                            ),
-                          ),
+                      color: Color(0xFF562634),
+                      onPressed: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => ExercisesScreen()),
+                      ),
                     ),
-                    SizedBox(height: 16),
                     _CustomButton(
                       icon: Icons.restaurant,
                       label: 'Diet',
-                      color: Colors.green.shade400,
-                      onPressed:
-                          () => Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (_) => DietScreen()),
-                          ),
+                      color: Color(0xFF562634),
+                      onPressed: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => DietScreen()),
+                      ),
                     ),
-                    SizedBox(height: 16),
                     _CustomButton(
                       icon: Icons.analytics,
                       label: 'Analytics',
-                      color: Colors.blue.shade400,
-                      onPressed:
-                          () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => AnalyticsScreen(),
-                            ),
-                          ),
+                      color: Color(0xFF562634),
+                      onPressed: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => AnalyticsScreen()),
+                      ),
                     ),
-                    SizedBox(height: 16),
                     _CustomButton(
                       icon: Icons.forum,
                       label: 'Forums',
-                      color: Colors.teal.shade400,
-                      onPressed:
-                          () => Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (_) => ForumScreen()),
-                          ),
+                      color: Color(0xFF562634),
+                      onPressed: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => ForumScreen()),
+                      ),
                     ),
-                    SizedBox(height: 16), // Add bottom padding
                   ],
                 ),
               ),
@@ -126,7 +147,7 @@ class HomeScreen extends StatelessWidget {
   }
 }
 
-// Custom Button Widget
+// Custom Button Widget (updated for grid layout)
 class _CustomButton extends StatelessWidget {
   final IconData icon;
   final String label;
@@ -149,15 +170,9 @@ class _CustomButton extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
         onTap: onPressed,
         child: Container(
-          width: double.infinity, // Make buttons full width
-          padding: EdgeInsets.symmetric(vertical: 20),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [color.withValues(), color],
-            ),
+            color: color,
           ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -179,4 +194,3 @@ class _CustomButton extends StatelessWidget {
     );
   }
 }
-

@@ -8,13 +8,15 @@
                 {
                     "dish 1": {
                         "calories": 400,
-                        "protein": 30
+                        "protein": 30,
+                        "description": "Very tasty very great"
                     }
                 },
                 {
                     "dish 2": {
                         "colories": 300,
-                        "protein": 20
+                        "protein": 20,
+                        "description": "Very tasty very great"
                     }    
                 }
             ]
@@ -26,7 +28,8 @@
                 {
                     "dish 1": {
                         "calories": 400,
-                        "protein": 30
+                        "protein": 30,
+                        "description": "Very tasty very great"
                     }
                 }
             ]
