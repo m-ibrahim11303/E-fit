@@ -26,6 +26,32 @@ export const addExercise = async (req, res) => {
   }
 };
 
+
+// Get all exercises stored in the DB
+export const getAllExercises = async (req, res) => {
+  try {
+    const exercises = await Exercise.find();
+
+    // Formatting for frontend
+    const formattedExercises = exercises.map(ex => ({
+      name: ex.name,
+      machineUse: ex.usesMachine,
+      timer: ex.type === "timer"
+    }));
+
+    const response = {
+      numberOfExercises: formattedExercises.length,
+      exercises: formattedExercises
+    };
+
+    return res.status(200).json(response);
+
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+};
+
+
 // Add exercise to user records
 export const addUserExercise = async (req, res) => {
   try {
