@@ -1,22 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:step_sync/step_sync.dart'; // Import your package
-
-void main() {
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Step Counter',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: StepCounterScreen(),
-    );
-  }
-}
+import 'dart:async';
+import 'package:pedometer/pedometer.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class StepCounterScreen extends StatefulWidget {
   @override
@@ -24,19 +9,64 @@ class StepCounterScreen extends StatefulWidget {
 }
 
 class _StepCounterScreenState extends State<StepCounterScreen> {
-  // Create an instance of StepCounter
-  final StepCounter stepCounter = StepCounter();
+  late Stream<StepCount> _stepCountStream;
+  late Stream<PedestrianStatus> _pedestrianStatusStream;
+  String _status = '?', _steps = '?';
 
   @override
   void initState() {
     super.initState();
-    stepCounter.updateSteps(); // Start listening to step updates
+    initPlatformState();
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-    // No need to call dispose() on the StepCounter instance
+  void onStepCount(StepCount event) {
+    setState(() {
+      _steps = event.steps.toString();
+    });
+  }
+
+  void onPedestrianStatusChanged(PedestrianStatus event) {
+    setState(() {
+      _status = event.status;
+    });
+  }
+
+  void onPedestrianStatusError(error) {
+    setState(() {
+      _status = 'Pedestrian Status not available';
+    });
+  }
+
+  void onStepCountError(error) {
+    setState(() {
+      _steps = 'Step Count not available';
+    });
+  }
+
+  Future<bool> _checkActivityRecognitionPermission() async {
+    bool granted = await Permission.activityRecognition.isGranted;
+
+    if (!granted) {
+      granted = await Permission.activityRecognition.request() ==
+          PermissionStatus.granted;
+    }
+
+    return granted;
+  }
+
+  Future<void> initPlatformState() async {
+    bool granted = await _checkActivityRecognitionPermission();
+    if (!granted) {
+      // optionally: show a dialog here
+    }
+
+    _pedestrianStatusStream = Pedometer.pedestrianStatusStream;
+    _stepCountStream = Pedometer.stepCountStream;
+
+    _pedestrianStatusStream
+        .listen(onPedestrianStatusChanged)
+        .onError(onPedestrianStatusError);
+    _stepCountStream.listen(onStepCount).onError(onStepCountError);
   }
 
   @override
@@ -46,40 +76,28 @@ class _StepCounterScreenState extends State<StepCounterScreen> {
         title: Text('Step Counter'),
       ),
       body: Center(
-        child: StreamBuilder<int>(
-          stream: stepCounter.stepStream, // Listen to the step count stream
-          builder: (context, snapshot) {
-            // Handle the stream's data
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return CircularProgressIndicator();
-            } else if (snapshot.hasError) {
-              return Text('Error: ${snapshot.error}');
-            } else if (snapshot.hasData) {
-              return Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  // Display the current step count
-                  Text(
-                    'Steps Taken: ${snapshot.data}',
-                    style: TextStyle(fontSize: 24),
-                  ),
-                  SizedBox(height: 20),
-                  // Button to reset the step count
-                  ElevatedButton(
-                    onPressed: () {
-                      setState(() {
-                        stepCounter
-                            .resetSteps(); // Reset step count when the button is pressed
-                      });
-                    },
-                    child: Text('Reset Steps'),
-                  ),
-                ],
-              );
-            } else {
-              return Text('No data available');
-            }
-          },
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text('Steps Taken', style: TextStyle(fontSize: 30)),
+            Text(_steps, style: TextStyle(fontSize: 60)),
+            SizedBox(height: 40),
+            Text('Pedestrian Status', style: TextStyle(fontSize: 30)),
+            Icon(
+              _status == 'walking'
+                  ? Icons.directions_walk
+                  : _status == 'stopped'
+                      ? Icons.accessibility_new
+                      : Icons.error,
+              size: 100,
+            ),
+            Text(
+              _status,
+              style: _status == 'walking' || _status == 'stopped'
+                  ? TextStyle(fontSize: 30)
+                  : TextStyle(fontSize: 20, color: Colors.red),
+            ),
+          ],
         ),
       ),
     );

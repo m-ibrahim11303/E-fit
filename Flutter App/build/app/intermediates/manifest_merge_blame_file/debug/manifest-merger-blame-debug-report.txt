@@ -15,206 +15,207 @@
 15    <uses-permission android:name="android.permission.INTERNET" />
 15-->C:\Users\HP\Documents\GitHub\E-fit\Flutter App\android\app\src\main\AndroidManifest.xml:2:5-67
 15-->C:\Users\HP\Documents\GitHub\E-fit\Flutter App\android\app\src\main\AndroidManifest.xml:2:22-64
-16    <uses-permission android:name="android.permission.BODY_SENSORS" />
-16-->C:\Users\HP\Documents\GitHub\E-fit\Flutter App\android\app\src\main\AndroidManifest.xml:3:5-71
-16-->C:\Users\HP\Documents\GitHub\E-fit\Flutter App\android\app\src\main\AndroidManifest.xml:3:22-68
-17    <!--
-18 Required to query activities that can process text, see:
-19         https://developer.android.com/training/package-visibility and
-20         https://developer.android.com/reference/android/content/Intent#ACTION_PROCESS_TEXT.
-21
-22         In particular, this is used by the Flutter engine in io.flutter.plugin.text.ProcessTextPlugin.
-23    -->
-24    <queries>
-24-->C:\Users\HP\Documents\GitHub\E-fit\Flutter App\android\app\src\main\AndroidManifest.xml:41:5-46:15
-25        <intent>
-25-->C:\Users\HP\Documents\GitHub\E-fit\Flutter App\android\app\src\main\AndroidManifest.xml:42:9-45:18
-26            <action android:name="android.intent.action.PROCESS_TEXT" />
-26-->C:\Users\HP\Documents\GitHub\E-fit\Flutter App\android\app\src\main\AndroidManifest.xml:43:13-72
-26-->C:\Users\HP\Documents\GitHub\E-fit\Flutter App\android\app\src\main\AndroidManifest.xml:43:21-70
-27
-28            <data android:mimeType="text/plain" />
-28-->C:\Users\HP\Documents\GitHub\E-fit\Flutter App\android\app\src\main\AndroidManifest.xml:44:13-50
-28-->C:\Users\HP\Documents\GitHub\E-fit\Flutter App\android\app\src\main\AndroidManifest.xml:44:19-48
-29        </intent>
-30    </queries>
-31
-32    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-32-->[:flutter_background_service_android] C:\Users\HP\Documents\GitHub\E-fit\Flutter App\build\flutter_background_service_android\intermediates\merged_manifest\debug\AndroidManifest.xml:7:5-77
-32-->[:flutter_background_service_android] C:\Users\HP\Documents\GitHub\E-fit\Flutter App\build\flutter_background_service_android\intermediates\merged_manifest\debug\AndroidManifest.xml:7:22-74
-33    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-33-->[:flutter_background_service_android] C:\Users\HP\Documents\GitHub\E-fit\Flutter App\build\flutter_background_service_android\intermediates\merged_manifest\debug\AndroidManifest.xml:8:5-81
-33-->[:flutter_background_service_android] C:\Users\HP\Documents\GitHub\E-fit\Flutter App\build\flutter_background_service_android\intermediates\merged_manifest\debug\AndroidManifest.xml:8:22-78
-34    <uses-permission android:name="android.permission.WAKE_LOCK" />
-34-->[:flutter_background_service_android] C:\Users\HP\Documents\GitHub\E-fit\Flutter App\build\flutter_background_service_android\intermediates\merged_manifest\debug\AndroidManifest.xml:9:5-68
-34-->[:flutter_background_service_android] C:\Users\HP\Documents\GitHub\E-fit\Flutter App\build\flutter_background_service_android\intermediates\merged_manifest\debug\AndroidManifest.xml:9:22-65
-35
-36    <permission
-36-->[androidx.core:core:1.13.1] C:\Users\HP\.gradle\caches\transforms-3\6f9a65baaf12c9cf4e60f5516557d16b\transformed\core-1.13.1\AndroidManifest.xml:22:5-24:47
-37        android:name="com.example.flutter_application_1.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
-37-->[androidx.core:core:1.13.1] C:\Users\HP\.gradle\caches\transforms-3\6f9a65baaf12c9cf4e60f5516557d16b\transformed\core-1.13.1\AndroidManifest.xml:23:9-81
-38        android:protectionLevel="signature" />
-38-->[androidx.core:core:1.13.1] C:\Users\HP\.gradle\caches\transforms-3\6f9a65baaf12c9cf4e60f5516557d16b\transformed\core-1.13.1\AndroidManifest.xml:24:9-44
-39
-40    <uses-permission android:name="com.example.flutter_application_1.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
-40-->[androidx.core:core:1.13.1] C:\Users\HP\.gradle\caches\transforms-3\6f9a65baaf12c9cf4e60f5516557d16b\transformed\core-1.13.1\AndroidManifest.xml:26:5-97
-40-->[androidx.core:core:1.13.1] C:\Users\HP\.gradle\caches\transforms-3\6f9a65baaf12c9cf4e60f5516557d16b\transformed\core-1.13.1\AndroidManifest.xml:26:22-94
-41
-42    <application
-43        android:name="android.app.Application"
-44        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
-44-->[androidx.core:core:1.13.1] C:\Users\HP\.gradle\caches\transforms-3\6f9a65baaf12c9cf4e60f5516557d16b\transformed\core-1.13.1\AndroidManifest.xml:28:18-86
-45        android:debuggable="true"
-46        android:extractNativeLibs="true"
-47        android:icon="@mipmap/ic_launcher"
-48        android:label="flutter_application_1" >
-49        <activity
-50            android:name="com.example.flutter_application_1.MainActivity"
-51            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
-52            android:exported="true"
-53            android:hardwareAccelerated="true"
-54            android:launchMode="singleTop"
-55            android:taskAffinity=""
-56            android:theme="@style/LaunchTheme"
-57            android:windowSoftInputMode="adjustResize" >
-58
-59            <!--
-60                 Specifies an Android theme to apply to this Activity as soon as
-61                 the Android process has started. This theme is visible to the user
-62                 while the Flutter UI initializes. After that, this theme continues
-63                 to determine the Window background behind the Flutter UI.
-64            -->
-65            <meta-data
-66                android:name="io.flutter.embedding.android.NormalTheme"
-67                android:resource="@style/NormalTheme" />
-68
-69            <intent-filter>
-70                <action android:name="android.intent.action.MAIN" />
-71
-72                <category android:name="android.intent.category.LAUNCHER" />
-73            </intent-filter>
-74        </activity>
-75        <!--
-76             Don't delete the meta-data below.
-77             This is used by the Flutter tool to generate GeneratedPluginRegistrant.java
-78        -->
-79        <meta-data
-80            android:name="flutterEmbedding"
-81            android:value="2" />
-82
-83        <service
-83-->[:flutter_background_service_android] C:\Users\HP\Documents\GitHub\E-fit\Flutter App\build\flutter_background_service_android\intermediates\merged_manifest\debug\AndroidManifest.xml:12:9-16:44
-84            android:name="id.flutter.flutter_background_service.BackgroundService"
-84-->[:flutter_background_service_android] C:\Users\HP\Documents\GitHub\E-fit\Flutter App\build\flutter_background_service_android\intermediates\merged_manifest\debug\AndroidManifest.xml:13:13-83
-85            android:enabled="true"
-85-->[:flutter_background_service_android] C:\Users\HP\Documents\GitHub\E-fit\Flutter App\build\flutter_background_service_android\intermediates\merged_manifest\debug\AndroidManifest.xml:14:13-35
-86            android:exported="true"
-86-->[:flutter_background_service_android] C:\Users\HP\Documents\GitHub\E-fit\Flutter App\build\flutter_background_service_android\intermediates\merged_manifest\debug\AndroidManifest.xml:15:13-36
-87            android:stopWithTask="false" />
-87-->[:flutter_background_service_android] C:\Users\HP\Documents\GitHub\E-fit\Flutter App\build\flutter_background_service_android\intermediates\merged_manifest\debug\AndroidManifest.xml:16:13-41
-88
-89        <receiver
-89-->[:flutter_background_service_android] C:\Users\HP\Documents\GitHub\E-fit\Flutter App\build\flutter_background_service_android\intermediates\merged_manifest\debug\AndroidManifest.xml:18:9-21:39
-90            android:name="id.flutter.flutter_background_service.WatchdogReceiver"
-90-->[:flutter_background_service_android] C:\Users\HP\Documents\GitHub\E-fit\Flutter App\build\flutter_background_service_android\intermediates\merged_manifest\debug\AndroidManifest.xml:19:13-82
-91            android:enabled="true"
-91-->[:flutter_background_service_android] C:\Users\HP\Documents\GitHub\E-fit\Flutter App\build\flutter_background_service_android\intermediates\merged_manifest\debug\AndroidManifest.xml:20:13-35
-92            android:exported="true" />
-92-->[:flutter_background_service_android] C:\Users\HP\Documents\GitHub\E-fit\Flutter App\build\flutter_background_service_android\intermediates\merged_manifest\debug\AndroidManifest.xml:21:13-36
-93        <receiver
-93-->[:flutter_background_service_android] C:\Users\HP\Documents\GitHub\E-fit\Flutter App\build\flutter_background_service_android\intermediates\merged_manifest\debug\AndroidManifest.xml:22:9-31:20
-94            android:name="id.flutter.flutter_background_service.BootReceiver"
-94-->[:flutter_background_service_android] C:\Users\HP\Documents\GitHub\E-fit\Flutter App\build\flutter_background_service_android\intermediates\merged_manifest\debug\AndroidManifest.xml:23:13-78
-95            android:enabled="true"
-95-->[:flutter_background_service_android] C:\Users\HP\Documents\GitHub\E-fit\Flutter App\build\flutter_background_service_android\intermediates\merged_manifest\debug\AndroidManifest.xml:24:13-35
-96            android:exported="true" >
-96-->[:flutter_background_service_android] C:\Users\HP\Documents\GitHub\E-fit\Flutter App\build\flutter_background_service_android\intermediates\merged_manifest\debug\AndroidManifest.xml:25:13-36
-97            <intent-filter>
-97-->[:flutter_background_service_android] C:\Users\HP\Documents\GitHub\E-fit\Flutter App\build\flutter_background_service_android\intermediates\merged_manifest\debug\AndroidManifest.xml:26:13-30:29
-98                <action android:name="android.intent.action.BOOT_COMPLETED" />
-98-->[:flutter_background_service_android] C:\Users\HP\Documents\GitHub\E-fit\Flutter App\build\flutter_background_service_android\intermediates\merged_manifest\debug\AndroidManifest.xml:27:17-79
-98-->[:flutter_background_service_android] C:\Users\HP\Documents\GitHub\E-fit\Flutter App\build\flutter_background_service_android\intermediates\merged_manifest\debug\AndroidManifest.xml:27:25-76
-99                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
-99-->[:flutter_background_service_android] C:\Users\HP\Documents\GitHub\E-fit\Flutter App\build\flutter_background_service_android\intermediates\merged_manifest\debug\AndroidManifest.xml:28:17-82
-99-->[:flutter_background_service_android] C:\Users\HP\Documents\GitHub\E-fit\Flutter App\build\flutter_background_service_android\intermediates\merged_manifest\debug\AndroidManifest.xml:28:25-79
-100                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
-100-->[:flutter_background_service_android] C:\Users\HP\Documents\GitHub\E-fit\Flutter App\build\flutter_background_service_android\intermediates\merged_manifest\debug\AndroidManifest.xml:29:17-84
-100-->[:flutter_background_service_android] C:\Users\HP\Documents\GitHub\E-fit\Flutter App\build\flutter_background_service_android\intermediates\merged_manifest\debug\AndroidManifest.xml:29:25-81
-101            </intent-filter>
-102        </receiver>
-103
-104        <uses-library
-104-->[androidx.window:window:1.2.0] C:\Users\HP\.gradle\caches\transforms-3\ccc4a5834963eab3ddfc6002627a8dfd\transformed\jetified-window-1.2.0\AndroidManifest.xml:23:9-25:40
-105            android:name="androidx.window.extensions"
-105-->[androidx.window:window:1.2.0] C:\Users\HP\.gradle\caches\transforms-3\ccc4a5834963eab3ddfc6002627a8dfd\transformed\jetified-window-1.2.0\AndroidManifest.xml:24:13-54
-106            android:required="false" />
-106-->[androidx.window:window:1.2.0] C:\Users\HP\.gradle\caches\transforms-3\ccc4a5834963eab3ddfc6002627a8dfd\transformed\jetified-window-1.2.0\AndroidManifest.xml:25:13-37
-107        <uses-library
-107-->[androidx.window:window:1.2.0] C:\Users\HP\.gradle\caches\transforms-3\ccc4a5834963eab3ddfc6002627a8dfd\transformed\jetified-window-1.2.0\AndroidManifest.xml:26:9-28:40
-108            android:name="androidx.window.sidecar"
-108-->[androidx.window:window:1.2.0] C:\Users\HP\.gradle\caches\transforms-3\ccc4a5834963eab3ddfc6002627a8dfd\transformed\jetified-window-1.2.0\AndroidManifest.xml:27:13-51
-109            android:required="false" />
-109-->[androidx.window:window:1.2.0] C:\Users\HP\.gradle\caches\transforms-3\ccc4a5834963eab3ddfc6002627a8dfd\transformed\jetified-window-1.2.0\AndroidManifest.xml:28:13-37
-110
-111        <provider
-111-->[androidx.lifecycle:lifecycle-process:2.7.0] C:\Users\HP\.gradle\caches\transforms-3\025a519efc7e7e9feceab474293f9f99\transformed\jetified-lifecycle-process-2.7.0\AndroidManifest.xml:24:9-32:20
-112            android:name="androidx.startup.InitializationProvider"
-112-->[androidx.lifecycle:lifecycle-process:2.7.0] C:\Users\HP\.gradle\caches\transforms-3\025a519efc7e7e9feceab474293f9f99\transformed\jetified-lifecycle-process-2.7.0\AndroidManifest.xml:25:13-67
-113            android:authorities="com.example.flutter_application_1.androidx-startup"
-113-->[androidx.lifecycle:lifecycle-process:2.7.0] C:\Users\HP\.gradle\caches\transforms-3\025a519efc7e7e9feceab474293f9f99\transformed\jetified-lifecycle-process-2.7.0\AndroidManifest.xml:26:13-68
-114            android:exported="false" >
-114-->[androidx.lifecycle:lifecycle-process:2.7.0] C:\Users\HP\.gradle\caches\transforms-3\025a519efc7e7e9feceab474293f9f99\transformed\jetified-lifecycle-process-2.7.0\AndroidManifest.xml:27:13-37
-115            <meta-data
-115-->[androidx.lifecycle:lifecycle-process:2.7.0] C:\Users\HP\.gradle\caches\transforms-3\025a519efc7e7e9feceab474293f9f99\transformed\jetified-lifecycle-process-2.7.0\AndroidManifest.xml:29:13-31:52
-116                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
-116-->[androidx.lifecycle:lifecycle-process:2.7.0] C:\Users\HP\.gradle\caches\transforms-3\025a519efc7e7e9feceab474293f9f99\transformed\jetified-lifecycle-process-2.7.0\AndroidManifest.xml:30:17-78
-117                android:value="androidx.startup" />
-117-->[androidx.lifecycle:lifecycle-process:2.7.0] C:\Users\HP\.gradle\caches\transforms-3\025a519efc7e7e9feceab474293f9f99\transformed\jetified-lifecycle-process-2.7.0\AndroidManifest.xml:31:17-49
-118            <meta-data
-118-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\HP\.gradle\caches\transforms-3\26f310b97a62e76c40a5d9d6f00c87c1\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:29:13-31:52
-119                android:name="androidx.profileinstaller.ProfileInstallerInitializer"
-119-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\HP\.gradle\caches\transforms-3\26f310b97a62e76c40a5d9d6f00c87c1\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:30:17-85
-120                android:value="androidx.startup" />
-120-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\HP\.gradle\caches\transforms-3\26f310b97a62e76c40a5d9d6f00c87c1\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:31:17-49
-121        </provider>
-122
-123        <receiver
-123-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\HP\.gradle\caches\transforms-3\26f310b97a62e76c40a5d9d6f00c87c1\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:34:9-52:20
-124            android:name="androidx.profileinstaller.ProfileInstallReceiver"
-124-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\HP\.gradle\caches\transforms-3\26f310b97a62e76c40a5d9d6f00c87c1\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:35:13-76
-125            android:directBootAware="false"
-125-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\HP\.gradle\caches\transforms-3\26f310b97a62e76c40a5d9d6f00c87c1\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:36:13-44
-126            android:enabled="true"
-126-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\HP\.gradle\caches\transforms-3\26f310b97a62e76c40a5d9d6f00c87c1\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:37:13-35
-127            android:exported="true"
-127-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\HP\.gradle\caches\transforms-3\26f310b97a62e76c40a5d9d6f00c87c1\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:38:13-36
-128            android:permission="android.permission.DUMP" >
-128-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\HP\.gradle\caches\transforms-3\26f310b97a62e76c40a5d9d6f00c87c1\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:39:13-57
-129            <intent-filter>
-129-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\HP\.gradle\caches\transforms-3\26f310b97a62e76c40a5d9d6f00c87c1\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:40:13-42:29
-130                <action android:name="androidx.profileinstaller.action.INSTALL_PROFILE" />
-130-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\HP\.gradle\caches\transforms-3\26f310b97a62e76c40a5d9d6f00c87c1\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:41:17-91
-130-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\HP\.gradle\caches\transforms-3\26f310b97a62e76c40a5d9d6f00c87c1\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:41:25-88
-131            </intent-filter>
-132            <intent-filter>
-132-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\HP\.gradle\caches\transforms-3\26f310b97a62e76c40a5d9d6f00c87c1\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:43:13-45:29
-133                <action android:name="androidx.profileinstaller.action.SKIP_FILE" />
-133-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\HP\.gradle\caches\transforms-3\26f310b97a62e76c40a5d9d6f00c87c1\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:44:17-85
-133-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\HP\.gradle\caches\transforms-3\26f310b97a62e76c40a5d9d6f00c87c1\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:44:25-82
-134            </intent-filter>
-135            <intent-filter>
-135-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\HP\.gradle\caches\transforms-3\26f310b97a62e76c40a5d9d6f00c87c1\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:46:13-48:29
-136                <action android:name="androidx.profileinstaller.action.SAVE_PROFILE" />
-136-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\HP\.gradle\caches\transforms-3\26f310b97a62e76c40a5d9d6f00c87c1\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:47:17-88
-136-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\HP\.gradle\caches\transforms-3\26f310b97a62e76c40a5d9d6f00c87c1\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:47:25-85
-137            </intent-filter>
-138            <intent-filter>
-138-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\HP\.gradle\caches\transforms-3\26f310b97a62e76c40a5d9d6f00c87c1\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:49:13-51:29
-139                <action android:name="androidx.profileinstaller.action.BENCHMARK_OPERATION" />
-139-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\HP\.gradle\caches\transforms-3\26f310b97a62e76c40a5d9d6f00c87c1\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:50:17-95
-139-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\HP\.gradle\caches\transforms-3\26f310b97a62e76c40a5d9d6f00c87c1\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:50:25-92
-140            </intent-filter>
-141        </receiver>
-142    </application>
-143
-144</manifest>
+16    <!-- <uses-permission android:name="android.permission.BODY_SENSORS" /> -->
+17    <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" />
+17-->C:\Users\HP\Documents\GitHub\E-fit\Flutter App\android\app\src\main\AndroidManifest.xml:4:5-79
+17-->C:\Users\HP\Documents\GitHub\E-fit\Flutter App\android\app\src\main\AndroidManifest.xml:4:22-76
+18    <!--
+19 Required to query activities that can process text, see:
+20         https://developer.android.com/training/package-visibility and
+21         https://developer.android.com/reference/android/content/Intent#ACTION_PROCESS_TEXT.
+22
+23         In particular, this is used by the Flutter engine in io.flutter.plugin.text.ProcessTextPlugin.
+24    -->
+25    <queries>
+25-->C:\Users\HP\Documents\GitHub\E-fit\Flutter App\android\app\src\main\AndroidManifest.xml:42:5-47:15
+26        <intent>
+26-->C:\Users\HP\Documents\GitHub\E-fit\Flutter App\android\app\src\main\AndroidManifest.xml:43:9-46:18
+27            <action android:name="android.intent.action.PROCESS_TEXT" />
+27-->C:\Users\HP\Documents\GitHub\E-fit\Flutter App\android\app\src\main\AndroidManifest.xml:44:13-72
+27-->C:\Users\HP\Documents\GitHub\E-fit\Flutter App\android\app\src\main\AndroidManifest.xml:44:21-70
+28
+29            <data android:mimeType="text/plain" />
+29-->C:\Users\HP\Documents\GitHub\E-fit\Flutter App\android\app\src\main\AndroidManifest.xml:45:13-50
+29-->C:\Users\HP\Documents\GitHub\E-fit\Flutter App\android\app\src\main\AndroidManifest.xml:45:19-48
+30        </intent>
+31    </queries>
+32
+33    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+33-->[:flutter_background_service_android] C:\Users\HP\Documents\GitHub\E-fit\Flutter App\build\flutter_background_service_android\intermediates\merged_manifest\debug\AndroidManifest.xml:7:5-77
+33-->[:flutter_background_service_android] C:\Users\HP\Documents\GitHub\E-fit\Flutter App\build\flutter_background_service_android\intermediates\merged_manifest\debug\AndroidManifest.xml:7:22-74
+34    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+34-->[:flutter_background_service_android] C:\Users\HP\Documents\GitHub\E-fit\Flutter App\build\flutter_background_service_android\intermediates\merged_manifest\debug\AndroidManifest.xml:8:5-81
+34-->[:flutter_background_service_android] C:\Users\HP\Documents\GitHub\E-fit\Flutter App\build\flutter_background_service_android\intermediates\merged_manifest\debug\AndroidManifest.xml:8:22-78
+35    <uses-permission android:name="android.permission.WAKE_LOCK" />
+35-->[:flutter_background_service_android] C:\Users\HP\Documents\GitHub\E-fit\Flutter App\build\flutter_background_service_android\intermediates\merged_manifest\debug\AndroidManifest.xml:9:5-68
+35-->[:flutter_background_service_android] C:\Users\HP\Documents\GitHub\E-fit\Flutter App\build\flutter_background_service_android\intermediates\merged_manifest\debug\AndroidManifest.xml:9:22-65
+36
+37    <permission
+37-->[androidx.core:core:1.13.1] C:\Users\HP\.gradle\caches\transforms-3\6f9a65baaf12c9cf4e60f5516557d16b\transformed\core-1.13.1\AndroidManifest.xml:22:5-24:47
+38        android:name="com.example.flutter_application_1.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+38-->[androidx.core:core:1.13.1] C:\Users\HP\.gradle\caches\transforms-3\6f9a65baaf12c9cf4e60f5516557d16b\transformed\core-1.13.1\AndroidManifest.xml:23:9-81
+39        android:protectionLevel="signature" />
+39-->[androidx.core:core:1.13.1] C:\Users\HP\.gradle\caches\transforms-3\6f9a65baaf12c9cf4e60f5516557d16b\transformed\core-1.13.1\AndroidManifest.xml:24:9-44
+40
+41    <uses-permission android:name="com.example.flutter_application_1.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
+41-->[androidx.core:core:1.13.1] C:\Users\HP\.gradle\caches\transforms-3\6f9a65baaf12c9cf4e60f5516557d16b\transformed\core-1.13.1\AndroidManifest.xml:26:5-97
+41-->[androidx.core:core:1.13.1] C:\Users\HP\.gradle\caches\transforms-3\6f9a65baaf12c9cf4e60f5516557d16b\transformed\core-1.13.1\AndroidManifest.xml:26:22-94
+42
+43    <application
+44        android:name="android.app.Application"
+45        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+45-->[androidx.core:core:1.13.1] C:\Users\HP\.gradle\caches\transforms-3\6f9a65baaf12c9cf4e60f5516557d16b\transformed\core-1.13.1\AndroidManifest.xml:28:18-86
+46        android:debuggable="true"
+47        android:extractNativeLibs="true"
+48        android:icon="@mipmap/ic_launcher"
+49        android:label="flutter_application_1" >
+50        <activity
+51            android:name="com.example.flutter_application_1.MainActivity"
+52            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
+53            android:exported="true"
+54            android:hardwareAccelerated="true"
+55            android:launchMode="singleTop"
+56            android:taskAffinity=""
+57            android:theme="@style/LaunchTheme"
+58            android:windowSoftInputMode="adjustResize" >
+59
+60            <!--
+61                 Specifies an Android theme to apply to this Activity as soon as
+62                 the Android process has started. This theme is visible to the user
+63                 while the Flutter UI initializes. After that, this theme continues
+64                 to determine the Window background behind the Flutter UI.
+65            -->
+66            <meta-data
+67                android:name="io.flutter.embedding.android.NormalTheme"
+68                android:resource="@style/NormalTheme" />
+69
+70            <intent-filter>
+71                <action android:name="android.intent.action.MAIN" />
+72
+73                <category android:name="android.intent.category.LAUNCHER" />
+74            </intent-filter>
+75        </activity>
+76        <!--
+77             Don't delete the meta-data below.
+78             This is used by the Flutter tool to generate GeneratedPluginRegistrant.java
+79        -->
+80        <meta-data
+81            android:name="flutterEmbedding"
+82            android:value="2" />
+83
+84        <service
+84-->[:flutter_background_service_android] C:\Users\HP\Documents\GitHub\E-fit\Flutter App\build\flutter_background_service_android\intermediates\merged_manifest\debug\AndroidManifest.xml:12:9-16:44
+85            android:name="id.flutter.flutter_background_service.BackgroundService"
+85-->[:flutter_background_service_android] C:\Users\HP\Documents\GitHub\E-fit\Flutter App\build\flutter_background_service_android\intermediates\merged_manifest\debug\AndroidManifest.xml:13:13-83
+86            android:enabled="true"
+86-->[:flutter_background_service_android] C:\Users\HP\Documents\GitHub\E-fit\Flutter App\build\flutter_background_service_android\intermediates\merged_manifest\debug\AndroidManifest.xml:14:13-35
+87            android:exported="true"
+87-->[:flutter_background_service_android] C:\Users\HP\Documents\GitHub\E-fit\Flutter App\build\flutter_background_service_android\intermediates\merged_manifest\debug\AndroidManifest.xml:15:13-36
+88            android:stopWithTask="false" />
+88-->[:flutter_background_service_android] C:\Users\HP\Documents\GitHub\E-fit\Flutter App\build\flutter_background_service_android\intermediates\merged_manifest\debug\AndroidManifest.xml:16:13-41
+89
+90        <receiver
+90-->[:flutter_background_service_android] C:\Users\HP\Documents\GitHub\E-fit\Flutter App\build\flutter_background_service_android\intermediates\merged_manifest\debug\AndroidManifest.xml:18:9-21:39
+91            android:name="id.flutter.flutter_background_service.WatchdogReceiver"
+91-->[:flutter_background_service_android] C:\Users\HP\Documents\GitHub\E-fit\Flutter App\build\flutter_background_service_android\intermediates\merged_manifest\debug\AndroidManifest.xml:19:13-82
+92            android:enabled="true"
+92-->[:flutter_background_service_android] C:\Users\HP\Documents\GitHub\E-fit\Flutter App\build\flutter_background_service_android\intermediates\merged_manifest\debug\AndroidManifest.xml:20:13-35
+93            android:exported="true" />
+93-->[:flutter_background_service_android] C:\Users\HP\Documents\GitHub\E-fit\Flutter App\build\flutter_background_service_android\intermediates\merged_manifest\debug\AndroidManifest.xml:21:13-36
+94        <receiver
+94-->[:flutter_background_service_android] C:\Users\HP\Documents\GitHub\E-fit\Flutter App\build\flutter_background_service_android\intermediates\merged_manifest\debug\AndroidManifest.xml:22:9-31:20
+95            android:name="id.flutter.flutter_background_service.BootReceiver"
+95-->[:flutter_background_service_android] C:\Users\HP\Documents\GitHub\E-fit\Flutter App\build\flutter_background_service_android\intermediates\merged_manifest\debug\AndroidManifest.xml:23:13-78
+96            android:enabled="true"
+96-->[:flutter_background_service_android] C:\Users\HP\Documents\GitHub\E-fit\Flutter App\build\flutter_background_service_android\intermediates\merged_manifest\debug\AndroidManifest.xml:24:13-35
+97            android:exported="true" >
+97-->[:flutter_background_service_android] C:\Users\HP\Documents\GitHub\E-fit\Flutter App\build\flutter_background_service_android\intermediates\merged_manifest\debug\AndroidManifest.xml:25:13-36
+98            <intent-filter>
+98-->[:flutter_background_service_android] C:\Users\HP\Documents\GitHub\E-fit\Flutter App\build\flutter_background_service_android\intermediates\merged_manifest\debug\AndroidManifest.xml:26:13-30:29
+99                <action android:name="android.intent.action.BOOT_COMPLETED" />
+99-->[:flutter_background_service_android] C:\Users\HP\Documents\GitHub\E-fit\Flutter App\build\flutter_background_service_android\intermediates\merged_manifest\debug\AndroidManifest.xml:27:17-79
+99-->[:flutter_background_service_android] C:\Users\HP\Documents\GitHub\E-fit\Flutter App\build\flutter_background_service_android\intermediates\merged_manifest\debug\AndroidManifest.xml:27:25-76
+100                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+100-->[:flutter_background_service_android] C:\Users\HP\Documents\GitHub\E-fit\Flutter App\build\flutter_background_service_android\intermediates\merged_manifest\debug\AndroidManifest.xml:28:17-82
+100-->[:flutter_background_service_android] C:\Users\HP\Documents\GitHub\E-fit\Flutter App\build\flutter_background_service_android\intermediates\merged_manifest\debug\AndroidManifest.xml:28:25-79
+101                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+101-->[:flutter_background_service_android] C:\Users\HP\Documents\GitHub\E-fit\Flutter App\build\flutter_background_service_android\intermediates\merged_manifest\debug\AndroidManifest.xml:29:17-84
+101-->[:flutter_background_service_android] C:\Users\HP\Documents\GitHub\E-fit\Flutter App\build\flutter_background_service_android\intermediates\merged_manifest\debug\AndroidManifest.xml:29:25-81
+102            </intent-filter>
+103        </receiver>
+104
+105        <uses-library
+105-->[androidx.window:window:1.2.0] C:\Users\HP\.gradle\caches\transforms-3\ccc4a5834963eab3ddfc6002627a8dfd\transformed\jetified-window-1.2.0\AndroidManifest.xml:23:9-25:40
+106            android:name="androidx.window.extensions"
+106-->[androidx.window:window:1.2.0] C:\Users\HP\.gradle\caches\transforms-3\ccc4a5834963eab3ddfc6002627a8dfd\transformed\jetified-window-1.2.0\AndroidManifest.xml:24:13-54
+107            android:required="false" />
+107-->[androidx.window:window:1.2.0] C:\Users\HP\.gradle\caches\transforms-3\ccc4a5834963eab3ddfc6002627a8dfd\transformed\jetified-window-1.2.0\AndroidManifest.xml:25:13-37
+108        <uses-library
+108-->[androidx.window:window:1.2.0] C:\Users\HP\.gradle\caches\transforms-3\ccc4a5834963eab3ddfc6002627a8dfd\transformed\jetified-window-1.2.0\AndroidManifest.xml:26:9-28:40
+109            android:name="androidx.window.sidecar"
+109-->[androidx.window:window:1.2.0] C:\Users\HP\.gradle\caches\transforms-3\ccc4a5834963eab3ddfc6002627a8dfd\transformed\jetified-window-1.2.0\AndroidManifest.xml:27:13-51
+110            android:required="false" />
+110-->[androidx.window:window:1.2.0] C:\Users\HP\.gradle\caches\transforms-3\ccc4a5834963eab3ddfc6002627a8dfd\transformed\jetified-window-1.2.0\AndroidManifest.xml:28:13-37
+111
+112        <provider
+112-->[androidx.lifecycle:lifecycle-process:2.7.0] C:\Users\HP\.gradle\caches\transforms-3\025a519efc7e7e9feceab474293f9f99\transformed\jetified-lifecycle-process-2.7.0\AndroidManifest.xml:24:9-32:20
+113            android:name="androidx.startup.InitializationProvider"
+113-->[androidx.lifecycle:lifecycle-process:2.7.0] C:\Users\HP\.gradle\caches\transforms-3\025a519efc7e7e9feceab474293f9f99\transformed\jetified-lifecycle-process-2.7.0\AndroidManifest.xml:25:13-67
+114            android:authorities="com.example.flutter_application_1.androidx-startup"
+114-->[androidx.lifecycle:lifecycle-process:2.7.0] C:\Users\HP\.gradle\caches\transforms-3\025a519efc7e7e9feceab474293f9f99\transformed\jetified-lifecycle-process-2.7.0\AndroidManifest.xml:26:13-68
+115            android:exported="false" >
+115-->[androidx.lifecycle:lifecycle-process:2.7.0] C:\Users\HP\.gradle\caches\transforms-3\025a519efc7e7e9feceab474293f9f99\transformed\jetified-lifecycle-process-2.7.0\AndroidManifest.xml:27:13-37
+116            <meta-data
+116-->[androidx.lifecycle:lifecycle-process:2.7.0] C:\Users\HP\.gradle\caches\transforms-3\025a519efc7e7e9feceab474293f9f99\transformed\jetified-lifecycle-process-2.7.0\AndroidManifest.xml:29:13-31:52
+117                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
+117-->[androidx.lifecycle:lifecycle-process:2.7.0] C:\Users\HP\.gradle\caches\transforms-3\025a519efc7e7e9feceab474293f9f99\transformed\jetified-lifecycle-process-2.7.0\AndroidManifest.xml:30:17-78
+118                android:value="androidx.startup" />
+118-->[androidx.lifecycle:lifecycle-process:2.7.0] C:\Users\HP\.gradle\caches\transforms-3\025a519efc7e7e9feceab474293f9f99\transformed\jetified-lifecycle-process-2.7.0\AndroidManifest.xml:31:17-49
+119            <meta-data
+119-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\HP\.gradle\caches\transforms-3\26f310b97a62e76c40a5d9d6f00c87c1\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:29:13-31:52
+120                android:name="androidx.profileinstaller.ProfileInstallerInitializer"
+120-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\HP\.gradle\caches\transforms-3\26f310b97a62e76c40a5d9d6f00c87c1\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:30:17-85
+121                android:value="androidx.startup" />
+121-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\HP\.gradle\caches\transforms-3\26f310b97a62e76c40a5d9d6f00c87c1\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:31:17-49
+122        </provider>
+123
+124        <receiver
+124-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\HP\.gradle\caches\transforms-3\26f310b97a62e76c40a5d9d6f00c87c1\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:34:9-52:20
+125            android:name="androidx.profileinstaller.ProfileInstallReceiver"
+125-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\HP\.gradle\caches\transforms-3\26f310b97a62e76c40a5d9d6f00c87c1\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:35:13-76
+126            android:directBootAware="false"
+126-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\HP\.gradle\caches\transforms-3\26f310b97a62e76c40a5d9d6f00c87c1\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:36:13-44
+127            android:enabled="true"
+127-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\HP\.gradle\caches\transforms-3\26f310b97a62e76c40a5d9d6f00c87c1\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:37:13-35
+128            android:exported="true"
+128-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\HP\.gradle\caches\transforms-3\26f310b97a62e76c40a5d9d6f00c87c1\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:38:13-36
+129            android:permission="android.permission.DUMP" >
+129-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\HP\.gradle\caches\transforms-3\26f310b97a62e76c40a5d9d6f00c87c1\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:39:13-57
+130            <intent-filter>
+130-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\HP\.gradle\caches\transforms-3\26f310b97a62e76c40a5d9d6f00c87c1\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:40:13-42:29
+131                <action android:name="androidx.profileinstaller.action.INSTALL_PROFILE" />
+131-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\HP\.gradle\caches\transforms-3\26f310b97a62e76c40a5d9d6f00c87c1\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:41:17-91
+131-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\HP\.gradle\caches\transforms-3\26f310b97a62e76c40a5d9d6f00c87c1\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:41:25-88
+132            </intent-filter>
+133            <intent-filter>
+133-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\HP\.gradle\caches\transforms-3\26f310b97a62e76c40a5d9d6f00c87c1\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:43:13-45:29
+134                <action android:name="androidx.profileinstaller.action.SKIP_FILE" />
+134-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\HP\.gradle\caches\transforms-3\26f310b97a62e76c40a5d9d6f00c87c1\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:44:17-85
+134-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\HP\.gradle\caches\transforms-3\26f310b97a62e76c40a5d9d6f00c87c1\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:44:25-82
+135            </intent-filter>
+136            <intent-filter>
+136-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\HP\.gradle\caches\transforms-3\26f310b97a62e76c40a5d9d6f00c87c1\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:46:13-48:29
+137                <action android:name="androidx.profileinstaller.action.SAVE_PROFILE" />
+137-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\HP\.gradle\caches\transforms-3\26f310b97a62e76c40a5d9d6f00c87c1\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:47:17-88
+137-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\HP\.gradle\caches\transforms-3\26f310b97a62e76c40a5d9d6f00c87c1\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:47:25-85
+138            </intent-filter>
+139            <intent-filter>
+139-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\HP\.gradle\caches\transforms-3\26f310b97a62e76c40a5d9d6f00c87c1\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:49:13-51:29
+140                <action android:name="androidx.profileinstaller.action.BENCHMARK_OPERATION" />
+140-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\HP\.gradle\caches\transforms-3\26f310b97a62e76c40a5d9d6f00c87c1\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:50:17-95
+140-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\HP\.gradle\caches\transforms-3\26f310b97a62e76c40a5d9d6f00c87c1\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:50:25-92
+141            </intent-filter>
+142        </receiver>
+143    </application>
+144
+145</manifest>

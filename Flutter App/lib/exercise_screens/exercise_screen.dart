@@ -102,20 +102,20 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (_) => ActiveJourneyScreen(journey: journey),
+                            builder: (_) =>
+                                ActiveJourneyScreen(journey: journey),
                           ),
                         );
                       },
                     ),
-                    SizedBox(height: 30),
-                    _JourneyButton(
-                      icon: Icons.directions_walk,
-                      label: 'Live Step Counter',
-                      color: Color(0xFF562634),
+                    ElevatedButton.icon(
+                      icon: Icon(Icons.directions_walk),
+                      label: Text("Step Counter"),
                       onPressed: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (_) => StepCounterScreen()),
+                          MaterialPageRoute(
+                              builder: (context) => StepCounterScreen()),
                         );
                       },
                     ),
