@@ -1,6 +1,329 @@
-import 'package:flutter/material.dart';
+// import 'package:flutter/material.dart';
 
 // list of items selected
+// class SelectedMealItem {
+//   final String id;
+//   final String name;
+//   final int calories;
+//   final int protein;
+
+//   SelectedMealItem({
+//     required this.id,
+//     required this.name,
+//     required this.calories,
+//     required this.protein,
+//   });
+// }
+
+// // Explicitly declared JSON data
+// const Map<String, dynamic> eateriesData = {
+//   "number of eateries": 2,
+//   "eateries": [
+//     {
+//       "name": "Green olive",
+//       "number of dishes": 2,
+//       "dishes": [
+//         {
+//           "name": "Dish 1",
+//           "calories": 400,
+//           "protein": 30,
+//           "description": "Very tasty very great"
+//         },
+//         {
+//           "name": "Dish 2",
+//           "calories": 300,
+//           "protein": 20,
+//           "description": "Very tasty very great"
+//         }
+//       ]
+//     },
+//     {
+//       "name": "PDC",
+//       "number of dishes": 1,
+//       "dishes": [
+//         {
+//           "name": "Dish 1",
+//           "calories": 400,
+//           "protein": 30,
+//           "description": "Very tasty very great"
+//         }
+//       ]
+//     }
+//   ]
+// };
+
+// // Meal Log Screen
+// class MealLogScreen extends StatefulWidget {
+//   @override
+//   _MealLogScreenState createState() => _MealLogScreenState();
+// }
+
+// class _MealLogScreenState extends State<MealLogScreen> {
+//   List<SelectedMealItem> selectedItems = [];
+
+//   void _addSelectedItem(Map<String, dynamic> itemData) {
+//     final newItem = SelectedMealItem(
+//       id: DateTime.now().millisecondsSinceEpoch.toString(),
+//       name: itemData['name'],
+//       calories: itemData['calories'],
+//       protein: itemData['protein'],
+//     );
+//     setState(() {
+//       selectedItems.add(newItem);
+//     });
+//   }
+
+//   void _removeItem(String id) {
+//     setState(() {
+//       selectedItems.removeWhere((item) => item.id == id);
+//     });
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     final List<dynamic> eateries = eateriesData['eateries'];
+
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: Text('Log Meal'),
+//         titleTextStyle: TextStyle(
+//           color: Colors.white,
+//           fontSize: 20,
+//         ),
+//         flexibleSpace: Container(
+//           decoration: BoxDecoration(color: Color(0xFF562634)),
+//         ),
+//       ),
+//       body: Container(
+//         decoration: BoxDecoration(
+//           gradient: LinearGradient(
+//             colors: [Colors.amber[50]!, Colors.red[50]!],
+//             begin: Alignment.topCenter,
+//             end: Alignment.bottomCenter,
+//           ),
+//         ),
+//         child: Padding(
+//           padding: EdgeInsets.all(24),
+//           child: Column(
+//             children: [
+//               Expanded(
+//                 child: ListView(
+//                   children: [
+//                     _MealOptionCard(
+//                       title: 'Custom',
+//                       color: Color(0xFF562634),
+//                       onTap: () async {
+//                         final result = await Navigator.push(
+//                           context,
+//                           MaterialPageRoute(builder: (_) => CustomMealScreen()),
+//                         );
+//                         if (result != null) {
+//                           _addSelectedItem(result);
+//                         }
+//                       },
+//                     ),
+//                     SizedBox(height: 20),
+//                     ...List.generate(eateries.length, (index) {
+//                       final eatery = eateries[index];
+//                       return Column(
+//                         children: [
+//                           _MealOptionCard(
+//                             title: eatery['name'],
+//                             color: Color(0xFF562634),
+//                             onTap: () async {
+//                               final result = await Navigator.push(
+//                                 context,
+//                                 MaterialPageRoute(
+//                                   builder: (_) => EateryMealScreen(eatery: eatery),
+//                                 ),
+//                               );
+//                               if (result != null) {
+//                                 _addSelectedItem(result);
+//                               }
+//                             },
+//                           ),
+//                           SizedBox(height: 20),
+//                         ],
+//                       );
+//                     }),
+//                     SizedBox(height: 20),
+//                     if (selectedItems.isNotEmpty) ...[
+//                       Text(
+//                         'Selected Items:',
+//                         style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+//                       ),
+//                       SizedBox(height: 10),
+//                       ...selectedItems.map((item) => ListTile(
+//                             title: Text(item.name),
+//                             subtitle: Text('${item.calories} kcal • ${item.protein}g protein'),
+//                             trailing: IconButton(
+//                               icon: Icon(Icons.close, color: Colors.red),
+//                               onPressed: () => _removeItem(item.id),
+//                             ),
+//                           )).toList(),
+//                       ElevatedButton(
+//                         style: ElevatedButton.styleFrom(
+//                           backgroundColor: Color(0xFF562634),
+//                           padding: EdgeInsets.symmetric(vertical: 15),
+//                           shape: RoundedRectangleBorder(
+//                             borderRadius: BorderRadius.circular(15),
+//                           ),
+//                         ),
+//                         onPressed: () {
+//                           double totalCalories = selectedItems.fold(0, (sum, item) => sum + item.calories);
+//                           double totalProtein = selectedItems.fold(0, (sum, item) => sum + item.protein);
+//                           Navigator.pop(context, {
+//                             'calories': totalCalories,
+//                             'protein': totalProtein
+//                           });
+//                           // insert post call to backend here
+//                         },
+//                         child: Text('Save All Items', style: TextStyle(color: Colors.white)),
+//                       ),
+//                     ],
+//                   ],
+//                 ),
+//               ),
+//             ],
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }
+
+// // Generic Eatery Meal Screen
+// class EateryMealScreen extends StatefulWidget {
+//   final Map<String, dynamic> eatery;
+
+//   const EateryMealScreen({required this.eatery});
+
+//   @override
+//   _EateryMealScreenState createState() => _EateryMealScreenState();
+// }
+
+// class _EateryMealScreenState extends State<EateryMealScreen> {
+//   int? _selectedIndex;
+
+//   @override
+//   Widget build(BuildContext context) {
+//     final List<dynamic> dishes = widget.eatery['dishes'];
+
+//     return Scaffold(
+//       floatingActionButton: _selectedIndex != null
+//           ? FloatingActionButton(
+//               onPressed: () {
+//                 final selectedDish = dishes[_selectedIndex!];
+//                 Navigator.pop(context, {
+//                   'name': selectedDish['name'],
+//                   'calories': selectedDish['calories'],
+//                   'protein': selectedDish['protein'],
+//                 });
+//               },
+//               backgroundColor: Color(0xFF562634),
+//               child: Icon(Icons.check, color: Colors.white),
+//             )
+//           : null,
+//       appBar: AppBar(
+//         title: Text(widget.eatery['name']),
+//         titleTextStyle: TextStyle(
+//           color: Colors.white,
+//           fontSize: 20,
+//         ),
+//         flexibleSpace: Container(
+//           decoration: BoxDecoration( color: Color(0xFF562634),
+//           ),
+//         ),
+//       ),
+//       body: Container(
+//         decoration: BoxDecoration(
+//           gradient: LinearGradient(
+//             colors: [Colors.amber[50]!, Colors.red[50]!],
+//             begin: Alignment.topCenter,
+//             end: Alignment.bottomCenter,
+//           ),
+//         ),
+//         child: ListView.builder(
+//           padding: EdgeInsets.all(16),
+//           itemCount: dishes.length,
+//           itemBuilder: (context, index) {
+//             final dish = dishes[index];
+//             return Card(
+//               elevation: 4,
+//               margin: EdgeInsets.symmetric(vertical: 8),
+//               shape: RoundedRectangleBorder(
+//                 borderRadius: BorderRadius.circular(15),
+//               ),
+//               color: _selectedIndex == index ? Colors.red[50] : Colors.white,
+//               child: InkWell(
+//                 borderRadius: BorderRadius.circular(15),
+//                 onTap: () {
+//                   setState(() {
+//                     _selectedIndex = index;
+//                   });
+//                 },
+//                 child: Padding(
+//                   padding: EdgeInsets.all(16),
+//                   child: Column(
+//                     crossAxisAlignment: CrossAxisAlignment.start,
+//                     children: [
+//                       Text(
+//                         dish['name'],
+//                         style: TextStyle(
+//                           fontSize: 20,
+//                           fontWeight: FontWeight.bold,
+//                           color: Colors.red.shade900,
+//                         ),
+//                       ),
+//                       SizedBox(height: 8),
+//                       Text(
+//                         dish['description'],
+//                         style: TextStyle(fontSize: 14, color: Colors.grey[700]),
+//                       ),
+//                       SizedBox(height: 12),
+//                       Row(
+//                         children: [
+//                           Icon(Icons.local_fire_department,
+//                               size: 16, color: Colors.orange),
+//                           SizedBox(width: 4),
+//                           Text(
+//                             '${dish['calories']} kcal',
+//                             style: TextStyle(
+//                               fontSize: 14,
+//                               color: Colors.grey[800],
+//                             ),
+//                           ),
+//                           SizedBox(width: 16),
+//                           Icon(Icons.fitness_center,
+//                               size: 16, color: Colors.green),
+//                           SizedBox(width: 4),
+//                           Text(
+//                             '${dish['protein']} g protein',
+//                             style: TextStyle(
+//                               fontSize: 14,
+//                               color: Colors.grey[800],
+//                             ),
+//                           ),
+//                         ],
+//                       ),
+//                     ],
+//                   ),
+//                 ),
+//               ),
+//             );
+//           },
+//         ),
+//       ),
+//     );
+//   }
+// }
+
+
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+
+// Model for selected meal items
 class SelectedMealItem {
   final String id;
   final String name;
@@ -15,42 +338,46 @@ class SelectedMealItem {
   });
 }
 
-// Explicitly declared JSON data
-const Map<String, dynamic> eateriesData = {
-  "number of eateries": 2,
-  "eateries": [
-    {
-      "name": "Green olive",
-      "number of dishes": 2,
-      "dishes": [
-        {
-          "name": "Dish 1",
-          "calories": 400,
-          "protein": 30,
-          "description": "Very tasty very great"
-        },
-        {
-          "name": "Dish 2",
-          "calories": 300,
-          "protein": 20,
-          "description": "Very tasty very great"
-        }
-      ]
-    },
-    {
-      "name": "PDC",
-      "number of dishes": 1,
-      "dishes": [
-        {
-          "name": "Dish 1",
-          "calories": 400,
-          "protein": 30,
-          "description": "Very tasty very great"
-        }
-      ]
+// Food Service to handle API calls
+class FoodService {
+  static const String baseUrl = 'https://e-fit-backend.onrender.com';
+
+  static Future<Map<String, dynamic>> getEateries() async {
+    try {
+      final response = await http.get(
+        Uri.parse('$baseUrl/dish/all'),
+        headers: {'Accept': 'application/json'},
+      );
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        throw Exception('Failed to load eateries: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Network error: $e');
     }
-  ]
-};
+  }
+
+  static Future<void> saveMeal(List<SelectedMealItem> items, String userId) async {
+    final response = await http.post(
+      Uri.parse('$baseUrl/meals'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({
+        'userId': userId,
+        'items': items.map((item) => {
+          'name': item.name,
+          'calories': item.calories,
+          'protein': item.protein,
+        }).toList(),
+      }),
+    );
+    
+    if (response.statusCode != 201) {
+      throw Exception('Failed to save meal: ${response.body}');
+    }
+  }
+}
 
 // Meal Log Screen
 class MealLogScreen extends StatefulWidget {
@@ -60,6 +387,33 @@ class MealLogScreen extends StatefulWidget {
 
 class _MealLogScreenState extends State<MealLogScreen> {
   List<SelectedMealItem> selectedItems = [];
+  List<dynamic> eateries = [];
+  bool isLoading = true;
+  String? error;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadEateries();
+  }
+
+  Future<void> _loadEateries() async {
+    try {
+      final data = await FoodService.getEateries();
+      setState(() {
+        eateries = data['eateries'];
+        isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        error = e.toString();
+        isLoading = false;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to load eateries: $e')),
+      );
+    }
+  }
 
   void _addSelectedItem(Map<String, dynamic> itemData) {
     final newItem = SelectedMealItem(
@@ -79,10 +433,28 @@ class _MealLogScreenState extends State<MealLogScreen> {
     });
   }
 
+  Future<void> _saveMeal() async {
+    setState(() => isLoading = true);
+    try {
+      // Replace 'userId' with actual user ID from your auth system
+      await FoodService.saveMeal(selectedItems, 'userId');
+      double totalCalories = selectedItems.fold(0, (sum, item) => sum + item.calories);
+      double totalProtein = selectedItems.fold(0, (sum, item) => sum + item.protein);
+      Navigator.pop(context, {
+        'calories': totalCalories,
+        'protein': totalProtein
+      });
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to save meal: $e')),
+      );
+    } finally {
+      setState(() => isLoading = false);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final List<dynamic> eateries = eateriesData['eateries'];
-
     return Scaffold(
       appBar: AppBar(
         title: Text('Log Meal'),
@@ -102,97 +474,96 @@ class _MealLogScreenState extends State<MealLogScreen> {
             end: Alignment.bottomCenter,
           ),
         ),
-        child: Padding(
-          padding: EdgeInsets.all(24),
-          child: Column(
-            children: [
-              Expanded(
-                child: ListView(
-                  children: [
-                    _MealOptionCard(
-                      title: 'Custom',
-                      color: Color(0xFF562634),
-                      onTap: () async {
-                        final result = await Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (_) => CustomMealScreen()),
-                        );
-                        if (result != null) {
-                          _addSelectedItem(result);
-                        }
-                      },
-                    ),
-                    SizedBox(height: 20),
-                    ...List.generate(eateries.length, (index) {
-                      final eatery = eateries[index];
-                      return Column(
-                        children: [
-                          _MealOptionCard(
-                            title: eatery['name'],
-                            color: Color(0xFF562634),
-                            onTap: () async {
-                              final result = await Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (_) => EateryMealScreen(eatery: eatery),
+        child: isLoading
+            ? Center(child: CircularProgressIndicator())
+            : error != null
+                ? Center(child: Text(error!))
+                : Padding(
+                    padding: EdgeInsets.all(24),
+                    child: Column(
+                      children: [
+                        Expanded(
+                          child: ListView(
+                            children: [
+                              _MealOptionCard(
+                                title: 'Custom',
+                                color: Color(0xFF562634),
+                                onTap: () async {
+                                  final result = await Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (_) => CustomMealScreen()),
+                                  );
+                                  if (result != null) {
+                                    _addSelectedItem(result);
+                                  }
+                                },
+                              ),
+                              SizedBox(height: 20),
+                              ...List.generate(eateries.length, (index) {
+                                final eatery = eateries[index];
+                                return Column(
+                                  children: [
+                                    _MealOptionCard(
+                                      title: eatery['name'],
+                                      color: Color(0xFF562634),
+                                      onTap: () async {
+                                        final result = await Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (_) => EateryMealScreen(eatery: eatery),
+                                          ),
+                                        );
+                                        if (result != null) {
+                                          _addSelectedItem(result);
+                                        }
+                                      },
+                                    ),
+                                    SizedBox(height: 20),
+                                  ],
+                                );
+                              }),
+                              if (selectedItems.isNotEmpty) ...[
+                                Text(
+                                  'Selected Items:',
+                                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                                 ),
-                              );
-                              if (result != null) {
-                                _addSelectedItem(result);
-                              }
-                            },
-                          ),
-                          SizedBox(height: 20),
-                        ],
-                      );
-                    }),
-                    SizedBox(height: 20),
-                    if (selectedItems.isNotEmpty) ...[
-                      Text(
-                        'Selected Items:',
-                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                      ),
-                      SizedBox(height: 10),
-                      ...selectedItems.map((item) => ListTile(
-                            title: Text(item.name),
-                            subtitle: Text('${item.calories} kcal • ${item.protein}g protein'),
-                            trailing: IconButton(
-                              icon: Icon(Icons.close, color: Colors.red),
-                              onPressed: () => _removeItem(item.id),
-                            ),
-                          )).toList(),
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Color(0xFF562634),
-                          padding: EdgeInsets.symmetric(vertical: 15),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15),
+                                SizedBox(height: 10),
+                                ...selectedItems.map((item) => ListTile(
+                                      title: Text(item.name),
+                                      subtitle: Text('${item.calories} kcal • ${item.protein}g protein'),
+                                      trailing: IconButton(
+                                        icon: Icon(Icons.close, color: Colors.red),
+                                        onPressed: () => _removeItem(item.id),
+                                      ),
+                                    )).toList(),
+                                SizedBox(height: 20),
+                                ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Color(0xFF562634),
+                                    padding: EdgeInsets.symmetric(vertical: 15),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(15),
+                                    ),
+                                  ),
+                                  onPressed: _saveMeal,
+                                  child: Text(
+                                    'Save All Items',
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                ),
+                              ],
+                            ],
                           ),
                         ),
-                        onPressed: () {
-                          double totalCalories = selectedItems.fold(0, (sum, item) => sum + item.calories);
-                          double totalProtein = selectedItems.fold(0, (sum, item) => sum + item.protein);
-                          Navigator.pop(context, {
-                            'calories': totalCalories,
-                            'protein': totalProtein
-                          });
-                          // insert post call to backend here
-                        },
-                        child: Text('Save All Items', style: TextStyle(color: Colors.white)),
-                      ),
-                    ],
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
+                      ],
+                    ),
+                  ),
       ),
     );
   }
 }
 
-// Generic Eatery Meal Screen
+// Eatery Meal Screen
 class EateryMealScreen extends StatefulWidget {
   final Map<String, dynamic> eatery;
 
@@ -231,8 +602,7 @@ class _EateryMealScreenState extends State<EateryMealScreen> {
           fontSize: 20,
         ),
         flexibleSpace: Container(
-          decoration: BoxDecoration( color: Color(0xFF562634),
-          ),
+          decoration: BoxDecoration(color: Color(0xFF562634)),
         ),
       ),
       body: Container(
@@ -283,8 +653,7 @@ class _EateryMealScreenState extends State<EateryMealScreen> {
                       SizedBox(height: 12),
                       Row(
                         children: [
-                          Icon(Icons.local_fire_department,
-                              size: 16, color: Colors.orange),
+                          Icon(Icons.local_fire_department, size: 16, color: Colors.orange),
                           SizedBox(width: 4),
                           Text(
                             '${dish['calories']} kcal',
@@ -294,8 +663,7 @@ class _EateryMealScreenState extends State<EateryMealScreen> {
                             ),
                           ),
                           SizedBox(width: 16),
-                          Icon(Icons.fitness_center,
-                              size: 16, color: Colors.green),
+                          Icon(Icons.fitness_center, size: 16, color: Colors.green),
                           SizedBox(width: 4),
                           Text(
                             '${dish['protein']} g protein',
@@ -527,3 +895,4 @@ class _CustomMealScreenState extends State<CustomMealScreen> {
     );
   }
 }
+
