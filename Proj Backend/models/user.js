@@ -19,39 +19,14 @@ import mongoose from "mongoose";
 
 
 const userSchema = new mongoose.Schema({
-  name: {
-    type: String, required: true
-  },
-  email: {
-    type: String, required: true, unique: true
-  },
-  password: {
-    type: String, required: true
-  },
-  gender: {
-    type: String, required: true
-  },
-  age: {
-    type: Number,
-    required: true,
-  },
-  height: {   // in cm
-    type: Number,
-    required: true,
-  },
-  weight: {   // in kg
-    type: Number,
-    required: true,
-  },
-  stepsLog: [{
-    type: mongoose.Schema.Types.ObjectId, ref: "Steps"
-  }],
-  exerciseLog: [{
-    type: mongoose.Schema.Types.ObjectId, ref: "UserExercise"
-  }],
-  meals: [{
-    type: mongoose.Schema.Types.ObjectId, ref: "UserMeals"
-  }]
+  firstName: { type: String, required: true },
+  lastName:  { type: String, required: false },
+  email:     { type: String, required: true, unique: true },
+  password:  { type: String, required: true },
+  gender:    { type: String, required: true },
+  dateOfBirth: { type: Date, required: true },
+  height:    { type: Number, required: true }, // cm
+  weight:    { type: Number, required: true }  // kg
 });
 
 export const User = mongoose.model("User", userSchema);

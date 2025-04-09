@@ -2,24 +2,44 @@ import { User } from "../models/user.js";
 
 export const createUser = async (req, res) => {
   try {
-    const { name, email, password, gender, age, height, weight } = req.body;
+    const {
+      firstName,
+      lastName,
+      email,
+      password,
+      gender,
+      dateOfBirth,
+      height,
+      weight
+    } = req.body;
 
-    if (!name || !email || !password || !gender || !age || !height || !weight) {
-      return res.status(400).json({ error: "All fields are required" });
+    if (!firstName || !email || !password || !gender || !dateOfBirth || !height || !weight) {
+      return res.status(400).json({ error: "Missing required fields" });
     }
 
-    const check = await User.findOne({ email: email });
-    if (check) {
-        console.log("Email ", email, " already in use")
-        return res.status(400).json({ error: "Email already in use" });
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      console.log("Email already in use:", email);
+      return res.status(400).json({ error: "Email already in use" });
     }
 
-    const user = await User.create({ name, email, password, gender, age, height, weight, stepsLog:[], exerciseLog:[], meals:[] });
-    console.log("User created: ", user)
-    return res.status(201).json({ message: "User created", user });
+    const newUser = await User.create({
+      firstName,
+      lastName: lastName || "",
+      email,
+      password,
+      gender,
+      dateOfBirth,
+      height: Number(height),
+      weight: Number(weight)
+    });
 
-  } catch (error) {
-    return res.status(500).json({ error: error.message });
+    console.log("User created:", newUser);
+    return res.status(201).json({ message: "User created", email: newUser.email });
+
+  } catch (err) {
+    console.error("Error creating user:", err.message);
+    return res.status(500).json({ error: err.message });
   }
 };
 
@@ -27,7 +47,7 @@ export const createUser = async (req, res) => {
 // email password
 export const loginUser = async (req, res) => {
   try {
-    const { email, password } = req.query; 
+    const { email, password } = req.query;
 
     if (!email || !password) {
       return res.status(400).json({ error: "All fields are required" });
@@ -46,9 +66,9 @@ export const loginUser = async (req, res) => {
     }
 
     // For simplicity, we are returning email as sessionCookie
-    return res.status(200).json({ 
-      message: "Login successful", 
-      sessionCookie: user.email 
+    return res.status(200).json({
+      message: "Login successful",
+      sessionCookie: user.email
     });
   } catch (error) {
     return res.status(500).json({ error: error.message, sessionCookie: null });
@@ -57,4 +77,5 @@ export const loginUser = async (req, res) => {
 
 // email verification (later)
 
+// Save Meal
 
