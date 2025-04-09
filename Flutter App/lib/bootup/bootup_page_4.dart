@@ -46,41 +46,8 @@ class BootupPage4 extends StatelessWidget {
                   ],
                 ),
               ),
-              // const Spacer(flex: 2),
               const SizedBox.shrink(),
               const SizedBox(height: 10),
-              // Row(
-              //   mainAxisAlignment: MainAxisAlignment.center,
-              //   children: [
-              //     Container(
-              //       margin: const EdgeInsets.symmetric(horizontal: 4.0),
-              //       width: 8,
-              //       height: 8,
-              //       decoration: const BoxDecoration(
-              //         color: Colors.white54,
-              //         shape: BoxShape.circle,
-              //       ),
-              //     ),
-              //     Container(
-              //       margin: const EdgeInsets.symmetric(horizontal: 4.0),
-              //       width: 8,
-              //       height: 8,
-              //       decoration: const BoxDecoration(
-              //         color: Colors.white54,
-              //         shape: BoxShape.circle,
-              //       ),
-              //     ),
-              //     Container(
-              //     margin: const EdgeInsets.symmetric(horizontal: 4.0),
-              //     width: 8,
-              //     height: 8,
-              //     decoration: const BoxDecoration(
-              //       color: Colors.white,
-              //       shape: BoxShape.circle,
-              //     ),
-              //   ),
-              // ],
-              // ),
               const SizedBox(height: 20),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(

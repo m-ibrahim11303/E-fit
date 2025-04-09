@@ -146,26 +146,6 @@ class _MealLogScreenState extends State<MealLogScreen> {
     }
   }
 
-  // Future<void> _saveMeal() async {
-  //   setState(() => isLoading = true);
-  //   try {
-  //     // Replace 'userId' with actual user ID from your auth system
-  //     await FoodService.saveMeal(selectedItems, 'userId');
-  //     double totalCalories = selectedItems.fold(0, (sum, item) => sum + item.calories);
-  //     double totalProtein = selectedItems.fold(0, (sum, item) => sum + item.protein);
-  //     Navigator.pop(context, {
-  //       'calories': totalCalories,
-  //       'protein': totalProtein
-  //     });
-  //   } catch (e) {
-  //     ScaffoldMessenger.of(context).showSnackBar(
-  //       SnackBar(content: Text('Failed to save meal: $e')),
-  //     );
-  //   } finally {
-  //     setState(() => isLoading = false);
-  //   }
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
