@@ -4,7 +4,7 @@ import { createUser, loginUser, saveMeals , getDietHistory} from "../controllers
 export const userRouter = express.Router();
 
 userRouter.post("/create", createUser);
-userRouter.post("/login", loginUser);
+userRouter.get("/login", loginUser);
 userRouter.post("/savemeals", saveMeals)
 userRouter.get("/diethistory", getDietHistory)
 
