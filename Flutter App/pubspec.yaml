@@ -94,8 +94,12 @@ flutter:
      - assets/images/background_login_signup_page_1.png
      - assets/images/background_signup_page_1.png
      - assets/images/background_signup_page_2.png
+     - assets/images/background_login_page_1_white.png
     # images
      - assets/images/home_page_logo.png
+     - assets/images/analytics_place_holder.png
+     - assets/images/analytics_place_holder2.png
+     - assets/images/analytics_place_holder3.png
      
 
 #     - assets/fonts/Jersey25-Regular.ttf

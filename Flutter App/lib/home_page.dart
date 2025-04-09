@@ -4,9 +4,8 @@ import 'exercise_screens/exercise_screen.dart';
 import 'settings_screen.dart';
 import 'forum_screen.dart';
 import 'analytics_screen.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart'; // Add secure storage
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'bootup/login_signup_page_1.dart';
-
 
 // Global secure storage instance
 final FlutterSecureStorage storage = FlutterSecureStorage();
@@ -31,29 +30,35 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final String imageAsset = 'assets/images/home_page_logo.png';
-  String? _userEmail; // To store the fetched email
+  String? _userEmail;
 
   @override
   void initState() {
     super.initState();
-    _fetchEmail(); // Fetch email when the screen initializes
+    _fetchEmail();
   }
-
-  void _handleLogout() async {
-    await storage.delete(key: 'email'); // Remove the stored email
-    Navigator.pushAndRemoveUntil(
-      context,
-      MaterialPageRoute(builder: (_) => LoginSignupPage1()),
-      (route) => false, // Remove all previous routes
-    );
-  }
-
 
   Future<void> _fetchEmail() async {
     final String? email = await storage.read(key: 'email');
     setState(() {
-      _userEmail = email ?? 'No email found'; // Default message if no email
+      _userEmail = email ?? 'No email found';
     });
+  }
+
+  void _handleLogout() async {
+    await storage.delete(key: 'email');
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (_) => LoginSignupPage1()),
+      (route) => false,
+    );
+  }
+
+  void _openSettings() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => SettingsScreen()),
+    );
   }
 
   @override
@@ -62,6 +67,11 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
+        leading: IconButton(
+          icon: Icon(Icons.settings, color: Colors.black),
+          onPressed: _openSettings,
+          tooltip: 'Settings',
+        ),
         actions: [
           IconButton(
             icon: Icon(Icons.logout, color: Colors.black),
@@ -103,7 +113,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   _CustomButton(
                     icon: Icons.fitness_center,
-                    label: 'Exercises ($_userEmail)', // Display email here
+                    label: 'Exercises',
                     color: const Color(0xFF562634),
                     onPressed: () => Navigator.push(
                       context,
@@ -212,8 +222,7 @@ class _CustomButton extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                   color: Colors.white,
                 ),
-                textAlign:
-                    TextAlign.center, // Ensure text wraps nicely if too long
+                textAlign: TextAlign.center,
               ),
             ],
           ),

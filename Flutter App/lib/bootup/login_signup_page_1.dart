@@ -3,7 +3,6 @@ import 'package:login_signup_1/bootup/login_page_1.dart';
 import 'package:login_signup_1/bootup/signup_page_1.dart';
 import 'bootup_page_4.dart';
 
-
 class LoginSignupPage1 extends StatelessWidget {
   const LoginSignupPage1({super.key});
 
@@ -29,17 +28,18 @@ class LoginSignupPage1 extends StatelessWidget {
         child: SafeArea(
           child: Column(
             children: [
-              // "U-Fit" text aligned to the left
+              // "E-Fit" text aligned to the left at the top
               Container(
                 width: double.infinity,
                 padding: const EdgeInsets.only(left: 20.0, top: 100),
                 child: Text(
-                  'U-Fit',
+                  'E-Fit',
                   style: jerseyStyle(96),
                   textAlign: TextAlign.left,
                 ),
               ),
-              const SizedBox(height: 240),
+              // Spacer pushes the remaining content to the bottom
+              const Spacer(),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 24.0),
                 child: Column(
@@ -62,9 +62,9 @@ class LoginSignupPage1 extends StatelessWidget {
               Center(
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white, // White background
-                    fixedSize: const Size(350, 59), // Width 323, Height 59
-                    elevation: 0, // Remove shadow if needed
+                    backgroundColor: Colors.white,
+                    fixedSize: const Size(350, 59),
+                    elevation: 0,
                   ),
                   onPressed: () {
                     Navigator.push(
@@ -143,7 +143,6 @@ class LoginSignupPage1 extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 20),
-              // Row for the social media buttons
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -153,8 +152,8 @@ class LoginSignupPage1 extends StatelessWidget {
                     },
                     icon: Image.asset(
                       'assets/images/google_icon.png',
-                      width: 50, // Set desired width
-                      height: 50, // Set desired height
+                      width: 50,
+                      height: 50,
                       fit: BoxFit.contain,
                     ),
                   ),
@@ -172,8 +171,7 @@ class LoginSignupPage1 extends StatelessWidget {
                   ),
                 ],
               ),
-
-              // const SizedBox(height: 70),
+              const SizedBox(height: 20), // Add some padding at the bottom
             ],
           ),
         ),

@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 // Dynamic image sources
 const List<String> imageUrls = [
@@ -19,7 +22,7 @@ class AnalyticsScreen extends StatelessWidget {
         title: Text('Analytics'),
         backgroundColor: Color(0xFF562634),
         titleTextStyle: TextStyle(
-          color: Colors.white, 
+          color: Colors.white,
           fontSize: 20,
         ),
       ),
@@ -42,39 +45,27 @@ class AnalyticsScreen extends StatelessWidget {
                           Expanded(
                             child: Padding(
                               padding: EdgeInsets.symmetric(vertical: 8.0),
-                              child: Image.network(
-                                imageUrls[0],
+                              child: Image.asset(
+                                'assets/images/analytics_place_holder.png',
                                 fit: BoxFit.cover,
-                                loadingBuilder: (context, child, loadingProgress) {
-                                  if (loadingProgress == null) return child;
-                                  return Center(child: CircularProgressIndicator());
-                                },
                               ),
                             ),
                           ),
                           Expanded(
                             child: Padding(
                               padding: EdgeInsets.symmetric(vertical: 8.0),
-                              child: Image.network(
-                                imageUrls[1],
+                              child: Image.asset(
+                                'assets/images/analytics_place_holder2.png',
                                 fit: BoxFit.cover,
-                                loadingBuilder: (context, child, loadingProgress) {
-                                  if (loadingProgress == null) return child;
-                                  return Center(child: CircularProgressIndicator());
-                                },
                               ),
                             ),
                           ),
                           Expanded(
                             child: Padding(
                               padding: EdgeInsets.symmetric(vertical: 8.0),
-                              child: Image.network(
-                                imageUrls[2],
+                              child: Image.asset(
+                                'assets/images/analytics_place_holder3.png',
                                 fit: BoxFit.cover,
-                                loadingBuilder: (context, child, loadingProgress) {
-                                  if (loadingProgress == null) return child;
-                                  return Center(child: CircularProgressIndicator());
-                                },
                               ),
                             ),
                           ),
@@ -89,7 +80,8 @@ class AnalyticsScreen extends StatelessWidget {
             Expanded(
               flex: 1,
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
@@ -99,7 +91,8 @@ class AnalyticsScreen extends StatelessWidget {
                       color: Color(0xFF562634),
                       onPressed: () => Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (_) => WorkoutHistoryScreen()),
+                        MaterialPageRoute(
+                            builder: (_) => WorkoutHistoryScreen()),
                       ),
                       buttonSize: Size(160, 160),
                     ),
@@ -303,29 +296,88 @@ class WorkoutHistoryScreen extends StatelessWidget {
 }
 
 // Diet History Data
-const Map<String, dynamic> dietData = {
-  "numberOfDays": 1,
-  "days": [
-    {
-      "name": "Today",
-      "noOfMeals": 3,
-      "meals": [
-        {
-          "PDC - Eggs and paratha": "Calories(kcal): 700\nProtein(grams): 35\n"
-        },
-        {
-          "Chicken and pasta": "Calories(kcal): 700\nProtein(grams): 35\n"
-        },
-        {
-          "Panini": "Calories(kcal): 700\nProtein(grams): 35\n"
-        }
-      ]
-    }
-  ]
-};
+// const Map<String, dynamic> dietData = {
+//   "numberOfDays": 1,
+//   "days": [
+//     {
+//       "name": "Today",
+//       "noOfMeals": 3,
+//       "meals": [
+//         {
+//           "PDC - Eggs and paratha": "Calories(kcal): 700\nProtein(grams): 35\n"
+//         },
+//         {
+//           "Chicken and pasta": "Calories(kcal): 700\nProtein(grams): 35\n"
+//         },
+//         {
+//           "Panini": "Calories(kcal): 700\nProtein(grams): 35\n"
+//         }
+//       ]
+//     }
+//   ]
+// };
 
 // Diet History Screen
-class DietHistoryScreen extends StatelessWidget {
+class DietHistoryScreen extends StatefulWidget {
+  @override
+  _DietHistoryScreenState createState() => _DietHistoryScreenState();
+}
+
+class _DietHistoryScreenState extends State<DietHistoryScreen> {
+  Map<String, dynamic> dietData = {"numberOfDays": 0, "days": []};
+  bool isLoading = true;
+  String errorMessage = '';
+
+  @override
+  void initState() {
+    super.initState();
+    fetchDietHistory();
+  }
+
+  Future<void> fetchDietHistory() async {
+    const apiUrl = 'https://e-fit-backend.onrender.com/user/diethistory';
+    final storage = FlutterSecureStorage();
+
+    try {
+      final userEmail = await storage.read(key: 'email');
+
+      if (userEmail == null) {
+        setState(() {
+          isLoading = false;
+          errorMessage = 'User email not found.';
+        });
+        return;
+      }
+
+      final response = await http.get(Uri.parse('$apiUrl?email=$userEmail'));
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        if (data['success']) {
+          setState(() {
+            dietData = data['data'];
+            isLoading = false;
+          });
+        } else {
+          setState(() {
+            isLoading = false;
+            errorMessage = data['message'] ?? 'Failed to load diet history';
+          });
+        }
+      } else {
+        setState(() {
+          isLoading = false;
+          errorMessage = 'Failed to load diet history: ${response.statusCode}';
+        });
+      }
+    } catch (e) {
+      setState(() {
+        isLoading = false;
+        errorMessage = 'Error: ${e.toString()}';
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -344,75 +396,81 @@ class DietHistoryScreen extends StatelessWidget {
       ),
       body: Container(
         color: Colors.white,
-        child: ListView.builder(
-          padding: EdgeInsets.all(16),
-          itemCount: dietData['days'].length,
-          itemBuilder: (context, dayIndex) {
-            final day = dietData['days'][dayIndex];
-            return Padding(
-              padding: EdgeInsets.only(bottom: 20),
-              child: Container(
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: Color(0xFF562634),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                padding: EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      day['name'],
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
+        child: isLoading
+            ? Center(child: CircularProgressIndicator())
+            : errorMessage.isNotEmpty
+                ? Center(child: Text(errorMessage))
+                : dietData['numberOfDays'] == 0
+                    ? Center(child: Text('No diet history available'))
+                    : ListView.builder(
+                        padding: EdgeInsets.all(16),
+                        itemCount: dietData['days'].length,
+                        itemBuilder: (context, dayIndex) {
+                          final day = dietData['days'][dayIndex];
+                          return Padding(
+                            padding: EdgeInsets.only(bottom: 20),
+                            child: Container(
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                color: Color(0xFF562634),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              padding: EdgeInsets.all(16),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    day['name'],
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  SizedBox(height: 10),
+                                  ...List.generate(day['meals'].length,
+                                      (mealIndex) {
+                                    final meal = day['meals'][mealIndex];
+                                    final mealName = meal.keys.first;
+                                    final nutrition = meal.values.first;
+                                    return Container(
+                                      width: double.infinity,
+                                      margin: EdgeInsets.only(bottom: 8),
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                      padding: EdgeInsets.all(12),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            mealName,
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 16,
+                                            ),
+                                          ),
+                                          SizedBox(height: 6),
+                                          Text(
+                                            nutrition,
+                                            style: TextStyle(
+                                              color: Colors.grey[700],
+                                              fontSize: 14,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  }),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
                       ),
-                    ),
-                    SizedBox(height: 10),
-                    ...List.generate(day['meals'].length, (mealIndex) {
-                      final meal = day['meals'][mealIndex];
-                      final mealName = meal.keys.first;
-                      final nutrition = meal.values.first;
-                      return Container(
-                        width: double.infinity,
-                        margin: EdgeInsets.only(bottom: 8),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        padding: EdgeInsets.all(12),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              mealName,
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16,
-                              ),
-                            ),
-                            SizedBox(height: 6),
-                            Text(
-                              nutrition,
-                              style: TextStyle(
-                                color: Colors.grey[700],
-                                fontSize: 14,
-                              ),
-                            ),
-                          ],
-                        ),
-                      );
-                    }),
-                  ],
-                ),
-              ),
-            );
-          },
-        ),
       ),
     );
   }
 }
-
-// Add this button next to your Workout History button:
