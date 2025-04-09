@@ -2,6 +2,7 @@ import { User } from "../models/user.js";
 
 export const createUser = async (req, res) => {
   try {
+    console.log(req.body)
     const {
       firstName,
       lastName,
@@ -47,6 +48,7 @@ export const createUser = async (req, res) => {
 // email password
 export const loginUser = async (req, res) => {
   try {
+    console.log(req.query)
     const { email, password } = req.query;
 
     if (!email || !password) {
