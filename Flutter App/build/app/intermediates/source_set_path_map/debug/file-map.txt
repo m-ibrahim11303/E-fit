@@ -1,29 +1,47 @@
-com.example.flutter_application_1.app-jetified-core-1.0.0-0 C:\Users\HP\.gradle\caches\transforms-3\009c5df562081d4b7b238cb604538cc1\transformed\jetified-core-1.0.0\res
-com.example.flutter_application_1.app-jetified-lifecycle-process-2.7.0-1 C:\Users\HP\.gradle\caches\transforms-3\025a519efc7e7e9feceab474293f9f99\transformed\jetified-lifecycle-process-2.7.0\res
-com.example.flutter_application_1.app-jetified-savedstate-1.2.1-2 C:\Users\HP\.gradle\caches\transforms-3\095d8d389c953609cbeb9a59131e5bb4\transformed\jetified-savedstate-1.2.1\res
-com.example.flutter_application_1.app-jetified-tracing-1.2.0-3 C:\Users\HP\.gradle\caches\transforms-3\1d94d15ec00459b0cd91ee546963b31f\transformed\jetified-tracing-1.2.0\res
-com.example.flutter_application_1.app-jetified-profileinstaller-1.3.1-4 C:\Users\HP\.gradle\caches\transforms-3\26f310b97a62e76c40a5d9d6f00c87c1\transformed\jetified-profileinstaller-1.3.1\res
-com.example.flutter_application_1.app-jetified-lifecycle-viewmodel-savedstate-2.7.0-5 C:\Users\HP\.gradle\caches\transforms-3\38443036310ac1ac0abc11bfed6c3bb6\transformed\jetified-lifecycle-viewmodel-savedstate-2.7.0\res
-com.example.flutter_application_1.app-jetified-lifecycle-livedata-core-ktx-2.7.0-6 C:\Users\HP\.gradle\caches\transforms-3\415d7355b50e14c07c37d10ec73386cd\transformed\jetified-lifecycle-livedata-core-ktx-2.7.0\res
-com.example.flutter_application_1.app-jetified-core-ktx-1.13.1-7 C:\Users\HP\.gradle\caches\transforms-3\415d76c52cad366e581fef5897ebd8d9\transformed\jetified-core-ktx-1.13.1\res
-com.example.flutter_application_1.app-core-runtime-2.2.0-8 C:\Users\HP\.gradle\caches\transforms-3\42d7d1f4a8c3a86b590b4ec2a4ec7424\transformed\core-runtime-2.2.0\res
-com.example.flutter_application_1.app-jetified-startup-runtime-1.1.1-9 C:\Users\HP\.gradle\caches\transforms-3\46cc651f6d63d2bfdfb2a5ef0963a8a5\transformed\jetified-startup-runtime-1.1.1\res
-com.example.flutter_application_1.app-lifecycle-runtime-2.7.0-10 C:\Users\HP\.gradle\caches\transforms-3\4d8fb0e95169e7ab22556f7db2625b32\transformed\lifecycle-runtime-2.7.0\res
-com.example.flutter_application_1.app-lifecycle-viewmodel-2.7.0-11 C:\Users\HP\.gradle\caches\transforms-3\5850a512e51849f8b0c7562717ef3f57\transformed\lifecycle-viewmodel-2.7.0\res
-com.example.flutter_application_1.app-core-1.13.1-12 C:\Users\HP\.gradle\caches\transforms-3\6f9a65baaf12c9cf4e60f5516557d16b\transformed\core-1.13.1\res
-com.example.flutter_application_1.app-jetified-window-java-1.2.0-13 C:\Users\HP\.gradle\caches\transforms-3\8847619c3d51f74604bc191b67b864ef\transformed\jetified-window-java-1.2.0\res
-com.example.flutter_application_1.app-fragment-1.7.1-14 C:\Users\HP\.gradle\caches\transforms-3\8e432e5b9b8e9399b31b8f294dd12e31\transformed\fragment-1.7.1\res
-com.example.flutter_application_1.app-jetified-activity-1.8.1-15 C:\Users\HP\.gradle\caches\transforms-3\b7d7f0cedb2a82f8fe37c039925beff8\transformed\jetified-activity-1.8.1\res
-com.example.flutter_application_1.app-jetified-window-1.2.0-16 C:\Users\HP\.gradle\caches\transforms-3\ccc4a5834963eab3ddfc6002627a8dfd\transformed\jetified-window-1.2.0\res
-com.example.flutter_application_1.app-lifecycle-livedata-core-2.7.0-17 C:\Users\HP\.gradle\caches\transforms-3\d06b4f0942054ac9aedca86ee14731d8\transformed\lifecycle-livedata-core-2.7.0\res
-com.example.flutter_application_1.app-jetified-annotation-experimental-1.4.0-18 C:\Users\HP\.gradle\caches\transforms-3\e0b851902971f01ce1512c869b13ee9c\transformed\jetified-annotation-experimental-1.4.0\res
-com.example.flutter_application_1.app-lifecycle-livedata-2.7.0-19 C:\Users\HP\.gradle\caches\transforms-3\e6b77f81fd42019aa6e0c89b074d648d\transformed\lifecycle-livedata-2.7.0\res
-com.example.flutter_application_1.app-debug-20 C:\Users\HP\Documents\GitHub\E-fit\Flutter App\android\app\src\debug\res
-com.example.flutter_application_1.app-main-21 C:\Users\HP\Documents\GitHub\E-fit\Flutter App\android\app\src\main\res
-com.example.flutter_application_1.app-pngs-22 C:\Users\HP\Documents\GitHub\E-fit\Flutter App\build\app\generated\res\pngs\debug
-com.example.flutter_application_1.app-resValues-23 C:\Users\HP\Documents\GitHub\E-fit\Flutter App\build\app\generated\res\resValues\debug
-com.example.flutter_application_1.app-packageDebugResources-24 C:\Users\HP\Documents\GitHub\E-fit\Flutter App\build\app\intermediates\incremental\debug\packageDebugResources\merged.dir
-com.example.flutter_application_1.app-packageDebugResources-25 C:\Users\HP\Documents\GitHub\E-fit\Flutter App\build\app\intermediates\incremental\debug\packageDebugResources\stripped.dir
-com.example.flutter_application_1.app-merged_res-26 C:\Users\HP\Documents\GitHub\E-fit\Flutter App\build\app\intermediates\merged_res\debug
-com.example.flutter_application_1.app-packaged_res-27 C:\Users\HP\Documents\GitHub\E-fit\Flutter App\build\flutter_background_service_android\intermediates\packaged_res\debug
-com.example.flutter_application_1.app-packaged_res-28 C:\Users\HP\Documents\GitHub\E-fit\Flutter App\build\sensors_plus\intermediates\packaged_res\debug
+com.example.flutter_application_1.app-preference-1.2.1-0 C:\Users\HP\.gradle\caches\transforms-3\02aab64e3be9f190a5773945e30a3ee3\transformed\preference-1.2.1\res
+com.example.flutter_application_1.app-core-1.13.1-1 C:\Users\HP\.gradle\caches\transforms-3\0356ad410b81daeebf51aab123b6c665\transformed\core-1.13.1\res
+com.example.flutter_application_1.app-coordinatorlayout-1.0.0-2 C:\Users\HP\.gradle\caches\transforms-3\2f00cc1a576450efc1f9be5e17f16828\transformed\coordinatorlayout-1.0.0\res
+com.example.flutter_application_1.app-jetified-datastore-preferences-release-3 C:\Users\HP\.gradle\caches\transforms-3\2f9f2744a3e64fe8e6c627430a4f3fdd\transformed\jetified-datastore-preferences-release\res
+com.example.flutter_application_1.app-jetified-annotation-experimental-1.4.0-4 C:\Users\HP\.gradle\caches\transforms-3\348f2ce470ea9789010910c9aa05b307\transformed\jetified-annotation-experimental-1.4.0\res
+com.example.flutter_application_1.app-jetified-datastore-release-5 C:\Users\HP\.gradle\caches\transforms-3\34f61998dd731408d330b62c5a761505\transformed\jetified-datastore-release\res
+com.example.flutter_application_1.app-lifecycle-viewmodel-2.7.0-6 C:\Users\HP\.gradle\caches\transforms-3\3f38764cf2113e26b06e224f79a6a1a1\transformed\lifecycle-viewmodel-2.7.0\res
+com.example.flutter_application_1.app-jetified-appcompat-resources-1.1.0-7 C:\Users\HP\.gradle\caches\transforms-3\49ca1856b6bb338b8b613d9b046f2d3a\transformed\jetified-appcompat-resources-1.1.0\res
+com.example.flutter_application_1.app-jetified-window-java-1.2.0-8 C:\Users\HP\.gradle\caches\transforms-3\54fdf84827b6b8650cdb0dcf07875a70\transformed\jetified-window-java-1.2.0\res
+com.example.flutter_application_1.app-jetified-fragment-ktx-1.7.1-9 C:\Users\HP\.gradle\caches\transforms-3\5e737fd455d50402304fed04c3e841a4\transformed\jetified-fragment-ktx-1.7.1\res
+com.example.flutter_application_1.app-jetified-tracing-1.2.0-10 C:\Users\HP\.gradle\caches\transforms-3\6ade132af14b2d19d52cef2116bf0d60\transformed\jetified-tracing-1.2.0\res
+com.example.flutter_application_1.app-transition-1.4.1-11 C:\Users\HP\.gradle\caches\transforms-3\7597562d47deab6b95cd10251ba85040\transformed\transition-1.4.1\res
+com.example.flutter_application_1.app-jetified-activity-1.8.1-12 C:\Users\HP\.gradle\caches\transforms-3\76e9185e51994f9a97b6ad9e2dd6a4a6\transformed\jetified-activity-1.8.1\res
+com.example.flutter_application_1.app-jetified-savedstate-1.2.1-13 C:\Users\HP\.gradle\caches\transforms-3\8b34fdf7516614bccae4b7c18f6e9497\transformed\jetified-savedstate-1.2.1\res
+com.example.flutter_application_1.app-recyclerview-1.0.0-14 C:\Users\HP\.gradle\caches\transforms-3\932709660992afa4e4067dfc762d0040\transformed\recyclerview-1.0.0\res
+com.example.flutter_application_1.app-jetified-lifecycle-runtime-ktx-2.7.0-15 C:\Users\HP\.gradle\caches\transforms-3\93b3e8aeadb41195063d5db45a210081\transformed\jetified-lifecycle-runtime-ktx-2.7.0\res
+com.example.flutter_application_1.app-fragment-1.7.1-16 C:\Users\HP\.gradle\caches\transforms-3\944e8c7b8c37446a889fa788da746690\transformed\fragment-1.7.1\res
+com.example.flutter_application_1.app-jetified-lifecycle-viewmodel-savedstate-2.7.0-17 C:\Users\HP\.gradle\caches\transforms-3\a48173c854cb1e8739cf50a0cc4e4f08\transformed\jetified-lifecycle-viewmodel-savedstate-2.7.0\res
+com.example.flutter_application_1.app-jetified-window-1.2.0-18 C:\Users\HP\.gradle\caches\transforms-3\ad6de34b529f37f7a6597556758879f8\transformed\jetified-window-1.2.0\res
+com.example.flutter_application_1.app-jetified-startup-runtime-1.1.1-19 C:\Users\HP\.gradle\caches\transforms-3\af971a1a8fbc34d1b6db899e9c4b8069\transformed\jetified-startup-runtime-1.1.1\res
+com.example.flutter_application_1.app-appcompat-1.1.0-20 C:\Users\HP\.gradle\caches\transforms-3\b3c6629888fd6e5f6c2cce0dfdfc0bf9\transformed\appcompat-1.1.0\res
+com.example.flutter_application_1.app-jetified-core-1.0.0-21 C:\Users\HP\.gradle\caches\transforms-3\bfba63c6d8d3899c01efa2cd2a430024\transformed\jetified-core-1.0.0\res
+com.example.flutter_application_1.app-jetified-datastore-core-release-22 C:\Users\HP\.gradle\caches\transforms-3\bfbb0ab2a4c1fa917eb497330708030a\transformed\jetified-datastore-core-release\res
+com.example.flutter_application_1.app-jetified-savedstate-ktx-1.2.1-23 C:\Users\HP\.gradle\caches\transforms-3\c65a66cf33021bbefa7146775bd65ffd\transformed\jetified-savedstate-ktx-1.2.1\res
+com.example.flutter_application_1.app-lifecycle-livedata-core-2.7.0-24 C:\Users\HP\.gradle\caches\transforms-3\cb83cde40ef5c6fd6e72b8f82c8817b0\transformed\lifecycle-livedata-core-2.7.0\res
+com.example.flutter_application_1.app-jetified-lifecycle-viewmodel-ktx-2.7.0-25 C:\Users\HP\.gradle\caches\transforms-3\cfc010941ade64e3044d9f18e5ef829a\transformed\jetified-lifecycle-viewmodel-ktx-2.7.0\res
+com.example.flutter_application_1.app-jetified-core-ktx-1.13.1-26 C:\Users\HP\.gradle\caches\transforms-3\d5689830292ae915176ffdacf744e90a\transformed\jetified-core-ktx-1.13.1\res
+com.example.flutter_application_1.app-core-runtime-2.2.0-27 C:\Users\HP\.gradle\caches\transforms-3\df70d6c00391816b58754fbf247417a0\transformed\core-runtime-2.2.0\res
+com.example.flutter_application_1.app-lifecycle-runtime-2.7.0-28 C:\Users\HP\.gradle\caches\transforms-3\e3cb88b71a6ff3a4e1cbc09fd2f62e85\transformed\lifecycle-runtime-2.7.0\res
+com.example.flutter_application_1.app-jetified-activity-ktx-1.8.1-29 C:\Users\HP\.gradle\caches\transforms-3\e4be5c37cba4923493a8b03fab6bc721\transformed\jetified-activity-ktx-1.8.1\res
+com.example.flutter_application_1.app-jetified-lifecycle-livedata-core-ktx-2.7.0-30 C:\Users\HP\.gradle\caches\transforms-3\e7d198fbd721a62aa289442d4a9e10b1\transformed\jetified-lifecycle-livedata-core-ktx-2.7.0\res
+com.example.flutter_application_1.app-lifecycle-livedata-2.7.0-31 C:\Users\HP\.gradle\caches\transforms-3\edf07b9fc368e5e1e324a16e162213f4\transformed\lifecycle-livedata-2.7.0\res
+com.example.flutter_application_1.app-jetified-profileinstaller-1.3.1-32 C:\Users\HP\.gradle\caches\transforms-3\efb0d1bede79ee2f72d81e59b558c68e\transformed\jetified-profileinstaller-1.3.1\res
+com.example.flutter_application_1.app-jetified-lifecycle-process-2.7.0-33 C:\Users\HP\.gradle\caches\transforms-3\f0721c6518dd04d0b117fe2f16085239\transformed\jetified-lifecycle-process-2.7.0\res
+com.example.flutter_application_1.app-slidingpanelayout-1.2.0-34 C:\Users\HP\.gradle\caches\transforms-3\f6c12906886370ace50f2c242a46d9be\transformed\slidingpanelayout-1.2.0\res
+com.example.flutter_application_1.app-debug-35 C:\Users\HP\Documents\GitHub\E-fit\Flutter App\android\app\src\debug\res
+com.example.flutter_application_1.app-main-36 C:\Users\HP\Documents\GitHub\E-fit\Flutter App\android\app\src\main\res
+com.example.flutter_application_1.app-pngs-37 C:\Users\HP\Documents\GitHub\E-fit\Flutter App\build\app\generated\res\pngs\debug
+com.example.flutter_application_1.app-resValues-38 C:\Users\HP\Documents\GitHub\E-fit\Flutter App\build\app\generated\res\resValues\debug
+com.example.flutter_application_1.app-packageDebugResources-39 C:\Users\HP\Documents\GitHub\E-fit\Flutter App\build\app\intermediates\incremental\debug\packageDebugResources\merged.dir
+com.example.flutter_application_1.app-packageDebugResources-40 C:\Users\HP\Documents\GitHub\E-fit\Flutter App\build\app\intermediates\incremental\debug\packageDebugResources\stripped.dir
+com.example.flutter_application_1.app-merged_res-41 C:\Users\HP\Documents\GitHub\E-fit\Flutter App\build\app\intermediates\merged_res\debug
+com.example.flutter_application_1.app-packaged_res-42 C:\Users\HP\Documents\GitHub\E-fit\Flutter App\build\flutter_background_service_android\intermediates\packaged_res\debug
+com.example.flutter_application_1.app-packaged_res-43 C:\Users\HP\Documents\GitHub\E-fit\Flutter App\build\pedometer\intermediates\packaged_res\debug
+com.example.flutter_application_1.app-packaged_res-44 C:\Users\HP\Documents\GitHub\E-fit\Flutter App\build\permission_handler_android\intermediates\packaged_res\debug
+com.example.flutter_application_1.app-packaged_res-45 C:\Users\HP\Documents\GitHub\E-fit\Flutter App\build\sensors_plus\intermediates\packaged_res\debug
+com.example.flutter_application_1.app-packaged_res-46 C:\Users\HP\Documents\GitHub\E-fit\Flutter App\build\shared_preferences_android\intermediates\packaged_res\debug
