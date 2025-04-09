@@ -1,7 +1,7 @@
 import { User } from "../models/user.js";
 import { UserMeals } from "../models/userMeals.js";
 import { waterLog } from "../models/waterlog.js";
-import {UserExercise }from "../models/userExercise.js";
+import { UserExercise } from "../models/userExercise.js";
 
 export const createUser = async (req, res) => {
   try {
@@ -263,68 +263,167 @@ export const logWater = async (req, res) => {
 
 export const saveExercises = async (req, res) => {
   try {
-      const { email, exercises } = req.body;
-      console.log("Log Exercise: ", email)
-      // Basic validation
-      if (!email || !exercises || !Array.isArray(exercises) || exercises.length === 0) {
-          return res.status(400).json({
-              success: false,
-              message: 'Email and exercises array are required'
-          });
-      }
-
-      const users = await User.find({ email: email });
-
-      if (users.length === 0) {
-          return res.status(404).json({ error: "User not found" });
-      }
-
-      // Prepare exercises data for bulk insert
-      const exercisesToSave = exercises.map(exerciseItem => {
-          const exercise = exerciseItem.exercise;
-          return {
-              userEmail: email,
-              name: exercise.name,
-              timer: exercise.timer,
-              typeOfExercise: exercise.typeOfExercise,
-              sets: exerciseItem.setData.map(set => ({
-                  setNumber: set.set,
-                  value: Number(set.value),
-                  type: set.type,
-                  weight: set.weight ? Number(set.weight) : null
-              }))
-          };
+    const { email, exercises } = req.body;
+    console.log("Log Exercise: ", email)
+    // Basic validation
+    if (!email || !exercises || !Array.isArray(exercises) || exercises.length === 0) {
+      return res.status(400).json({
+        success: false,
+        message: 'Email and exercises array are required'
       });
+    }
 
-      // Insert all exercises in one operation
-      const savedExercises = await UserExercise.insertMany(exercisesToSave);
+    const users = await User.find({ email: email });
 
-      return res.status(201).json({
-          success: true,
-          message: 'Exercises saved successfully',
-          data: {
-              count: savedExercises.length,
-              exercises: savedExercises.map(exercise => ({
-                  id: exercise._id,
-                  name: exercise.name,
-                  type: exercise.typeOfExercise,
-                  sets: exercise.sets.map(set => ({
-                      setNumber: set.setNumber,
-                      value: set.value,
-                      type: set.type,
-                      weight: set.weight
-                  })),
-                  timestamp: exercise.timestamp
-              }))
-          }
-      });
+    if (users.length === 0) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    // Prepare exercises data for bulk insert
+    const exercisesToSave = exercises.map(exerciseItem => {
+      const exercise = exerciseItem.exercise;
+      return {
+        userEmail: email,
+        name: exercise.name,
+        timer: exercise.timer,
+        typeOfExercise: exercise.typeOfExercise,
+        sets: exerciseItem.setData.map(set => ({
+          setNumber: set.set,
+          value: Number(set.value),
+          type: set.type,
+          weight: set.weight ? Number(set.weight) : null
+        }))
+      };
+    });
+
+    // Insert all exercises in one operation
+    const savedExercises = await UserExercise.insertMany(exercisesToSave);
+
+    return res.status(201).json({
+      success: true,
+      message: 'Exercises saved successfully',
+      data: {
+        count: savedExercises.length,
+        exercises: savedExercises.map(exercise => ({
+          id: exercise._id,
+          name: exercise.name,
+          type: exercise.typeOfExercise,
+          sets: exercise.sets.map(set => ({
+            setNumber: set.setNumber,
+            value: set.value,
+            type: set.type,
+            weight: set.weight
+          })),
+          timestamp: exercise.timestamp
+        }))
+      }
+    });
 
   } catch (error) {
-      console.error('Error saving exercises:', error);
-      return res.status(500).json({
-          success: false,
-          message: 'Failed to save exercises',
-          error: error.message
+    console.error('Error saving exercises:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Failed to save exercises',
+      error: error.message
+    });
+  }
+};
+
+// Get exercise history
+
+export const getWorkoutHistory = async (req, res) => {
+  try {
+    const { email } = req.query;
+
+    if (!email) {
+      return res.status(400).json({
+        success: false,
+        message: 'Email is required'
       });
+    }
+    console.log("Workout history: ", email)
+    
+    const users = await User.find({ email: email });
+    if (users.length === 0) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    // Get exercises from database, sorted by timestamp (newest first)
+    const exercises = await UserExercise.find({ userEmail: email })
+      .sort({ timestamp: -1 });
+
+    if (!exercises || exercises.length === 0) {
+      return res.status(200).json({
+        success: true,
+        data: {
+          numberOfDays: 0,
+          days: []
+        }
+      });
+    }
+
+    // Group exercises by day
+    const exercisesByDay = {};
+    exercises.forEach(exercise => {
+      const dateStr = exercise.timestamp.toISOString().split('T')[0];
+      if (!exercisesByDay[dateStr]) {
+        exercisesByDay[dateStr] = [];
+      }
+      exercisesByDay[dateStr].push(exercise);
+    });
+
+    // Format the data for frontend
+    const days = Object.keys(exercisesByDay).map((dateStr, index) => {
+      const dayExercises = exercisesByDay[dateStr];
+      const dayName = index === 0 ? "Today" :
+        index === 1 ? "Yesterday" :
+          new Date(dateStr).toLocaleDateString('en-US', {
+            weekday: 'long',
+            month: 'short',
+            day: 'numeric'
+          });
+
+      return {
+        name: dayName,
+        noOfExercises: dayExercises.length,
+        exercises: dayExercises.map(exercise => {
+          // Format sets information
+          const setsInfo = exercise.sets.map(set => {
+            let setText = `Set ${set.setNumber}: `;
+            if (exercise.timer) {
+              setText += `${set.value} minutes`;
+            } else {
+              setText += `${set.value} reps`;
+              if (set.weight) {
+                setText += ` (${set.weight} kg)`;
+              }
+            }
+            return setText;
+          }).join('\n');
+
+          return {
+            [exercise.name]: setsInfo
+          };
+        })
+      };
+    });
+
+    const responseData = {
+      numberOfDays: days.length,
+      days: days
+    };
+
+    return res.status(200).json({
+      success: true,
+      data: responseData
+    });
+
+  } catch (error) {
+    console.error('Error fetching workout history:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Failed to fetch workout history',
+      error: error.message
+    });
   }
 };
