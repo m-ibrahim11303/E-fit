@@ -1,5 +1,7 @@
 import { User } from "../models/user.js";
 import { UserMeals } from "../models/userMeals.js";
+import { waterLog } from "../models/waterlog.js";
+
 export const createUser = async (req, res) => {
   try {
     console.log(req.body)
@@ -153,6 +155,11 @@ export const getDietHistory = async (req, res) => {
       });
     }
 
+    const users = await User.find({ email: email });
+    if (users.length === 0) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
     // Get meals from database, sorted by timestamp (newest first)
     const meals = await UserMeals.find({ userEmail: email })
       .sort({ timestamp: -1 });
@@ -214,5 +221,37 @@ export const getDietHistory = async (req, res) => {
       message: 'Failed to fetch diet history',
       error: error.message
     });
+  }
+};
+
+export const logWater = async (req, res) => {
+  console.log("Water log: ", req.body)
+  const { email, amount } = req.body;
+
+  if (!email || !amount) {
+    return res.status(400).json({ message: 'Email and amount are required' });
+  }
+
+  const users = await User.find({ email: email });
+
+  if (users.length === 0) {
+    return res.status(404).json({ error: "User not found" });
+  }
+
+  try {
+    // Create a new water log entry
+    const newWaterLog = new waterLog({
+      email,
+      amount,
+    });
+
+    // Save the log to the database
+    await newWaterLog.save();
+
+    // Return a success message
+    res.status(200).json({ message: 'Water intake logged successfully' });
+  } catch (error) {
+    console.error('Error logging water intake:', error);
+    res.status(500).json({ message: 'Server error' });
   }
 };
