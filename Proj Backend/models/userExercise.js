@@ -1,15 +1,45 @@
 import mongoose from "mongoose";
 
-const userExerciseSchema = new mongoose.Schema({
-    userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
-    exerciseId: { type: mongoose.Schema.Types.ObjectId, ref: "Exercises", required: true },
-    timeStamp: { type: Date, required: true },
-    sets_reps: [{ type: Number, required: true }] // [number of reps in each set OR number of seconds in each set]
+const userExercisesSchema = new mongoose.Schema({
+    userEmail: { 
+        type: String,
+        required: true,
+        index: true
+    },
+    name: {
+        type: String,
+        required: true
+    },
+    timer: {
+        type: Boolean,
+        required: true
+    },
+    typeOfExercise: {
+        type: String,
+        required: true
+    },
+    sets: [{
+        setNumber: {
+            type: Number,
+            required: true
+        },
+        value: {
+            type: Number,
+            required: true
+        },
+        type: {
+            type: String,
+            required: true
+        },
+        weight: {
+            type: Number
+        }
+    }],
+    timestamp: { 
+        type: Date, 
+        default: Date.now,
+        required: true 
+    }
 });
 
-// module.exports = mongoose.model("UserExercise", userExerciseSchema);
-export const UserExercise = mongoose.model("UserExercise", userExerciseSchema);
-
-// exercise id
-// Sets [] 
-// TimeStamp
+export const UserExercise = mongoose.model("UserExercises", userExercisesSchema);

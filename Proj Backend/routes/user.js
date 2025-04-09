@@ -1,5 +1,5 @@
 import express from "express";
-import { createUser, loginUser, saveMeals , getDietHistory, logWater} from "../controllers/user.js";
+import { createUser, loginUser, saveMeals , getDietHistory, logWater, saveExercises} from "../controllers/user.js";
 
 export const userRouter = express.Router();
 
@@ -8,5 +8,5 @@ userRouter.get("/login", loginUser);
 userRouter.post("/savemeals", saveMeals)
 userRouter.post("/logwater", logWater)
 userRouter.get("/diethistory", getDietHistory)
-
+userRouter.post("/saveexercises", saveExercises)
 // localhost:8000/user/get

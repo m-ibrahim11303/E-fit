@@ -1,6 +1,7 @@
 import { User } from "../models/user.js";
 import { UserMeals } from "../models/userMeals.js";
 import { waterLog } from "../models/waterlog.js";
+import {UserExercise }from "../models/userExercise.js";
 
 export const createUser = async (req, res) => {
   try {
@@ -253,5 +254,77 @@ export const logWater = async (req, res) => {
   } catch (error) {
     console.error('Error logging water intake:', error);
     res.status(500).json({ message: 'Server error' });
+  }
+};
+
+
+// Log user exercises
+
+
+export const saveExercises = async (req, res) => {
+  try {
+      const { email, exercises } = req.body;
+      console.log("Log Exercise: ", email)
+      // Basic validation
+      if (!email || !exercises || !Array.isArray(exercises) || exercises.length === 0) {
+          return res.status(400).json({
+              success: false,
+              message: 'Email and exercises array are required'
+          });
+      }
+
+      const users = await User.find({ email: email });
+
+      if (users.length === 0) {
+          return res.status(404).json({ error: "User not found" });
+      }
+
+      // Prepare exercises data for bulk insert
+      const exercisesToSave = exercises.map(exerciseItem => {
+          const exercise = exerciseItem.exercise;
+          return {
+              userEmail: email,
+              name: exercise.name,
+              timer: exercise.timer,
+              typeOfExercise: exercise.typeOfExercise,
+              sets: exerciseItem.setData.map(set => ({
+                  setNumber: set.set,
+                  value: Number(set.value),
+                  type: set.type,
+                  weight: set.weight ? Number(set.weight) : null
+              }))
+          };
+      });
+
+      // Insert all exercises in one operation
+      const savedExercises = await UserExercise.insertMany(exercisesToSave);
+
+      return res.status(201).json({
+          success: true,
+          message: 'Exercises saved successfully',
+          data: {
+              count: savedExercises.length,
+              exercises: savedExercises.map(exercise => ({
+                  id: exercise._id,
+                  name: exercise.name,
+                  type: exercise.typeOfExercise,
+                  sets: exercise.sets.map(set => ({
+                      setNumber: set.setNumber,
+                      value: set.value,
+                      type: set.type,
+                      weight: set.weight
+                  })),
+                  timestamp: exercise.timestamp
+              }))
+          }
+      });
+
+  } catch (error) {
+      console.error('Error saving exercises:', error);
+      return res.status(500).json({
+          success: false,
+          message: 'Failed to save exercises',
+          error: error.message
+      });
   }
 };
