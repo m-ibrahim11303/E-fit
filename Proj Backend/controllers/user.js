@@ -27,7 +27,7 @@ export const createUser = async (req, res) => {
 // email password
 export const loginUser = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { email, password } = req.query; 
 
     if (!email || !password) {
       return res.status(400).json({ error: "All fields are required" });
@@ -36,18 +36,22 @@ export const loginUser = async (req, res) => {
     const users = await User.find({ email: email });
 
     if (users.length === 0) {
-      return res.status(404).json({ error: "User not found" });
+      return res.status(404).json({ error: "User not found", sessionCookie: null });
     }
 
     const user = users[0]; // email is unique
 
     if (user.password !== password) {
-      return res.status(401).json({ error: "Incorrect password" });
+      return res.status(401).json({ error: "Incorrect password", sessionCookie: null });
     }
 
-    return res.status(200).json({ message: "Login successful", user });
+    // For simplicity, we are returning email as sessionCookie
+    return res.status(200).json({ 
+      message: "Login successful", 
+      sessionCookie: user.email 
+    });
   } catch (error) {
-    return res.status(500).json({ error: error.message });
+    return res.status(500).json({ error: error.message, sessionCookie: null });
   }
 };
 
