@@ -5,6 +5,8 @@ import 'signup_page_2.dart'; // Import the VerifyEmailPage
 import 'package:login_signup_1/home_page.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart'; // Add secure storage
 import 'package:crypto/crypto.dart'; // Add this for SHA-256 hashing
+import 'package:login_signup_1/bootup/signup_page_1.dart';
+import 'package:login_signup_1/bootup/signup_page_3.dart'; // Ensure this import is correct
 
 // Global variables
 String name_ = "";

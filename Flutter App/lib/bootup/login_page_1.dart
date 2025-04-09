@@ -283,11 +283,11 @@ class _LoginPage1State extends State<LoginPage1> {
           _showSuccessDialog('Logged in successfully');
         }
       } else {
-        await storage.write(key: 'email', value: "fatim123@gmail.com");
+        // await storage.write(key: 'email', value: "fatim123@gmail.com");
         _showErrorDialog('Login failed. Please try again.');
       }
     } catch (e) {
-      await storage.write(key: 'email', value: "fatim123@gmail.com");
+      // await storage.write(key: 'email', value: "fatim123@gmail.com");
       _showErrorDialog('An error occurred: $e');
     }
   }

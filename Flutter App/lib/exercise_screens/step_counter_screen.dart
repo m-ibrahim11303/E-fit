@@ -12,6 +12,7 @@ class _StepCounterScreenState extends State<StepCounterScreen> {
   late Stream<StepCount> _stepCountStream;
   late Stream<PedestrianStatus> _pedestrianStatusStream;
   String _status = '?', _steps = '?';
+  int _initialStepCount = 0;
 
   @override
   void initState() {
@@ -21,7 +22,8 @@ class _StepCounterScreenState extends State<StepCounterScreen> {
 
   void onStepCount(StepCount event) {
     setState(() {
-      _steps = event.steps.toString();
+      // Subtract the initial step count from the new step count
+      _steps = (event.steps - _initialStepCount).toString();
     });
   }
 
@@ -63,10 +65,16 @@ class _StepCounterScreenState extends State<StepCounterScreen> {
     _pedestrianStatusStream = Pedometer.pedestrianStatusStream;
     _stepCountStream = Pedometer.stepCountStream;
 
+    _stepCountStream.listen((event) {
+      if (_initialStepCount == 0) {
+        _initialStepCount = event.steps;
+      }
+      onStepCount(event);
+    }).onError(onStepCountError);
+
     _pedestrianStatusStream
         .listen(onPedestrianStatusChanged)
         .onError(onPedestrianStatusError);
-    _stepCountStream.listen(onStepCount).onError(onStepCountError);
   }
 
   @override

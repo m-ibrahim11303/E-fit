@@ -174,38 +174,69 @@ class _CustomButton extends StatelessWidget {
   }
 }
 
-// Explicitly declared workout data
-const Map<String, dynamic> workoutData = {
-  "numberOfDays": 3,
-  "days": [
-    {
-      "name": "Today",
-      "noOfExercises": 3,
-      "exercises": [
-        {"Running": "Set 1: 10 minutes\n"},
-        {"Bench Press": "Set 1: 12 reps\nSet 2: 10 reps\nSet 3: 8 reps"},
-        {"Incline Dumbbell Press": "Set 1: 12 reps"}
-      ]
-    },
-    {
-      "name": "Thursday",
-      "noOfExercises": 1,
-      "exercises": [
-        {"Bench Press": "Set 1: 12 reps\nSet 2: 10 reps\nSet 3: 8 reps"}
-      ]
-    },
-    {
-      "name": "Wednesday",
-      "noOfExercises": 2,
-      "exercises": [
-        {"Running": "Set 1: 10 minutes\n"},
-        {"Bench Press": "Set 1: 12 reps\nSet 2: 10 reps\nSet 3: 8 reps"}
-      ]
-    }
-  ]
-};
+// Workout History Screen
+class WorkoutHistoryScreen extends StatefulWidget {
+  @override
+  _WorkoutHistoryScreenState createState() => _WorkoutHistoryScreenState();
+}
 
-class WorkoutHistoryScreen extends StatelessWidget {
+class _WorkoutHistoryScreenState extends State<WorkoutHistoryScreen> {
+  Map<String, dynamic> workoutData = {"numberOfDays": 0, "days": []};
+  bool isLoading = true;
+  String errorMessage = '';
+  final storage = FlutterSecureStorage();
+
+  @override
+  void initState() {
+    super.initState();
+    fetchWorkoutHistory();
+  }
+
+  Future<void> fetchWorkoutHistory() async {
+    try {
+      final email = await storage.read(key: 'email');
+
+      if (email == null) {
+        setState(() {
+          isLoading = false;
+          errorMessage = 'User email not found.';
+        });
+        return;
+      }
+
+      final response = await http.get(
+        Uri.parse(
+            'https://e-fit-backend.onrender.com/user/workouthistory?email=$email'),
+      );
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        if (data['success']) {
+          setState(() {
+            workoutData = data['data'];
+            isLoading = false;
+          });
+        } else {
+          setState(() {
+            isLoading = false;
+            errorMessage = data['message'] ?? 'Failed to load workout history';
+          });
+        }
+      } else {
+        setState(() {
+          isLoading = false;
+          errorMessage =
+              'Failed to load workout history: ${response.statusCode}';
+        });
+      }
+    } catch (e) {
+      setState(() {
+        isLoading = false;
+        errorMessage = 'Error: ${e.toString()}';
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -224,98 +255,85 @@ class WorkoutHistoryScreen extends StatelessWidget {
       ),
       body: Container(
         color: Colors.white,
-        child: ListView.builder(
-          padding: EdgeInsets.all(16),
-          itemCount: workoutData['days'].length,
-          itemBuilder: (context, dayIndex) {
-            final day = workoutData['days'][dayIndex];
-            return Padding(
-              padding: EdgeInsets.only(bottom: 20),
-              child: Container(
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: Color(0xFF562634),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                padding: EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      day['name'],
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
+        child: isLoading
+            ? Center(child: CircularProgressIndicator())
+            : errorMessage.isNotEmpty
+                ? Center(child: Text(errorMessage))
+                : workoutData['numberOfDays'] == 0
+                    ? Center(child: Text('No workout history available'))
+                    : ListView.builder(
+                        padding: EdgeInsets.all(16),
+                        itemCount: workoutData['days'].length,
+                        itemBuilder: (context, dayIndex) {
+                          final day = workoutData['days'][dayIndex];
+                          return Padding(
+                            padding: EdgeInsets.only(bottom: 20),
+                            child: Container(
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                color: Color(0xFF562634),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              padding: EdgeInsets.all(16),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    day['name'],
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  SizedBox(height: 10),
+                                  ...List.generate(day['exercises'].length,
+                                      (exerciseIndex) {
+                                    final exercise =
+                                        day['exercises'][exerciseIndex];
+                                    final exerciseName = exercise.keys.first;
+                                    final sets = exercise.values.first;
+                                    return Container(
+                                      width: double.infinity,
+                                      margin: EdgeInsets.only(bottom: 8),
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                      padding: EdgeInsets.all(12),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            exerciseName,
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 16,
+                                            ),
+                                          ),
+                                          SizedBox(height: 6),
+                                          Text(
+                                            sets,
+                                            style: TextStyle(
+                                              color: Colors.grey[700],
+                                              fontSize: 14,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  }),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
                       ),
-                    ),
-                    SizedBox(height: 10),
-                    ...List.generate(day['exercises'].length, (exerciseIndex) {
-                      final exercise = day['exercises'][exerciseIndex];
-                      final exerciseName = exercise.keys.first;
-                      final sets = exercise.values.first;
-                      return Container(
-                        width: double.infinity,
-                        margin: EdgeInsets.only(bottom: 8),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        padding: EdgeInsets.all(12),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              exerciseName,
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16,
-                              ),
-                            ),
-                            SizedBox(height: 6),
-                            Text(
-                              sets,
-                              style: TextStyle(
-                                color: Colors.grey[700],
-                                fontSize: 14,
-                              ),
-                            ),
-                          ],
-                        ),
-                      );
-                    }),
-                  ],
-                ),
-              ),
-            );
-          },
-        ),
       ),
     );
   }
 }
-
-// Diet History Data
-// const Map<String, dynamic> dietData = {
-//   "numberOfDays": 1,
-//   "days": [
-//     {
-//       "name": "Today",
-//       "noOfMeals": 3,
-//       "meals": [
-//         {
-//           "PDC - Eggs and paratha": "Calories(kcal): 700\nProtein(grams): 35\n"
-//         },
-//         {
-//           "Chicken and pasta": "Calories(kcal): 700\nProtein(grams): 35\n"
-//         },
-//         {
-//           "Panini": "Calories(kcal): 700\nProtein(grams): 35\n"
-//         }
-//       ]
-//     }
-//   ]
-// };
 
 // Diet History Screen
 class DietHistoryScreen extends StatefulWidget {

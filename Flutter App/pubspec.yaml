@@ -86,6 +86,7 @@ flutter:
      - assets/images/red_cross_icon.png
      - assets/images/calendar_icon.png
     # background
+     - assets/images/background_full.png
      - assets/images/background_bootup_page_2.png
      - assets/images/background_bootup_page_3.png
      - assets/images/background_bootup_page_4.png

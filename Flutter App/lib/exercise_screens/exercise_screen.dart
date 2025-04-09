@@ -108,14 +108,17 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
                         );
                       },
                     ),
-                    ElevatedButton.icon(
-                      icon: Icon(Icons.directions_walk),
-                      label: Text("Step Counter"),
+                    SizedBox(height: 30),
+                    _JourneyButton(
+                      icon: Icons.directions_walk,
+                      label: 'Step Counter',
+                      color: Color(0xFF562634),
                       onPressed: () {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => StepCounterScreen()),
+                            builder: (context) => StepCounterScreen(),
+                          ),
                         );
                       },
                     ),

@@ -136,42 +136,11 @@ class LoginSignupPage1 extends StatelessWidget {
               Container(
                 width: double.infinity,
                 padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                child: Text(
-                  'Log in with social media',
-                  style: jerseyStyle(20, const Color(0x90FFFFFF)),
-                  textAlign: TextAlign.center,
-                ),
+                
               ),
               const SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  IconButton(
-                    onPressed: () {
-                      // Handle Google login
-                    },
-                    icon: Image.asset(
-                      'assets/images/google_icon.png',
-                      width: 50,
-                      height: 50,
-                      fit: BoxFit.contain,
-                    ),
-                  ),
-                  const SizedBox(width: 20),
-                  IconButton(
-                    onPressed: () {
-                      // Handle Facebook login
-                    },
-                    icon: Image.asset(
-                      'assets/images/facebook_icon.png',
-                      width: 50,
-                      height: 50,
-                      fit: BoxFit.contain,
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 20), // Add some padding at the bottom
+              // Removed the Row containing Google and Facebook icons
+              const SizedBox(height: 20), // Maintain bottom padding
             ],
           ),
         ),
