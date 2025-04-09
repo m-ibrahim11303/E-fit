@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
 
-
 const waterLogSchema = new mongoose.Schema(
     {
         amount: {

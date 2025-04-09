@@ -3,6 +3,7 @@ import { UserMeals } from "../models/userMeals.js";
 import { waterLog } from "../models/waterlog.js";
 import { UserExercise } from "../models/userExercise.js";
 
+// SignUp user
 export const createUser = async (req, res) => {
   try {
     console.log(req.body)
@@ -48,7 +49,6 @@ export const createUser = async (req, res) => {
 };
 
 // Login
-// email password
 export const loginUser = async (req, res) => {
   try {
     console.log(req.query)
@@ -69,8 +69,6 @@ export const loginUser = async (req, res) => {
     if (user.password !== password) {
       return res.status(401).json({ error: "Incorrect password", sessionCookie: null });
     }
-
-    // For simplicity, we are returning email as sessionCookie
     console.log("User logged in: ", email)
     return res.status(200).json({
       message: "Login successful",
@@ -81,9 +79,7 @@ export const loginUser = async (req, res) => {
   }
 };
 
-// email verification (later)
-
-// Save Meal
+// Save user meals
 export const saveMeals = async (req, res) => {
   try {
     const { email, items } = req.body;
@@ -101,19 +97,15 @@ export const saveMeals = async (req, res) => {
       return res.status(404).json({ error: "User not found" });
     }
 
-    // Prepare meals data for bulk insert
     const mealsToSave = items.map(item => ({
       userEmail: email,
       name: item.name,
       calories: item.calories,
       protein: item.protein,
-      // timestamp will be automatically added
     }));
 
-    // Insert all meals in one operation
     const savedMeals = await UserMeals.insertMany(mealsToSave);
 
-    // Calculate totals
     const totals = {
       calories: items.reduce((sum, item) => sum + item.calories, 0),
       protein: items.reduce((sum, item) => sum + item.protein, 0)
@@ -175,7 +167,7 @@ export const getDietHistory = async (req, res) => {
       });
     }
 
-    // Group meals by day
+    // Grouping meals by day
     const mealsByDay = {};
     meals.forEach(meal => {
       const dateStr = meal.timestamp.toISOString().split('T')[0];
@@ -185,7 +177,7 @@ export const getDietHistory = async (req, res) => {
       mealsByDay[dateStr].push(meal);
     });
 
-    // Format the data to match frontend structure
+    // Formatting the data to match frontend structure
     const days = Object.keys(mealsByDay).map((dateStr, index) => {
       const dayMeals = mealsByDay[dateStr];
       const dayName = index === 0 ? "Today" :
@@ -246,10 +238,8 @@ export const logWater = async (req, res) => {
       amount,
     });
 
-    // Save the log to the database
     await newWaterLog.save();
 
-    // Return a success message
     res.status(200).json({ message: 'Water intake logged successfully' });
   } catch (error) {
     console.error('Error logging water intake:', error);
@@ -330,7 +320,6 @@ export const saveExercises = async (req, res) => {
 };
 
 // Get exercise history
-
 export const getWorkoutHistory = async (req, res) => {
   try {
     const { email } = req.query;

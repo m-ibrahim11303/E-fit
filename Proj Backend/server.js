@@ -11,4 +11,3 @@ app.listen(8000, () => {
 });
 
 connect();
-// Task app
