@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'dart:async';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart'; // Add secure storage
 
 // JSON data stored locally in the Dart file.
 const String journeyJson = '''
@@ -53,6 +54,9 @@ const String journeyJson = '''
 }
 ''';
 
+// Global secure storage instance
+final FlutterSecureStorage storage = FlutterSecureStorage();
+
 void main() {
   runApp(MyApp());
 }
@@ -89,9 +93,13 @@ class Exercise {
     ExerciseDetails? detailsReps,
   })  : typeOfExercise = typeOfExercise ?? (timer ? 'timer' : 'reps'),
         detailsTimer = detailsTimer ??
-            (timer ? ExerciseDetails(sets: 1, reps: [30]) : ExerciseDetails(sets: 0, reps: [])),
+            (timer
+                ? ExerciseDetails(sets: 1, reps: [30])
+                : ExerciseDetails(sets: 0, reps: [])),
         detailsReps = detailsReps ??
-            (!timer ? ExerciseDetails(sets: 1, reps: [10]) : ExerciseDetails(sets: 0, reps: []));
+            (!timer
+                ? ExerciseDetails(sets: 1, reps: [10])
+                : ExerciseDetails(sets: 0, reps: []));
 
   factory Exercise.fromJson(Map<String, dynamic> json) {
     return Exercise(
@@ -102,10 +110,14 @@ class Exercise {
       image: json['image'] ?? 'https://via.placeholder.com/150',
       detailsTimer: json.containsKey('detailsTimer')
           ? ExerciseDetails.fromJson(json['detailsTimer'])
-          : (json['timer'] ? ExerciseDetails(sets: 1, reps: [30]) : ExerciseDetails(sets: 0, reps: [])),
+          : (json['timer']
+              ? ExerciseDetails(sets: 1, reps: [30])
+              : ExerciseDetails(sets: 0, reps: [])),
       detailsReps: json.containsKey('detailsReps')
           ? ExerciseDetails.fromJson(json['detailsReps'])
-          : (!json['timer'] ? ExerciseDetails(sets: 1, reps: [10]) : ExerciseDetails(sets: 0, reps: [])),
+          : (!json['timer']
+              ? ExerciseDetails(sets: 1, reps: [10])
+              : ExerciseDetails(sets: 0, reps: [])),
     );
   }
 }
@@ -119,6 +131,7 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
   int _completedExercises = 12;
   final int _totalExercises = 25;
   int _stepsWalked = 8450;
+  String? _userEmail; // To store the fetched email
   final List<Exercise> _todayExercises = [
     Exercise(name: 'Push-ups', machineUse: false, timer: false),
     Exercise(name: 'Squats', machineUse: false, timer: false),
@@ -126,10 +139,23 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
   ];
 
   @override
+  void initState() {
+    super.initState();
+    _fetchEmail(); // Fetch email when the screen initializes
+  }
+
+  Future<void> _fetchEmail() async {
+    final String? email = await storage.read(key: 'email');
+    setState(() {
+      _userEmail = email ?? 'No email found'; // Default message if no email
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Fitness Journey'),
+        title: Text('Fitness Journey email'), //, '$_userEmail'), // Display email here
         flexibleSpace: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
@@ -175,7 +201,7 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
                     _ProgressStat(
                       icon: Icons.directions_walk,
                       value: '$_stepsWalked',
-                      label: 'Steps Walked',
+                      label: 'Steps Walked email: ($_userEmail)', // Display email here
                       color: Colors.blue,
                     ),
                   ],
@@ -216,7 +242,8 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (_) => ActiveJourneyScreen(journey: journey),
+                            builder: (_) =>
+                                ActiveJourneyScreen(journey: journey),
                           ),
                         );
                       },
@@ -481,9 +508,8 @@ class ExercisesListScreen extends StatelessWidget {
                   borderRadius: BorderRadius.circular(15),
                 ),
                 child: ListTile(
-                  tileColor: exercise.machineUse 
-                      ? Colors.blue[50] 
-                      : Colors.green[50],
+                  tileColor:
+                      exercise.machineUse ? Colors.blue[50] : Colors.green[50],
                   title: Text(
                     exercise.name,
                     style: TextStyle(
@@ -493,16 +519,16 @@ class ExercisesListScreen extends StatelessWidget {
                     ),
                   ),
                   subtitle: Text(
-                    exercise.machineUse 
-                        ? 'Machine Exercise' 
+                    exercise.machineUse
+                        ? 'Machine Exercise'
                         : 'Bodyweight Exercise',
                     style: TextStyle(
                       color: Colors.grey[600],
                     ),
                   ),
                   trailing: Icon(
-                    exercise.machineUse 
-                        ? Icons.fitness_center 
+                    exercise.machineUse
+                        ? Icons.fitness_center
                         : Icons.self_improvement,
                     color: Colors.red[800],
                   ),
@@ -556,7 +582,7 @@ class _ExerciseSetupScreenState extends State<ExerciseSetupScreen> {
   void _submit() {
     if (_formKey.currentState!.validate()) {
       List<Map<String, dynamic>> setData = [];
-      
+
       for (int i = 0; i < _setControllers.length; i++) {
         setData.add({
           'set': i + 1,
@@ -636,7 +662,8 @@ class _ExerciseSetupScreenState extends State<ExerciseSetupScreen> {
                         ),
                         validator: (value) {
                           if (value == null || value.isEmpty) return 'Required';
-                          if (int.tryParse(value) == null) return 'Invalid number';
+                          if (int.tryParse(value) == null)
+                            return 'Invalid number';
                           return null;
                         },
                       ),
@@ -681,10 +708,9 @@ class ExerciseJourney {
   });
 
   factory ExerciseJourney.fromJson(Map<String, dynamic> json) {
-    var exercises = (json['exercises'] as List)
-        .map((e) => Exercise.fromJson(e))
-        .toList();
-        
+    var exercises =
+        (json['exercises'] as List).map((e) => Exercise.fromJson(e)).toList();
+
     return ExerciseJourney(
       numberOfExercises: json['numberOfExercises'],
       exercises: exercises,
@@ -726,10 +752,12 @@ class _ActiveJourneyScreenState extends State<ActiveJourneyScreen> {
   Timer? _timer;
   bool _showCompletionMessage = false;
 
-  Exercise get currentExercise => widget.journey.exercises[_currentExerciseIndex];
-  ExerciseDetails get currentDetails => currentExercise.typeOfExercise == 'timer'
-      ? currentExercise.detailsTimer
-      : currentExercise.detailsReps;
+  Exercise get currentExercise =>
+      widget.journey.exercises[_currentExerciseIndex];
+  ExerciseDetails get currentDetails =>
+      currentExercise.typeOfExercise == 'timer'
+          ? currentExercise.detailsTimer
+          : currentExercise.detailsReps;
 
   @override
   void dispose() {
@@ -790,7 +818,6 @@ class _ActiveJourneyScreenState extends State<ActiveJourneyScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // Updated layout for a more aesthetically pleasing design.
     return Scaffold(
       appBar: AppBar(
         title: Text('Active Journey'),
@@ -816,14 +843,12 @@ class _ActiveJourneyScreenState extends State<ActiveJourneyScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // Instead of displaying the JPEG image, we display an icon.
                 Icon(
                   currentExercise.timer ? Icons.timer : Icons.fitness_center,
                   size: 100,
                   color: Colors.red[800],
                 ),
                 SizedBox(height: 20),
-                // Wrap exercise details in a Card for a polished look.
                 Card(
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15),
@@ -846,7 +871,8 @@ class _ActiveJourneyScreenState extends State<ActiveJourneyScreen> {
                         Text(
                           currentExercise.description,
                           textAlign: TextAlign.center,
-                          style: TextStyle(fontSize: 16, color: Colors.grey[700]),
+                          style:
+                              TextStyle(fontSize: 16, color: Colors.grey[700]),
                         ),
                       ],
                     ),
@@ -867,7 +893,8 @@ class _ActiveJourneyScreenState extends State<ActiveJourneyScreen> {
                 SizedBox(height: 30),
                 if (_showCompletionMessage)
                   Text(
-                    _currentExerciseIndex == widget.journey.exercises.length - 1 &&
+                    _currentExerciseIndex ==
+                                widget.journey.exercises.length - 1 &&
                             _currentSet == currentDetails.sets - 1
                         ? 'All done for the day! 🎉'
                         : 'Great work!',
@@ -877,16 +904,17 @@ class _ActiveJourneyScreenState extends State<ActiveJourneyScreen> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  if (!_showCompletionMessage && !_isRunning)
-                    ElevatedButton(
-                      onPressed: _startExercise,
-                      child: Text('Start ${currentExercise.name}'),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.red[800],
-                        foregroundColor: Colors.white, // This makes the button text white.
-                        padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15),
-                      ),
+                if (!_showCompletionMessage && !_isRunning)
+                  ElevatedButton(
+                    onPressed: _startExercise,
+                    child: Text('Start ${currentExercise.name}'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.red[800],
+                      foregroundColor: Colors.white,
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 40, vertical: 15),
                     ),
+                  ),
                 if (_isRunning)
                   ElevatedButton(
                     onPressed: _stopTimer,
@@ -894,7 +922,8 @@ class _ActiveJourneyScreenState extends State<ActiveJourneyScreen> {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.red[800],
                       foregroundColor: Colors.white,
-                      padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 40, vertical: 15),
                     ),
                   ),
               ],

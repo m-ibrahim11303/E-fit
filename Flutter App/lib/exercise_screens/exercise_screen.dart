@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'start_journey.dart';
 import 'continue_journey.dart';
+import 'step_counter_screen.dart';
 import 'dart:convert';
 
 class ExercisesScreen extends StatefulWidget {
@@ -101,8 +102,20 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (_) => ActiveJourneyScreen(journey: journey),
+                            builder: (_) =>
+                                ActiveJourneyScreen(journey: journey),
                           ),
+                        );
+                      },
+                    ),
+                    ElevatedButton.icon(
+                      icon: Icon(Icons.directions_walk),
+                      label: Text("Step Counter"),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => StepCounterScreen()),
                         );
                       },
                     ),
