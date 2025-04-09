@@ -61,19 +61,17 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  void _openSettings() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (_) => SettingsScreen()),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
+        leading: IconButton(
+          icon: Icon(Icons.settings, color: Colors.black),
+          onPressed: _openSettings,
+          tooltip: 'Settings',
+        ),
         actions: [
           IconButton(
             icon: Icon(Icons.logout, color: Colors.black),
@@ -84,8 +82,9 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: Column(
         children: [
-          // Background Image
-          Positioned.fill(
+          // Top Section with Curved Image (50% height)
+          Expanded(
+            flex: 1,
             child: ClipPath(
               clipper: _CurvedClipper(),
               child: ClipRRect(
@@ -96,6 +95,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Image.asset(
                   imageAsset,
                   fit: BoxFit.cover,
+                  width: double.infinity,
                 ),
               ),
             ),
@@ -113,7 +113,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   _CustomButton(
                     icon: Icons.fitness_center,
-                    label: 'Exercises ($_userEmail)', // Display email here
+                    label: 'Exercises',
                     color: const Color(0xFF562634),
                     onPressed: () => Navigator.push(
                       context,
