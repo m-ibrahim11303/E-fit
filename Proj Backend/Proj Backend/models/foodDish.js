@@ -8,5 +8,4 @@ const foodDishSchema = new mongoose.Schema({
     proteins: { type: Number, required: true }
 });
 
-// module.exports = mongoose.model("FoodDish", foodDishSchema);
 export const FoodDish = mongoose.model("FoodDish", foodDishSchema);

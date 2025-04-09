@@ -13,5 +13,3 @@ app.use("/user", userRouter);
 app.use("/dish", dishRouter);
 app.use("/exercise", exerciseRouter);
  
-
-// localhost:8000/user

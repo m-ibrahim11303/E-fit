@@ -1,5 +1,6 @@
 import { FoodDish } from "../models/foodDish.js";
 
+// Add new dish to DB
 export const addDish = async (req, res) => {
   try {
     const { name, description, eatery, calories, proteins } = req.body;
@@ -16,6 +17,7 @@ export const addDish = async (req, res) => {
   }
 };
 
+// Get all dishes
 export const getAllDishes = async (req, res) => {
   try {
     const dishes = await FoodDish.find();

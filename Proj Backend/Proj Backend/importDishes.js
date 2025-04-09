@@ -6,7 +6,7 @@ const API_URL = "http://localhost:8000/dish/add";
 
 const results = [];
 
-fs.createReadStream("dishes.csv") // Change this to your CSV file path
+fs.createReadStream("dishes.csv") 
     .pipe(csv())
     .on("data", (row) => {
         results.push(row);
