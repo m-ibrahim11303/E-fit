@@ -137,6 +137,7 @@ export const saveMeals = async (req, res) => {
   }
 };
 
+// Diet history for user
 export const getDietHistory = async (req, res) => {
   try {
     const { email } = req.query; // Get email from query params
@@ -217,6 +218,7 @@ export const getDietHistory = async (req, res) => {
   }
 };
 
+
 export const logWater = async (req, res) => {
   console.log("Water log: ", req.body)
   const { email, amount } = req.body;
@@ -249,8 +251,6 @@ export const logWater = async (req, res) => {
 
 
 // Log user exercises
-
-
 export const saveExercises = async (req, res) => {
   try {
     const { email, exercises } = req.body;
