@@ -35,7 +35,7 @@ export const createUser = async (req, res) => {
       weight: Number(weight)
     });
 
-    console.log("User created:", newUser);
+    console.log("User created:", newUser.firstName);
     return res.status(201).json({ message: "User created", email: newUser.email });
 
   } catch (err) {
@@ -68,6 +68,7 @@ export const loginUser = async (req, res) => {
     }
 
     // For simplicity, we are returning email as sessionCookie
+    console.log("User logged in: ", email)
     return res.status(200).json({
       message: "Login successful",
       sessionCookie: user.email
