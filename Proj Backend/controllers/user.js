@@ -83,61 +83,136 @@ export const loginUser = async (req, res) => {
 // Save Meal
 export const saveMeals = async (req, res) => {
   try {
-      const { email, items } = req.body;
+    const { email, items } = req.body;
 
-      // Basic validation
-      if (!email || !items || !Array.isArray(items) || items.length === 0) {
-          return res.status(400).json({
-              success: false,
-              message: 'Email and items array are required'
-          });
-      }
-      const users = await User.find({ email: email });
-
-      if (users.length === 0) {
-        return res.status(404).json({ error: "User not found" });
-      }
-
-      // Prepare meals data for bulk insert
-      const mealsToSave = items.map(item => ({
-          userEmail: email,
-          name: item.name,
-          calories: item.calories,
-          protein: item.protein,
-          // timestamp will be automatically added
-      }));
-
-      // Insert all meals in one operation
-      const savedMeals = await UserMeals.insertMany(mealsToSave);
-
-      // Calculate totals
-      const totals = {
-          calories: items.reduce((sum, item) => sum + item.calories, 0),
-          protein: items.reduce((sum, item) => sum + item.protein, 0)
-      };
-
-      return res.status(201).json({
-          success: true,
-          message: 'Meals saved successfully',
-          data: {
-              count: savedMeals.length,
-              totals,
-              meals: savedMeals.map(meal => ({
-                  id: meal._id,
-                  name: meal.name,
-                  calories: meal.calories,
-                  protein: meal.protein,
-                  timestamp: meal.timestamp
-              }))
-          }
+    // Basic validation
+    if (!email || !items || !Array.isArray(items) || items.length === 0) {
+      return res.status(400).json({
+        success: false,
+        message: 'Email and items array are required'
       });
+    }
+    const users = await User.find({ email: email });
+
+    if (users.length === 0) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    // Prepare meals data for bulk insert
+    const mealsToSave = items.map(item => ({
+      userEmail: email,
+      name: item.name,
+      calories: item.calories,
+      protein: item.protein,
+      // timestamp will be automatically added
+    }));
+
+    // Insert all meals in one operation
+    const savedMeals = await UserMeals.insertMany(mealsToSave);
+
+    // Calculate totals
+    const totals = {
+      calories: items.reduce((sum, item) => sum + item.calories, 0),
+      protein: items.reduce((sum, item) => sum + item.protein, 0)
+    };
+
+    return res.status(201).json({
+      success: true,
+      message: 'Meals saved successfully',
+      data: {
+        count: savedMeals.length,
+        totals,
+        meals: savedMeals.map(meal => ({
+          id: meal._id,
+          name: meal.name,
+          calories: meal.calories,
+          protein: meal.protein,
+          timestamp: meal.timestamp
+        }))
+      }
+    });
 
   } catch (error) {
-      console.error('Error saving meals:', error);
-      return res.status(500).json({
-          success: false,
-          message: 'Failed to save meals',
-          error: error.message
+    console.error('Error saving meals:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Failed to save meals',
+      error: error.message
+    });
+  }
+};
+
+export const getDietHistory = async (req, res) => {
+  try {
+    const { email } = req.query; // Get email from query params
+
+    if (!email) {
+      return res.status(400).json({
+        success: false,
+        message: 'Email is required'
       });
+    }
+
+    // Get meals from database, sorted by timestamp (newest first)
+    const meals = await UserMeals.find({ userEmail: email })
+      .sort({ timestamp: -1 });
+
+    if (!meals || meals.length === 0) {
+      return res.status(200).json({
+        success: true,
+        data: {
+          numberOfDays: 0,
+          days: []
+        }
+      });
+    }
+
+    // Group meals by day
+    const mealsByDay = {};
+    meals.forEach(meal => {
+      const dateStr = meal.timestamp.toISOString().split('T')[0];
+      if (!mealsByDay[dateStr]) {
+        mealsByDay[dateStr] = [];
+      }
+      mealsByDay[dateStr].push(meal);
+    });
+
+    // Format the data to match frontend structure
+    const days = Object.keys(mealsByDay).map((dateStr, index) => {
+      const dayMeals = mealsByDay[dateStr];
+      const dayName = index === 0 ? "Today" :
+        index === 1 ? "Yesterday" :
+          new Date(dateStr).toLocaleDateString('en-US', {
+            weekday: 'long',
+            month: 'short',
+            day: 'numeric'
+          });
+
+      return {
+        name: dayName,
+        noOfMeals: dayMeals.length,
+        meals: dayMeals.map(meal => ({
+          [meal.name]: `Calories(kcal): ${meal.calories}\nProtein(grams): ${meal.protein}`
+        }))
+      };
+    });
+
+    const responseData = {
+      numberOfDays: days.length,
+      days: days
+    };
+
+    return res.status(200).json({
+      success: true,
+      data: responseData
+    });
+
+  } catch (error) {
+    console.error('Error fetching diet history:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Failed to fetch diet history',
+      error: error.message
+    });
   }
 };
