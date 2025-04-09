@@ -15,3 +15,4 @@ app.use("/exercise", exerciseRouter);
  
 
 // localhost:8000/user
+// https://e-fit-backend.onrender.com/dish/all/ 

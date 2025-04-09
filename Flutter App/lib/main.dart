@@ -43,7 +43,8 @@ class HomeScreen extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         IconButton(
-                          icon: Icon(Icons.settings, size: 30, color: Colors.black),
+                          icon: Icon(Icons.settings,
+                              size: 30, color: Colors.black),
                           onPressed: () => Navigator.push(
                             context,
                             MaterialPageRoute(builder: (_) => SettingsScreen()),
@@ -62,9 +63,11 @@ class HomeScreen extends StatelessWidget {
                               child: Image.network(
                                 imageUrls[0],
                                 fit: BoxFit.cover,
-                                loadingBuilder: (context, child, loadingProgress) {
+                                loadingBuilder:
+                                    (context, child, loadingProgress) {
                                   if (loadingProgress == null) return child;
-                                  return Center(child: CircularProgressIndicator());
+                                  return Center(
+                                      child: CircularProgressIndicator());
                                 },
                               ),
                             ),
@@ -75,9 +78,11 @@ class HomeScreen extends StatelessWidget {
                               child: Image.network(
                                 imageUrls[1],
                                 fit: BoxFit.cover,
-                                loadingBuilder: (context, child, loadingProgress) {
+                                loadingBuilder:
+                                    (context, child, loadingProgress) {
                                   if (loadingProgress == null) return child;
-                                  return Center(child: CircularProgressIndicator());
+                                  return Center(
+                                      child: CircularProgressIndicator());
                                 },
                               ),
                             ),
