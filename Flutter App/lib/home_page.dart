@@ -4,7 +4,7 @@ import 'exercise_screens/exercise_screen.dart';
 import 'settings_screen.dart';
 import 'forum_screen.dart';
 import 'analytics_screen.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart'; // Add secure storage
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'bootup/login_signup_page_1.dart';
 
 // Global secure storage instance
@@ -30,28 +30,35 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final String imageAsset = 'assets/images/home_page_logo.png';
-  String? _userEmail; // To store the fetched email
+  String? _userEmail;
 
   @override
   void initState() {
     super.initState();
-    _fetchEmail(); // Fetch email when the screen initializes
-  }
-
-  void _handleLogout() async {
-    await storage.delete(key: 'email'); // Remove the stored email
-    Navigator.pushAndRemoveUntil(
-      context,
-      MaterialPageRoute(builder: (_) => LoginSignupPage1()),
-      (route) => false, // Remove all previous routes
-    );
+    _fetchEmail();
   }
 
   Future<void> _fetchEmail() async {
     final String? email = await storage.read(key: 'email');
     setState(() {
-      _userEmail = email ?? 'No email found'; // Default message if no email
+      _userEmail = email ?? 'No email found';
     });
+  }
+
+  void _handleLogout() async {
+    await storage.delete(key: 'email');
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (_) => LoginSignupPage1()),
+      (route) => false,
+    );
+  }
+
+  void _openSettings() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => SettingsScreen()),
+    );
   }
 
   void _openSettings() {
@@ -64,7 +71,18 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        actions: [
+          IconButton(
+            icon: Icon(Icons.logout, color: Colors.black),
+            onPressed: _handleLogout,
+            tooltip: 'Logout',
+          ),
+        ],
+      ),
+      body: Column(
         children: [
           // Background Image
           Positioned.fill(
@@ -82,93 +100,55 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ),
-
-          // Settings Button (Top Left)
-          Positioned(
-            top: 40,
-            left: 20,
-            child: IconButton(
-              icon: Icon(Icons.settings, color: Colors.white),
-              onPressed: _openSettings,
-              tooltip: 'Settings',
-            ),
-          ),
-
-          // Logout Button (Top Right)
-          Positioned(
-            top: 40,
-            right: 20,
-            child: IconButton(
-              icon: Icon(Icons.logout, color: Colors.white),
-              onPressed: _handleLogout,
-              tooltip: 'Logout',
-            ),
-          ),
-
-          // Main Content
-          Positioned.fill(
-            top: 120, // Push the content below the buttons
-            child: Column(
-              children: [
-                Expanded(
-                  flex: 1,
-                  child: Container(), // Empty space for the image above
-                ),
-                // Bottom Section with 2x2 Grid Buttons
-                Expanded(
-                  flex: 1,
-                  child: Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: GridView.count(
-                      crossAxisCount: 2,
-                      mainAxisSpacing: 20,
-                      crossAxisSpacing: 20,
-                      childAspectRatio: 1.2,
-                      children: [
-                        _CustomButton(
-                          icon: Icons.fitness_center,
-                          label:
-                              'Exercises ($_userEmail)', // Display email here
-                          color: const Color(0xFF562634),
-                          onPressed: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (_) => ExercisesScreen()),
-                          ),
-                        ),
-                        _CustomButton(
-                          icon: Icons.restaurant,
-                          label: 'Diet',
-                          color: const Color(0xFF562634),
-                          onPressed: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (_) => DietScreen()),
-                          ),
-                        ),
-                        _CustomButton(
-                          icon: Icons.analytics,
-                          label: 'Analytics',
-                          color: const Color(0xFF562634),
-                          onPressed: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (_) => AnalyticsScreen()),
-                          ),
-                        ),
-                        _CustomButton(
-                          icon: Icons.forum,
-                          label: 'Forums',
-                          color: const Color(0xFF562634),
-                          onPressed: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (_) => ForumScreen()),
-                          ),
-                        ),
-                      ],
+          // Bottom Section with 2x2 Grid Buttons
+          Expanded(
+            flex: 1,
+            child: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: GridView.count(
+                crossAxisCount: 2,
+                mainAxisSpacing: 20,
+                crossAxisSpacing: 20,
+                childAspectRatio: 1.2,
+                children: [
+                  _CustomButton(
+                    icon: Icons.fitness_center,
+                    label: 'Exercises ($_userEmail)', // Display email here
+                    color: const Color(0xFF562634),
+                    onPressed: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => ExercisesScreen()),
                     ),
                   ),
-                ),
-              ],
+                  _CustomButton(
+                    icon: Icons.restaurant,
+                    label: 'Diet',
+                    color: const Color(0xFF562634),
+                    onPressed: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => DietScreen()),
+                    ),
+                  ),
+                  _CustomButton(
+                    icon: Icons.analytics,
+                    label: 'Analytics',
+                    color: const Color(0xFF562634),
+                    onPressed: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => AnalyticsScreen()),
+                    ),
+                  ),
+                  _CustomButton(
+                    icon: Icons.forum,
+                    label: 'Forums',
+                    color: const Color(0xFF562634),
+                    onPressed: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => ForumScreen()),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ],
@@ -242,8 +222,7 @@ class _CustomButton extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                   color: Colors.white,
                 ),
-                textAlign:
-                    TextAlign.center, // Ensure text wraps nicely if too long
+                textAlign: TextAlign.center,
               ),
             ],
           ),
