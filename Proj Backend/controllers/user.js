@@ -6,7 +6,6 @@ import { UserExercise } from "../models/userExercise.js";
 // SignUp user
 export const createUser = async (req, res) => {
   try {
-    console.log(req.body)
     const {
       firstName,
       lastName,
@@ -39,7 +38,6 @@ export const createUser = async (req, res) => {
       weight: Number(weight)
     });
 
-    console.log("User created:", newUser.firstName);
     return res.status(201).json({ message: "User created", email: newUser.email });
 
   } catch (err) {
@@ -51,7 +49,6 @@ export const createUser = async (req, res) => {
 // Login
 export const loginUser = async (req, res) => {
   try {
-    console.log(req.query)
     const { email, password } = req.query;
 
     if (!email || !password) {
@@ -69,7 +66,7 @@ export const loginUser = async (req, res) => {
     if (user.password !== password) {
       return res.status(401).json({ error: "Incorrect password", sessionCookie: null });
     }
-    console.log("User logged in: ", email)
+
     return res.status(200).json({
       message: "Login successful",
       sessionCookie: user.email
@@ -220,7 +217,6 @@ export const getDietHistory = async (req, res) => {
 
 
 export const logWater = async (req, res) => {
-  console.log("Water log: ", req.body)
   const { email, amount } = req.body;
 
   if (!email || !amount) {
@@ -254,7 +250,6 @@ export const logWater = async (req, res) => {
 export const saveExercises = async (req, res) => {
   try {
     const { email, exercises } = req.body;
-    console.log("Log Exercise: ", email)
     // Basic validation
     if (!email || !exercises || !Array.isArray(exercises) || exercises.length === 0) {
       return res.status(400).json({
@@ -330,7 +325,6 @@ export const getWorkoutHistory = async (req, res) => {
         message: 'Email is required'
       });
     }
-    console.log("Workout history: ", email)
     
     const users = await User.find({ email: email });
     if (users.length === 0) {
