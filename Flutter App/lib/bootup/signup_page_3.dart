@@ -146,7 +146,6 @@ class _SignUpPage3State extends State<SignUpPage3> {
     );
   }
 
-
   // Function to handle the API call and navigation
   Future<void> _completeSignUp() async {
     // Create JSON object with user data
@@ -158,7 +157,8 @@ class _SignUpPage3State extends State<SignUpPage3> {
       'height': _heightController.text,
       'gender': _selectedGender,
       'email': email_, // Include email from previous screen
-      'password':_hashPassword(password_), // Include password from previous screen
+      'password':
+          _hashPassword(password_), // Include password from previous screen
     };
 
     try {

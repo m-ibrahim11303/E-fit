@@ -54,10 +54,18 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  // void _openSettings() {
+  //   Navigator.push(
+  //     context,
+  //     MaterialPageRoute(builder: (_) => SettingsScreen(email: _userEmail)),
+  //   );
+  // }
+
   void _openSettings() {
+    final email = _userEmail ?? 'No email available'; // Fallback value
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (_) => SettingsScreen()),
+      MaterialPageRoute(builder: (_) => SettingsScreen(email: email)),
     );
   }
 
