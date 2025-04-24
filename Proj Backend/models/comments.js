@@ -1,10 +1,12 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
-const commentsSchema = new mongoose.Schema({
-    commenter: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
-    content: { type: String, required: true },
-    upvotes: { type: Number, default: 0 },
-    downvotes: { type: Number, default: 0 }
+const comment = new mongoose.Schema({
+  postId: { type: mongoose.Schema.Types.ObjectId, ref: 'Post', required: true },
+  commenterEmail: { type: String, required: true, ref: 'User' },
+  content: { type: String, required: true },
+  likes: { type: Number, default: 0 },
+  dislikes: { type: Number, default: 0 },
+  timestamp: { type: Date, default: Date.now }
 });
 
-module.exports = mongoose.model("Comments", commentsSchema);
+export const Comment = mongoose.model('Comment', comment);
