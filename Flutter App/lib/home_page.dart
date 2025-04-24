@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'diet_screens/diet_screen.dart';
 import 'exercise_screens/exercise_screen.dart';
-import 'settings_screen.dart';
+import 'settings_screens/settings_screen.dart';
 import 'forum_screen.dart';
 import 'analytics_screen.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -53,13 +53,6 @@ class _HomeScreenState extends State<HomeScreen> {
       (route) => false,
     );
   }
-
-  // void _openSettings() {
-  //   Navigator.push(
-  //     context,
-  //     MaterialPageRoute(builder: (_) => SettingsScreen(email: _userEmail)),
-  //   );
-  // }
 
   void _openSettings() {
     final email = _userEmail ?? 'No email available'; // Fallback value

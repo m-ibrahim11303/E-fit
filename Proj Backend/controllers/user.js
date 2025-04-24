@@ -76,6 +76,33 @@ export const loginUser = async (req, res) => {
   }
 };
 
+export const changePassword = async (req, res) => {
+  try {
+    const { email, currentPassword, newPassword } = req.body;
+
+    if (!email || !currentPassword || !newPassword) {
+      return res.status(400).json({ error: "Email, current password, and new password are required" });
+    }
+
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    if (user.password !== currentPassword) {
+      return res.status(401).json({ error: "Incorrect current password" });
+    }
+
+    user.password = newPassword;
+    await user.save();
+
+    return res.status(200).json({ message: "Password changed successfully" });
+  } catch (error) {
+    console.error("Error changing password:", error.message);
+    return res.status(500).json({ error: "Server error" });
+  }
+};
 
 export const deleteUser = async (req, res) => {
   try {
