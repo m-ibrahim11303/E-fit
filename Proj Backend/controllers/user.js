@@ -79,6 +79,40 @@ export const loginUser = async (req, res) => {
   }
 };
 
+export const deleteUser = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+      return res.status(400).json({ error: "Email and password are required" });
+    }
+
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    if (user.password !== password) {
+      return res.status(401).json({ error: "Incorrect password" });
+    }
+
+    // Delete user and associated data
+    await Promise.all([
+      User.deleteOne({ email }),
+      UserMeals.deleteMany({ userEmail: email }),
+      waterLog.deleteMany({ email }),
+      UserExercise.deleteMany({ userEmail: email }),
+    ]);
+
+    return res.status(200).json({ message: "User and all associated data deleted successfully" });
+
+  } catch (error) {
+    console.error("Error deleting user:", error.message);
+    return res.status(500).json({ error: "Server error" });
+  }
+};
+
 // Save user meals
 export const saveMeals = async (req, res) => {
   try {
