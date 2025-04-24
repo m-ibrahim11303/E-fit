@@ -1,7 +1,7 @@
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 // Model for selected meal items
 class SelectedMealItem {
@@ -39,20 +39,23 @@ class FoodService {
     }
   }
 
-  static Future<void> saveMeal(List<SelectedMealItem> items, String userId) async {
+  static Future<void> saveMeal(
+      List<SelectedMealItem> items, String email) async {
     final response = await http.post(
-      Uri.parse('$baseUrl/meals'),
+      Uri.parse('$baseUrl/user/savemeals'),
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode({
-        'userId': userId,
-        'items': items.map((item) => {
-          'name': item.name,
-          'calories': item.calories,
-          'protein': item.protein,
-        }).toList(),
+        'email': email,
+        'items': items
+            .map((item) => {
+                  'name': item.name,
+                  'calories': item.calories,
+                  'protein': item.protein,
+                })
+            .toList(),
       }),
     );
-    
+
     if (response.statusCode != 201) {
       throw Exception('Failed to save meal: ${response.body}');
     }
@@ -116,13 +119,23 @@ class _MealLogScreenState extends State<MealLogScreen> {
   Future<void> _saveMeal() async {
     setState(() => isLoading = true);
     try {
-      // Replace 'userId' with actual user ID from your auth system
-      await FoodService.saveMeal(selectedItems, 'userId');
-      double totalCalories = selectedItems.fold(0, (sum, item) => sum + item.calories);
-      double totalProtein = selectedItems.fold(0, (sum, item) => sum + item.protein);
+      final storage = FlutterSecureStorage();
+      final userEmail = await storage.read(key: 'email');
+
+      if (userEmail == null) {
+        throw Exception('No user email found in secure storage');
+      }
+
+      await FoodService.saveMeal(selectedItems, userEmail);
+
+      double totalCalories =
+          selectedItems.fold(0, (sum, item) => sum + item.calories);
+      double totalProtein =
+          selectedItems.fold(0, (sum, item) => sum + item.protein);
+
       Navigator.pop(context, {
         'calories': totalCalories,
-        'protein': totalProtein
+        'protein': totalProtein,
       });
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -171,7 +184,8 @@ class _MealLogScreenState extends State<MealLogScreen> {
                                 onTap: () async {
                                   final result = await Navigator.push(
                                     context,
-                                    MaterialPageRoute(builder: (_) => CustomMealScreen()),
+                                    MaterialPageRoute(
+                                        builder: (_) => CustomMealScreen()),
                                   );
                                   if (result != null) {
                                     _addSelectedItem(result);
@@ -190,7 +204,8 @@ class _MealLogScreenState extends State<MealLogScreen> {
                                         final result = await Navigator.push(
                                           context,
                                           MaterialPageRoute(
-                                            builder: (_) => EateryMealScreen(eatery: eatery),
+                                            builder: (_) => EateryMealScreen(
+                                                eatery: eatery),
                                           ),
                                         );
                                         if (result != null) {
@@ -205,17 +220,24 @@ class _MealLogScreenState extends State<MealLogScreen> {
                               if (selectedItems.isNotEmpty) ...[
                                 Text(
                                   'Selected Items:',
-                                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold),
                                 ),
                                 SizedBox(height: 10),
-                                ...selectedItems.map((item) => ListTile(
-                                      title: Text(item.name),
-                                      subtitle: Text('${item.calories} kcal • ${item.protein}g protein'),
-                                      trailing: IconButton(
-                                        icon: Icon(Icons.close, color: Colors.red),
-                                        onPressed: () => _removeItem(item.id),
-                                      ),
-                                    )).toList(),
+                                ...selectedItems
+                                    .map((item) => ListTile(
+                                          title: Text(item.name),
+                                          subtitle: Text(
+                                              '${item.calories} kcal • ${item.protein}g protein'),
+                                          trailing: IconButton(
+                                            icon: Icon(Icons.close,
+                                                color: Colors.red),
+                                            onPressed: () =>
+                                                _removeItem(item.id),
+                                          ),
+                                        ))
+                                    .toList(),
                                 SizedBox(height: 20),
                                 ElevatedButton(
                                   style: ElevatedButton.styleFrom(
@@ -333,7 +355,8 @@ class _EateryMealScreenState extends State<EateryMealScreen> {
                       SizedBox(height: 12),
                       Row(
                         children: [
-                          Icon(Icons.local_fire_department, size: 16, color: Colors.orange),
+                          Icon(Icons.local_fire_department,
+                              size: 16, color: Colors.orange),
                           SizedBox(width: 4),
                           Text(
                             '${dish['calories']} kcal',
@@ -343,7 +366,8 @@ class _EateryMealScreenState extends State<EateryMealScreen> {
                             ),
                           ),
                           SizedBox(width: 16),
-                          Icon(Icons.fitness_center, size: 16, color: Colors.green),
+                          Icon(Icons.fitness_center,
+                              size: 16, color: Colors.green),
                           SizedBox(width: 4),
                           Text(
                             '${dish['protein']} g protein',
@@ -414,8 +438,6 @@ class CustomMealScreen extends StatefulWidget {
 }
 
 class _CustomMealScreenState extends State<CustomMealScreen> {
-
-
   final _formKey = GlobalKey<FormState>();
   final _mealNameController = TextEditingController();
   final _caloriesController = TextEditingController();
@@ -438,7 +460,7 @@ class _CustomMealScreenState extends State<CustomMealScreen> {
       };
 
       Navigator.pop(context, mealData);
-      
+
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('${mealData['name']} saved!'),
@@ -575,4 +597,3 @@ class _CustomMealScreenState extends State<CustomMealScreen> {
     );
   }
 }
-

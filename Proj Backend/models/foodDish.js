@@ -9,4 +9,5 @@ const foodDish = new mongoose.Schema({
     day_of_week: { type: String, required: false }  
 });
 
+
 export const FoodDish = mongoose.model("FoodDish", foodDish);

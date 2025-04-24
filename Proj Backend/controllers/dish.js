@@ -17,6 +17,7 @@ export const addDish = async (req, res) => {
   }
 };
 
+// Get all dishes
 export const getAllDishes = async (req, res) => {
   try {
     const today = new Date().toLocaleDateString("en-US", { weekday: "long" }).toLowerCase();

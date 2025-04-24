@@ -1,9 +1,12 @@
 import express from "express";
-import { createUser, loginUser, saveMeals , getDietHistory, logWater, saveExercises, getWorkoutHistory} from "../controllers/user.js";
+
+import { createUser, loginUser, deleteUser, saveMeals , getDietHistory, logWater, saveExercises, getWorkoutHistory} from "../controllers/user.js";
+
 
 export const userRouter = express.Router();
 
 userRouter.post("/create", createUser);
+userRouter.post("/delete", deleteUser);
 userRouter.get("/login", loginUser);
 
 userRouter.post("/savemeals", saveMeals)
