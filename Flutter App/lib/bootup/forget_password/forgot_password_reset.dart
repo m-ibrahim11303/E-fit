@@ -29,7 +29,7 @@ class _ForgotPasswordResetState extends State<ForgotPasswordReset> {
       body: jsonEncode({
         'email': widget.email,
         'code': widget.code,
-        'newPassword': sha256Hash(_passwordController.text.trim()),
+        'newPassword': hashPassword(_passwordController.text.trim()),
       }),
     );
 
@@ -62,4 +62,10 @@ class _ForgotPasswordResetState extends State<ForgotPasswordReset> {
       ),
     );
   }
+}
+
+String hashPassword(String password) {
+  var bytes = utf8.encode(password);
+  var digest = sha256.convert(bytes);
+  return digest.toString();
 }
