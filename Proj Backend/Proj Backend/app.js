@@ -3,6 +3,7 @@ import cors from "cors";
 import { userRouter } from "./routes/user.js";
 import { dishRouter } from "./routes/dish.js";
 import { exerciseRouter } from "./routes/exercise.js";
+import { aiRouter } from "./routes/ai.js";
 
 export const app = express();
 
@@ -12,4 +13,6 @@ app.use(express.json());
 app.use("/user", userRouter);
 app.use("/dish", dishRouter);
 app.use("/exercise", exerciseRouter);
+app.use("/ai", aiRouter);
  
+// http://localhost:8000/ai/generate
