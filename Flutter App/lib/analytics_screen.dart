@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'analytics_test.dart'; // Import the analytics_test.dart screen
 
 // Dynamic image sources
 const List<String> imageUrls = [
@@ -25,6 +26,24 @@ class AnalyticsScreen extends StatelessWidget {
           color: Colors.white,
           fontSize: 20,
         ),
+        actions: [
+          // Add a small button at the top right
+          IconButton(
+            icon: Icon(
+              Icons.bar_chart, // Chart icon to indicate analytics
+              color: Colors.white,
+              size: 24, // Small size for the button
+            ),
+            onPressed: () {
+              // Navigate to AnalyticsTestScreen
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => ActivityGraphScreen()),
+              );
+            },
+            tooltip: 'View Detailed Analytics', // Accessibility tooltip
+          ),
+        ],
       ),
       body: Container(
         color: Colors.white,
