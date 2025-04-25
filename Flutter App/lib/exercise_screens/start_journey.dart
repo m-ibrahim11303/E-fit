@@ -5,6 +5,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 /// ------------------ MODELS ------------------
 
+/// A model for a single exercise.
 class Exercise {
   final String name;
   final bool machineUse;

@@ -1,8 +1,10 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:http/http.dart' as http;
 import 'start_journey.dart';
 import 'continue_journey.dart';
 import 'step_counter_screen.dart';
-import 'dart:convert';
 
 class ExercisesScreen extends StatefulWidget {
   @override
@@ -10,9 +12,109 @@ class ExercisesScreen extends StatefulWidget {
 }
 
 class _ExercisesScreenState extends State<ExercisesScreen> {
-  int _completedExercises = 12;
+  int _completedExercisesToday = 0; // To store exercises completed today
   final int _totalExercises = 25;
   int _stepsWalked = 8450;
+  bool _isLoading = true;
+  String? _errorMessage;
+
+  final FlutterSecureStorage _storage = FlutterSecureStorage();
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchWorkoutHistory();
+  }
+
+  Future<void> _fetchWorkoutHistory() async {
+    try {
+      // Retrieve email from secure storage
+      String? email = await _storage.read(key: 'email');
+      if (email == null) {
+        setState(() {
+          _isLoading = false;
+          _errorMessage = 'No email found in storage';
+        });
+        return;
+      }
+
+      // Make API call
+      final response = await http.get(
+        Uri.parse(
+            'https://e-fit-backend.onrender.com/user/workouthistory?email=$email'),
+      );
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        if (data['success']) {
+          // Parse the JSON to find exercises completed today
+          int exercisesToday = 0;
+          final days = data['data']['days'] as List<dynamic>;
+          // Assume "Yesterday" represents today based on JSON structure
+          for (var day in days) {
+            if (day['name'] == 'Today') {
+              exercisesToday = day['noOfExercises'] ?? 0;
+              break;
+            }
+          }
+
+          setState(() {
+            _completedExercisesToday = exercisesToday;
+            _isLoading = false;
+          });
+        } else {
+          setState(() {
+            _isLoading = false;
+            _errorMessage = data['message'] ?? 'Failed to load workout history';
+          });
+        }
+      } else {
+        setState() {
+          _isLoading = false;
+          _errorMessage =
+              'Failed to load workout history: ${response.statusCode}';
+        }
+      }
+    } catch (e) {
+      setState(() {
+        _isLoading = false;
+        _errorMessage = 'Error: ${e.toString()}';
+      });
+    }
+  }
+
+  // Helper to get day name
+  String _getDayName(int weekday) {
+    const days = [
+      'Monday',
+      'Tuesday',
+      'Wednesday',
+      'Thursday',
+      'Friday',
+      'Saturday',
+      'Sunday'
+    ];
+    return days[weekday - 1];
+  }
+
+  // Helper to get month name
+  String _getMonthName(int month) {
+    const months = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec'
+    ];
+    return months[month - 1];
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,93 +142,94 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
         ),
         child: Padding(
           padding: EdgeInsets.all(24),
-          child: Column(
-            children: [
-              Container(
-                padding: EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(15),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black12,
-                      blurRadius: 10,
-                      spreadRadius: 2,
-                    ),
-                  ],
-                ),
-                child: Column(
-                  children: [
-                    _ProgressStat(
-                      icon: Icons.check_circle,
-                      value: '$_completedExercises/$_totalExercises',
-                      label: 'Exercises Completed',
-                      color: Color(0xFF562634),
-                    ),
-                    Divider(height: 30),
-                    _ProgressStat(
-                      icon: Icons.directions_walk,
-                      value: '$_stepsWalked',
-                      label: 'Steps Walked',
-                      color: Color(0xFF562634),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(height: 30),
-              Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    _JourneyButton(
-                      icon: Icons.flag,
-                      label: 'Start New Journey',
-                      color: Color(0xFF562634),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => ExercisesListScreen(),
+          child: _isLoading
+              ? Center(child: CircularProgressIndicator())
+              : _errorMessage != null
+                  ? Center(child: Text(_errorMessage!))
+                  : Column(
+                      children: [
+                        Container(
+                          padding: EdgeInsets.all(16),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(15),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black12,
+                                blurRadius: 10,
+                                spreadRadius: 2,
+                              ),
+                            ],
                           ),
-                        );
-                      },
-                    ),
-                    SizedBox(height: 30),
-                    _JourneyButton(
-                      icon: Icons.directions_run,
-                      label: 'Continue Journey',
-                      color: Color(0xFF562634),
-                      onPressed: () {
-                        final jsonData = jsonDecode(journeyJson);
-                        final journey = ExerciseJourney.fromJson(jsonData);
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) =>
-                                ActiveJourneyScreen(journey: journey),
+                          child: Column(
+                            children: [
+                              _ProgressStat(
+                                icon: Icons.check_circle,
+                                value: '$_completedExercisesToday',
+                                label: 'Exercises Completed Today',
+                                color: Color(0xFF562634),
+                              ),
+                              Divider(height: 30),
+                              _ProgressStat(
+                                icon: Icons.directions_walk,
+                                value: '$_stepsWalked',
+                                label: 'Steps Walked',
+                                color: Color(0xFF562634),
+                              ),
+                            ],
                           ),
-                        );
-                      },
-                    ),
-                    SizedBox(height: 30),
-                    _JourneyButton(
-                      icon: Icons.directions_walk,
-                      label: 'Step Counter',
-                      color: Color(0xFF562634),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => StepCounterScreen(),
+                        ),
+                        SizedBox(height: 30),
+                        Expanded(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              _JourneyButton(
+                                icon: Icons.flag,
+                                label: 'Log Exercises',
+                                color: Color(0xFF562634),
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (_) => ExercisesListScreen(),
+                                    ),
+                                  );
+                                },
+                              ),
+                              SizedBox(height: 30),
+                              _JourneyButton(
+                                icon: Icons.auto_awesome,
+                                label: 'Recommended for you',
+                                color: Color(0xFF562634),
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (_) => UserInfoFlowManager(),
+                                    ),
+                                  );
+                                },
+                              ),
+                              SizedBox(height: 30),
+                              _JourneyButton(
+                                icon: Icons.directions_walk,
+                                label: 'Step Counter',
+                                color: Color(0xFF562634),
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => StepCounterScreen(),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ],
                           ),
-                        );
-                      },
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-              ),
-            ],
-          ),
         ),
       ),
     );

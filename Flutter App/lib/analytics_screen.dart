@@ -1,19 +1,29 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'analytics_test.dart'; // Import the analytics_test.dart screen
+import 'package:http/http.dart' as http; // Keep for history screens
+import 'dart:convert'; // Keep for history screens
+import 'package:flutter_secure_storage/flutter_secure_storage.dart'; // Keep for history screens
+import 'analytics_test.dart'; // <--- Make sure this imports ActivityGraphScreen class
 
-// Dynamic image sources
-const List<String> imageUrls = [
-  'https://example.com/analytics1.jpg',
-  'https://example.com/analytics2.jpg',
-  'https://example.com/analytics3.jpg',
-];
+// Define the primary color consistently
+const Color primaryColor = Color(0xFF562634);
 
 class AnalyticsScreen extends StatelessWidget {
+  // Remains StatelessWidget for this version
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double horizontalPadding = 40.0;
+    double buttonSpacing = 20.0;
+    double availableWidth = screenWidth - horizontalPadding - buttonSpacing;
+    double historyButtonWidth = availableWidth / 2;
+    double historyButtonHeight = historyButtonWidth * 0.8;
+
+    // Define size for the large central button
+    // Make it a significant portion of the screen width, e.g., 70%
+    double largeButtonWidth = screenWidth * 0.7;
+    // Make height proportional or fixed, e.g., 40% of its width
+    double largeButtonHeight = largeButtonWidth * 0.4;
+
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -21,121 +31,81 @@ class AnalyticsScreen extends StatelessWidget {
           onPressed: () => Navigator.pop(context),
         ),
         title: Text('Analytics'),
-        backgroundColor: Color(0xFF562634),
+        backgroundColor: primaryColor, // Use defined color
         titleTextStyle: TextStyle(
           color: Colors.white,
           fontSize: 20,
         ),
-        actions: [
-          // Add a small button at the top right
-          IconButton(
-            icon: Icon(
-              Icons.bar_chart, // Chart icon to indicate analytics
-              color: Colors.white,
-              size: 24, // Small size for the button
-            ),
-            onPressed: () {
-              // Navigate to AnalyticsTestScreen
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => ActivityGraphScreen()),
-              );
-            },
-            tooltip: 'View Detailed Analytics', // Accessibility tooltip
-          ),
-        ],
+        // --- REMOVED actions list ---
+        // actions: [ ... IconButton removed ... ],
       ),
       body: Container(
-        color: Colors.white,
-        child: Column(
-          children: [
-            // Top Section with Vertical Images
-            Expanded(
-              flex: 2,
-              child: Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Column(
-                  children: [
-                    SizedBox(height: 20), // Spacing below app bar
-                    // Vertical Image Stack
-                    Expanded(
-                      child: Column(
-                        children: [
-                          Expanded(
-                            child: Padding(
-                              padding: EdgeInsets.symmetric(vertical: 8.0),
-                              child: Image.asset(
-                                'assets/images/analytics_place_holder.png',
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            child: Padding(
-                              padding: EdgeInsets.symmetric(vertical: 8.0),
-                              child: Image.asset(
-                                'assets/images/analytics_place_holder2.png',
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            child: Padding(
-                              padding: EdgeInsets.symmetric(vertical: 8.0),
-                              child: Image.asset(
-                                'assets/images/analytics_place_holder3.png',
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
+        color: Colors.grey[100], // Use a light background color
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              // --- History Buttons at the Top ---
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  _CustomButton(
+                    icon: Icons.fitness_center,
+                    label: 'Workout\nHistory',
+                    color: primaryColor,
+                    onPressed: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => WorkoutHistoryScreen()),
                     ),
-                  ],
-                ),
+                    buttonSize: Size(historyButtonWidth, historyButtonHeight),
+                  ),
+                  _CustomButton(
+                    icon: Icons.restaurant,
+                    label: 'Diet\nHistory',
+                    color: primaryColor,
+                    onPressed: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => DietHistoryScreen()),
+                    ),
+                    buttonSize: Size(historyButtonWidth, historyButtonHeight),
+                  ),
+                ],
               ),
-            ),
-            // Bottom Section with Horizontal Buttons
-            Expanded(
-              flex: 1,
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    _CustomButton(
-                      icon: Icons.fitness_center,
-                      label: 'Workout\nHistory',
-                      color: Color(0xFF562634),
-                      onPressed: () => Navigator.push(
+              // --- END History Buttons ---
+
+              // --- Large Centered Button ---
+              // Use Expanded to take remaining space and Center to position the button
+              Expanded(
+                child: Center(
+                  child: _CustomButton(
+                    // Use the same custom button widget
+                    icon: Icons.bar_chart, // Icon for analytics/charts
+                    label: 'Detailed\nAnalytics', // Clear label
+                    color: primaryColor, // Use consistent color
+                    onPressed: () {
+                      // Navigate to the detailed screen when pressed
+                      Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (_) => WorkoutHistoryScreen()),
-                      ),
-                      buttonSize: Size(160, 160),
-                    ),
-                    _CustomButton(
-                      icon: Icons.restaurant,
-                      label: 'Diet\nHistory',
-                      color: Color(0xFF562634),
-                      onPressed: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (_) => DietHistoryScreen()),
-                      ),
-                      buttonSize: Size(160, 160),
-                    ),
-                  ],
+                            builder: (context) => ActivityGraphScreen()),
+                      );
+                    },
+                    // Use the larger, calculated size
+                    buttonSize: Size(largeButtonWidth, largeButtonHeight),
+                  ),
                 ),
               ),
-            ),
-          ],
+              // --- END Large Centered Button ---
+            ],
+          ),
         ),
       ),
     );
   }
 }
 
+// _CustomButton Widget (Unchanged from previous version)
 class _CustomButton extends StatelessWidget {
   final IconData icon;
   final String label;
@@ -148,29 +118,34 @@ class _CustomButton extends StatelessWidget {
     required this.label,
     required this.color,
     required this.onPressed,
-    this.buttonSize = const Size(150, 150),
+    required this.buttonSize,
   });
 
   @override
   Widget build(BuildContext context) {
+    double fontSize = buttonSize.height * 0.12;
+    if (fontSize < 14) fontSize = 14;
+    if (fontSize > 18) fontSize = 18;
+    double iconSize = buttonSize.height * 0.25;
+    if (iconSize < 24) iconSize = 24;
+    if (iconSize > 35) iconSize = 35;
+
     return SizedBox(
       width: buttonSize.width,
       height: buttonSize.height,
       child: Card(
         elevation: 5,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+        clipBehavior: Clip.antiAlias,
         child: InkWell(
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(15),
           onTap: onPressed,
           child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
-              color: color,
-            ),
+            decoration: BoxDecoration(color: color),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(icon, size: 30, color: Colors.white),
+                Icon(icon, size: iconSize, color: Colors.white),
                 SizedBox(height: 8),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 8),
@@ -178,10 +153,12 @@ class _CustomButton extends StatelessWidget {
                     label,
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      fontSize: 18,
+                      fontSize: fontSize,
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
                     ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
               ],
@@ -193,7 +170,10 @@ class _CustomButton extends StatelessWidget {
   }
 }
 
-// Workout History Screen
+// --- History Screen Definitions ---
+// (Include the actual implementations of WorkoutHistoryScreen and DietHistoryScreen here)
+
+// Workout History Screen (Keep the full StatefulWidget implementation)
 class WorkoutHistoryScreen extends StatefulWidget {
   @override
   _WorkoutHistoryScreenState createState() => _WorkoutHistoryScreenState();
@@ -212,27 +192,36 @@ class _WorkoutHistoryScreenState extends State<WorkoutHistoryScreen> {
   }
 
   Future<void> fetchWorkoutHistory() async {
+    if (!mounted) return;
+    setState(() {
+      isLoading = true;
+      errorMessage = '';
+    });
     try {
       final email = await storage.read(key: 'email');
-
-      if (email == null) {
+      if (!mounted) return;
+      if (email == null || email.isEmpty) {
         setState(() {
           isLoading = false;
-          errorMessage = 'User email not found.';
+          errorMessage = 'User email not found. Please log in.';
         });
         return;
       }
-
       final response = await http.get(
         Uri.parse(
             'https://e-fit-backend.onrender.com/user/workouthistory?email=$email'),
-      );
-
+        headers: {'Content-Type': 'application/json'},
+      ).timeout(const Duration(seconds: 15));
+      if (!mounted) return;
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
-        if (data['success']) {
+        if (data['success'] == true && data['data'] != null) {
           setState(() {
-            workoutData = data['data'];
+            workoutData = {
+              "numberOfDays": (data['data']['numberOfDays'] as int?) ?? 0,
+              "days":
+                  List<Map<String, dynamic>>.from(data['data']['days'] ?? [])
+            };
             isLoading = false;
           });
         } else {
@@ -242,16 +231,19 @@ class _WorkoutHistoryScreenState extends State<WorkoutHistoryScreen> {
           });
         }
       } else {
+        String specificError = response.statusCode == 404
+            ? 'Workout history not found.'
+            : 'Server error: ${response.statusCode}';
         setState(() {
           isLoading = false;
-          errorMessage =
-              'Failed to load workout history: ${response.statusCode}';
+          errorMessage = 'Failed to load workout history: $specificError';
         });
       }
     } catch (e) {
+      if (!mounted) return;
       setState(() {
         isLoading = false;
-        errorMessage = 'Error: ${e.toString()}';
+        errorMessage = 'An error occurred: ${e.toString()}';
       });
     }
   }
@@ -261,36 +253,78 @@ class _WorkoutHistoryScreenState extends State<WorkoutHistoryScreen> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Navigator.pop(context),
-        ),
+            icon: Icon(Icons.arrow_back, color: Colors.white),
+            onPressed: () => Navigator.pop(context)),
         title: Text('Workout History'),
-        backgroundColor: Color(0xFF562634),
+        backgroundColor: primaryColor,
         titleTextStyle: TextStyle(
           color: Colors.white,
           fontSize: 20,
           fontWeight: FontWeight.bold,
         ),
+        actions: [
+          if (!isLoading)
+            IconButton(
+              icon: Icon(Icons.refresh, color: Colors.white),
+              onPressed: fetchWorkoutHistory,
+              tooltip: 'Refresh History',
+            )
+        ],
       ),
       body: Container(
-        color: Colors.white,
+        color: Colors.grey[100],
         child: isLoading
-            ? Center(child: CircularProgressIndicator())
+            ? Center(child: CircularProgressIndicator(color: primaryColor))
             : errorMessage.isNotEmpty
-                ? Center(child: Text(errorMessage))
-                : workoutData['numberOfDays'] == 0
-                    ? Center(child: Text('No workout history available'))
+                ? Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(Icons.error_outline,
+                              color: Colors.red, size: 40),
+                          SizedBox(height: 10),
+                          Text(errorMessage, textAlign: TextAlign.center),
+                          SizedBox(height: 10),
+                          ElevatedButton.icon(
+                            icon: Icon(Icons.refresh),
+                            label: Text('Retry'),
+                            onPressed: fetchWorkoutHistory,
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor: primaryColor,
+                                foregroundColor: Colors.white),
+                          )
+                        ],
+                      ),
+                    ),
+                  )
+                : (workoutData['days'] as List).isEmpty
+                    ? Center(
+                        child: Text(
+                            'No workout history found.\nGo log some workouts!',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontSize: 16, color: Colors.grey[600])))
                     : ListView.builder(
                         padding: EdgeInsets.all(16),
-                        itemCount: workoutData['days'].length,
+                        itemCount: (workoutData['days'] as List).length,
                         itemBuilder: (context, dayIndex) {
-                          final day = workoutData['days'][dayIndex];
-                          return Padding(
-                            padding: EdgeInsets.only(bottom: 20),
+                          final day = (workoutData['days'] as List)[dayIndex]
+                                  as Map<String, dynamic>? ??
+                              {};
+                          final String dayName =
+                              day['name'] as String? ?? 'Unknown Day';
+                          final List<dynamic> exercises =
+                              day['exercises'] as List<dynamic>? ?? [];
+                          return Card(
+                            margin: EdgeInsets.only(bottom: 16),
+                            elevation: 2,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12)),
                             child: Container(
-                              width: double.infinity,
                               decoration: BoxDecoration(
-                                color: Color(0xFF562634),
+                                color: Colors.white,
                                 borderRadius: BorderRadius.circular(12),
                               ),
                               padding: EdgeInsets.all(16),
@@ -298,51 +332,75 @@ class _WorkoutHistoryScreenState extends State<WorkoutHistoryScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    day['name'],
+                                    dayName,
                                     style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 20,
+                                      color: primaryColor,
+                                      fontSize: 18,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
-                                  SizedBox(height: 10),
-                                  ...List.generate(day['exercises'].length,
-                                      (exerciseIndex) {
-                                    final exercise =
-                                        day['exercises'][exerciseIndex];
-                                    final exerciseName = exercise.keys.first;
-                                    final sets = exercise.values.first;
-                                    return Container(
-                                      width: double.infinity,
-                                      margin: EdgeInsets.only(bottom: 8),
-                                      decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        borderRadius: BorderRadius.circular(8),
-                                      ),
-                                      padding: EdgeInsets.all(12),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            exerciseName,
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 16,
+                                  Divider(height: 20, color: Colors.grey[300]),
+                                  if (exercises.isEmpty)
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 8.0),
+                                      child: Text("No exercises logged.",
+                                          style: TextStyle(
+                                              fontStyle: FontStyle.italic,
+                                              color: Colors.grey[600])),
+                                    )
+                                  else
+                                    ...List.generate(exercises.length,
+                                        (exerciseIndex) {
+                                      final exerciseMap =
+                                          exercises[exerciseIndex]
+                                                  as Map<String, dynamic>? ??
+                                              {};
+                                      final exerciseName =
+                                          exerciseMap.keys.isNotEmpty
+                                              ? exerciseMap.keys.first
+                                              : 'Unknown Exercise';
+                                      final sets = exerciseMap.values.isNotEmpty
+                                          ? (exerciseMap.values.first
+                                                  as String? ??
+                                              '')
+                                          : '';
+                                      return Container(
+                                        width: double.infinity,
+                                        margin: EdgeInsets.only(bottom: 10),
+                                        decoration: BoxDecoration(
+                                            color: Colors.grey[50],
+                                            borderRadius:
+                                                BorderRadius.circular(8),
+                                            border: Border.all(
+                                                color: Colors.grey[200]!)),
+                                        padding: EdgeInsets.all(12),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              exerciseName,
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 16,
+                                                color: Colors.black87,
+                                              ),
                                             ),
-                                          ),
-                                          SizedBox(height: 6),
-                                          Text(
-                                            sets,
-                                            style: TextStyle(
-                                              color: Colors.grey[700],
-                                              fontSize: 14,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    );
-                                  }),
+                                            if (sets.isNotEmpty) ...[
+                                              SizedBox(height: 6),
+                                              Text(
+                                                sets,
+                                                style: TextStyle(
+                                                  color: Colors.grey[700],
+                                                  fontSize: 14,
+                                                  height: 1.4,
+                                                ),
+                                              ),
+                                            ]
+                                          ],
+                                        ),
+                                      );
+                                    }),
                                 ],
                               ),
                             ),
@@ -354,7 +412,7 @@ class _WorkoutHistoryScreenState extends State<WorkoutHistoryScreen> {
   }
 }
 
-// Diet History Screen
+// Diet History Screen (Keep the full StatefulWidget implementation)
 class DietHistoryScreen extends StatefulWidget {
   @override
   _DietHistoryScreenState createState() => _DietHistoryScreenState();
@@ -364,6 +422,7 @@ class _DietHistoryScreenState extends State<DietHistoryScreen> {
   Map<String, dynamic> dietData = {"numberOfDays": 0, "days": []};
   bool isLoading = true;
   String errorMessage = '';
+  final storage = FlutterSecureStorage();
 
   @override
   void initState() {
@@ -372,27 +431,36 @@ class _DietHistoryScreenState extends State<DietHistoryScreen> {
   }
 
   Future<void> fetchDietHistory() async {
+    if (!mounted) return;
+    setState(() {
+      isLoading = true;
+      errorMessage = '';
+    });
     const apiUrl = 'https://e-fit-backend.onrender.com/user/diethistory';
-    final storage = FlutterSecureStorage();
-
     try {
       final userEmail = await storage.read(key: 'email');
-
-      if (userEmail == null) {
+      if (!mounted) return;
+      if (userEmail == null || userEmail.isEmpty) {
         setState(() {
           isLoading = false;
           errorMessage = 'User email not found.';
         });
         return;
       }
-
-      final response = await http.get(Uri.parse('$apiUrl?email=$userEmail'));
-
+      final response = await http.get(
+        Uri.parse('$apiUrl?email=$userEmail'),
+        headers: {'Content-Type': 'application/json'},
+      ).timeout(const Duration(seconds: 15));
+      if (!mounted) return;
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
-        if (data['success']) {
+        if (data['success'] == true && data['data'] != null) {
           setState(() {
-            dietData = data['data'];
+            dietData = {
+              "numberOfDays": (data['data']['numberOfDays'] as int?) ?? 0,
+              "days":
+                  List<Map<String, dynamic>>.from(data['data']['days'] ?? [])
+            };
             isLoading = false;
           });
         } else {
@@ -402,15 +470,19 @@ class _DietHistoryScreenState extends State<DietHistoryScreen> {
           });
         }
       } else {
+        String specificError = response.statusCode == 404
+            ? 'Diet history not found.'
+            : 'Server error: ${response.statusCode}';
         setState(() {
           isLoading = false;
-          errorMessage = 'Failed to load diet history: ${response.statusCode}';
+          errorMessage = 'Failed to load diet history: $specificError';
         });
       }
     } catch (e) {
+      if (!mounted) return;
       setState(() {
         isLoading = false;
-        errorMessage = 'Error: ${e.toString()}';
+        errorMessage = 'An error occurred: ${e.toString()}';
       });
     }
   }
@@ -424,32 +496,73 @@ class _DietHistoryScreenState extends State<DietHistoryScreen> {
           onPressed: () => Navigator.pop(context),
         ),
         title: Text('Diet History'),
-        backgroundColor: Color(0xFF562634),
+        backgroundColor: primaryColor,
         titleTextStyle: TextStyle(
           color: Colors.white,
           fontSize: 20,
           fontWeight: FontWeight.bold,
         ),
+        actions: [
+          if (!isLoading)
+            IconButton(
+              icon: Icon(Icons.refresh, color: Colors.white),
+              onPressed: fetchDietHistory,
+              tooltip: 'Refresh History',
+            ),
+        ],
       ),
       body: Container(
-        color: Colors.white,
+        color: Colors.grey[100],
         child: isLoading
-            ? Center(child: CircularProgressIndicator())
+            ? Center(child: CircularProgressIndicator(color: primaryColor))
             : errorMessage.isNotEmpty
-                ? Center(child: Text(errorMessage))
-                : dietData['numberOfDays'] == 0
-                    ? Center(child: Text('No diet history available'))
+                ? Center(
+                    child: Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(Icons.error_outline, color: Colors.red, size: 40),
+                        SizedBox(height: 10),
+                        Text(errorMessage, textAlign: TextAlign.center),
+                        SizedBox(height: 10),
+                        ElevatedButton.icon(
+                          icon: Icon(Icons.refresh),
+                          label: Text('Retry'),
+                          onPressed: fetchDietHistory,
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: primaryColor,
+                              foregroundColor: Colors.white),
+                        )
+                      ],
+                    ),
+                  ))
+                : (dietData['days'] as List).isEmpty
+                    ? Center(
+                        child: Text(
+                            'No diet history found.\nGo log some meals!',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontSize: 16, color: Colors.grey[600])))
                     : ListView.builder(
                         padding: EdgeInsets.all(16),
-                        itemCount: dietData['days'].length,
+                        itemCount: (dietData['days'] as List).length,
                         itemBuilder: (context, dayIndex) {
-                          final day = dietData['days'][dayIndex];
-                          return Padding(
-                            padding: EdgeInsets.only(bottom: 20),
+                          final day = (dietData['days'] as List)[dayIndex]
+                                  as Map<String, dynamic>? ??
+                              {};
+                          final String dayName =
+                              day['name'] as String? ?? 'Unknown Day';
+                          final List<dynamic> meals =
+                              day['meals'] as List<dynamic>? ?? [];
+                          return Card(
+                            margin: EdgeInsets.only(bottom: 16),
+                            elevation: 2,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12)),
                             child: Container(
-                              width: double.infinity,
                               decoration: BoxDecoration(
-                                color: Color(0xFF562634),
+                                color: Colors.white,
                                 borderRadius: BorderRadius.circular(12),
                               ),
                               padding: EdgeInsets.all(16),
@@ -457,50 +570,72 @@ class _DietHistoryScreenState extends State<DietHistoryScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    day['name'],
+                                    dayName,
                                     style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 20,
+                                      color: primaryColor,
+                                      fontSize: 18,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
-                                  SizedBox(height: 10),
-                                  ...List.generate(day['meals'].length,
-                                      (mealIndex) {
-                                    final meal = day['meals'][mealIndex];
-                                    final mealName = meal.keys.first;
-                                    final nutrition = meal.values.first;
-                                    return Container(
-                                      width: double.infinity,
-                                      margin: EdgeInsets.only(bottom: 8),
-                                      decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        borderRadius: BorderRadius.circular(8),
-                                      ),
-                                      padding: EdgeInsets.all(12),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            mealName,
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 16,
+                                  Divider(height: 20, color: Colors.grey[300]),
+                                  if (meals.isEmpty)
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 8.0),
+                                      child: Text("No meals logged.",
+                                          style: TextStyle(
+                                              fontStyle: FontStyle.italic,
+                                              color: Colors.grey[600])),
+                                    )
+                                  else
+                                    ...List.generate(meals.length, (mealIndex) {
+                                      final mealMap = meals[mealIndex]
+                                              as Map<String, dynamic>? ??
+                                          {};
+                                      final mealName = mealMap.keys.isNotEmpty
+                                          ? mealMap.keys.first
+                                          : 'Unknown Meal';
+                                      final nutrition = mealMap
+                                              .values.isNotEmpty
+                                          ? (mealMap.values.first as String? ??
+                                              '')
+                                          : '';
+                                      return Container(
+                                        width: double.infinity,
+                                        margin: EdgeInsets.only(bottom: 10),
+                                        decoration: BoxDecoration(
+                                            color: Colors.grey[50],
+                                            borderRadius:
+                                                BorderRadius.circular(8),
+                                            border: Border.all(
+                                                color: Colors.grey[200]!)),
+                                        padding: EdgeInsets.all(12),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              mealName,
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 16,
+                                                color: Colors.black87,
+                                              ),
                                             ),
-                                          ),
-                                          SizedBox(height: 6),
-                                          Text(
-                                            nutrition,
-                                            style: TextStyle(
-                                              color: Colors.grey[700],
-                                              fontSize: 14,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    );
-                                  }),
+                                            if (nutrition.isNotEmpty) ...[
+                                              SizedBox(height: 6),
+                                              Text(
+                                                nutrition,
+                                                style: TextStyle(
+                                                  color: Colors.grey[700],
+                                                  fontSize: 14,
+                                                  height: 1.4,
+                                                ),
+                                              ),
+                                            ]
+                                          ],
+                                        ),
+                                      );
+                                    }),
                                 ],
                               ),
                             ),
@@ -511,3 +646,4 @@ class _DietHistoryScreenState extends State<DietHistoryScreen> {
     );
   }
 }
+// --- End History Screen Definitions ---
