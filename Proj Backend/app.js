@@ -19,7 +19,6 @@ app.use("/dish", dishRouter);
 app.use("/exercise", exerciseRouter);
 app.use("/ai", aiRouter);
  
-// http://localhost:8000/ai/generate
 app.use("/post", postRouter);
 app.use("/comment", commentRouter);
 app.use("/analytics", analyticsRouter);

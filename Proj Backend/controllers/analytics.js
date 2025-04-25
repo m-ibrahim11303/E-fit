@@ -1,11 +1,11 @@
 import { User } from "../models/user.js";
 import { UserMeals } from "../models/userMeals.js";
-import { waterLog } from '../models/waterlog.js'; // <-- Import this
+import { waterLog } from "../models/waterlog.js";
+import { UserBMR } from "../models/bmr_tdee.js"; // <-- Add this line if not already imported
 
 export const getDietAnalytics = async (req, res) => {
     try {
         const { email } = req.query;
-        console.log(`$> Charts requested by ${email}`)
 
         if (!email) {
             return res.status(400).json({
@@ -14,8 +14,8 @@ export const getDietAnalytics = async (req, res) => {
             });
         }
 
-        const users = await User.find({ email: email });
-        if (users.length === 0) {
+        const user = await User.findOne({ email });
+        if (!user) {
             return res.status(404).json({ error: "User not found" });
         }
 
@@ -24,14 +24,13 @@ export const getDietAnalytics = async (req, res) => {
         const weekAgo = new Date(today);
         weekAgo.setDate(today.getDate() - 6);
 
-        // Fetch last 7 days of data (including today)
         const meals = await UserMeals.find({
             userEmail: email,
             timestamp: { $gte: weekAgo }
         });
 
         const waterLogs = await waterLog.find({
-            email: email,
+            email,
             timestamp: { $gte: weekAgo }
         });
 
@@ -49,13 +48,8 @@ export const getDietAnalytics = async (req, res) => {
 
             const label = i === 6 ? "Today" : date.toLocaleDateString("en-US", { weekday: "short" });
 
-            // Filter for this specific day
-            const mealsOnDay = meals.filter(
-                meal => meal.timestamp >= startOfDay && meal.timestamp <= endOfDay
-            );
-            const waterOnDay = waterLogs.filter(
-                log => log.timestamp >= startOfDay && log.timestamp <= endOfDay
-            );
+            const mealsOnDay = meals.filter(meal => meal.timestamp >= startOfDay && meal.timestamp <= endOfDay);
+            const waterOnDay = waterLogs.filter(log => log.timestamp >= startOfDay && log.timestamp <= endOfDay);
 
             const calories = mealsOnDay.reduce((sum, m) => sum + m.calories, 0);
             const protein = mealsOnDay.reduce((sum, m) => sum + m.protein, 0);
@@ -92,11 +86,23 @@ export const getDietAnalytics = async (req, res) => {
                 ylabel: "Water (ml)"
             }
         ];
-        console.log(`$> Charts sent`)
+
+        // --- BMI Calculation ---
+        const heightInMeters = user.height / 100;
+        const bmi = +(user.weight / (heightInMeters * heightInMeters)).toFixed(1);
+
+        // --- Get Most Recent BMR & TDEE ---
+        const bmrTdee = await UserBMR.findOne({ userEmail: email }).sort({ timestamp: -1 });
+
+        const bmr = bmrTdee ? bmrTdee.bmr : null;
+        const tdee = bmrTdee ? bmrTdee.tdee : null;
 
         return res.status(200).json({
             success: true,
-            data: responseData
+            data: responseData,
+            bmi,
+            bmr,
+            tdee
         });
 
     } catch (error) {
