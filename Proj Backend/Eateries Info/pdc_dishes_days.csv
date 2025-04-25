@@ -1,9 +1,7 @@
 name,description,eatery,calories,proteins,day_of_week
-Aalo Shimla,A traditional dish made with regional ingredients and spices. (Aalo Shimla),PDC,412,14,Friday
-Alloo Ghobi,A traditional dish made with regional ingredients and spices. (Alloo Ghobi),PDC,284,16,Monday
-Aloo Baingan,A delicious vegetarian dish combining seasonal vegetables with spices. (Aloo Baingan),PDC,216,15,Tuesday
-Aloo Gobi,A delicious vegetarian dish combining seasonal vegetables with spices. (Aloo Gobi),PDC,277,9,Wednesday
-Aloo Methi,A delicious vegetarian dish combining seasonal vegetables with spices. (Aloo Methi),PDC,335,14,"Tuesday, Thursday"
+Alo Shimla,A traditional dish made with regional ingredients and spices. (Aalo Shimla),PDC,412,14,Friday
+Aloo Ghobi,A traditional dish made with regional ingredients and spices. (Alloo Ghobi),PDC,284,16,Monday
+Aloo Baingan,A delicious vegetarian dish combining seasonal vegetables with spices. (Aloo Baingan),PDC,216,15,"Wednesday, Tuesday"
 Aloo Palak,A delicious vegetarian dish combining seasonal vegetables with spices. (Aloo Palak),PDC,328,10,Sunday
 Aloo anda (takka tak),A delicious vegetarian dish combining seasonal vegetables with spices. (Aloo anda (takka tak)),PDC,237,9,Wednesday
 Aloo methi,A delicious vegetarian dish combining seasonal vegetables with spices. (Aloo methi),PDC,397,10,"Tuesday, Thursday"
@@ -18,7 +16,7 @@ Butri Spinach Potato,A traditional dish made with regional ingredients and spice
 Butter Rice,Aromatic rice dish infused with spices and sometimes paired with meat or vegetables. (Butter Rice),PDC,548,17,Sunday
 Channa Daal,"A protein-packed lentil preparation, staple in many desi households. (Channa Daal)",PDC,346,15,Wednesday
 Channa Masalah,A traditional dish made with regional ingredients and spices. (Channa Masalah),PDC,303,19,Wednesday
-Chicken  Biryani (sindhi/simple),"A flavorful chicken-based dish, seasoned with local spices. (Chicken  Biryani (sindhi/simple))",PDC,476,34,
+Chicken Biryani (sindhi/simple),"A flavorful chicken-based dish, seasoned with local spices. (Chicken  Biryani (sindhi/simple))",PDC,476,34,
 Chicken Chargha,"A flavorful chicken-based dish, seasoned with local spices. (Chicken Chargha)",PDC,308,25,Thursday
 Chicken Chilli Dry,"A flavorful chicken-based dish, seasoned with local spices. (Chicken Chilli Dry)",PDC,477,33,"Tuesday, Thursday"
 Chicken Florenteen,"A flavorful chicken-based dish, seasoned with local spices. (Chicken Florenteen)",PDC,482,31,Tuesday
@@ -33,7 +31,6 @@ Corn Rice,Aromatic rice dish infused with spices and sometimes paired with meat 
 Daal Makhni,"A protein-packed lentil preparation, staple in many desi households. (Daal Makhni)",PDC,339,18,Friday
 Daal Mash Fry,"A protein-packed lentil preparation, staple in many desi households. (Daal Mash Fry)",PDC,301,13,"Tuesday, Saturday"
 Daal maang masoor,"A protein-packed lentil preparation, staple in many desi households. (Daal maang masoor)",PDC,327,13,Thursday
-Daal mash fry,"A protein-packed lentil preparation, staple in many desi households. (Daal mash fry)",PDC,319,11,"Tuesday, Saturday"
 Dall Channa Fry,A traditional dish made with regional ingredients and spices. (Dall Channa Fry),PDC,414,25,Monday
 Dall Maang Sabat,A traditional dish made with regional ingredients and spices. (Dall Maang Sabat),PDC,310,21,Sunday
 Dall Mong Masoor,A traditional dish made with regional ingredients and spices. (Dall Mong Masoor),PDC,250,10,Monday
@@ -41,12 +38,11 @@ Dall Qalandri,A traditional dish made with regional ingredients and spices. (Dal
 Egg Fried Rice,Aromatic rice dish infused with spices and sometimes paired with meat or vegetables. (Egg Fried Rice),PDC,419,16,"Tuesday, Sunday"
 Garlic Chicken,"A flavorful chicken-based dish, seasoned with local spices. (Garlic Chicken)",PDC,422,34,Thursday
 Garlic Rice,Aromatic rice dish infused with spices and sometimes paired with meat or vegetables. (Garlic Rice),PDC,528,13,Monday
-Grilled Chi with Mushroom Sauce,A traditional dish made with regional ingredients and spices. (Grilled Chi with Mushroom Sauce),PDC,343,22,Monday
+Grilled Chicken with Mushroom Sauce,A traditional dish made with regional ingredients and spices. (Grilled Chi with Mushroom Sauce),PDC,343,22,Monday
 Grilled Chicken with Torgion Herb Rice,"A flavorful chicken-based dish, seasoned with local spices. (Grilled Chicken with Torgion Herb Rice)",PDC,427,28,Wednesday
 Grilled Vegetable,A delicious vegetarian dish combining seasonal vegetables with spices. (Grilled Vegetable),PDC,383,9,Thursday
 Halwa Kaddu,A traditional dish made with regional ingredients and spices. (Halwa Kaddu),PDC,271,19,Sunday
 Hara Masala Chicken,"A flavorful chicken-based dish, seasoned with local spices. (Hara Masala Chicken)",PDC,378,28,Wednesday
-Healthy Counter,A traditional dish made with regional ingredients and spices. (Healthy Counter),PDC,320,16,
 Herbi Baingan,A traditional dish made with regional ingredients and spices. (Herbi Baingan),PDC,442,24,Saturday
 Kabab Masala,A traditional dish made with regional ingredients and spices. (Kabab Masala),PDC,387,24,Tuesday
 Kabli Pulao,Aromatic rice dish infused with spices and sometimes paired with meat or vegetables. (Kabli Pulao),PDC,353,19,"Wednesday, Friday"
@@ -57,15 +53,14 @@ Matar Pulao,Aromatic rice dish infused with spices and sometimes paired with mea
 Mince Macaroni,A fusion pasta dish with South Asian flavors and herbs. (Mince Macaroni),PDC,387,19,Wednesday
 Mix Vegetable,A delicious vegetarian dish combining seasonal vegetables with spices. (Mix Vegetable),PDC,343,8,Thursday
 Mix veg pulao,Aromatic rice dish infused with spices and sometimes paired with meat or vegetables. (Mix veg pulao),PDC,377,12,Monday
-Paytala Chicken,"A flavorful chicken-based dish, seasoned with local spices. (Paytala Chicken)",PDC,406,29,Saturday
+Patyala Chicken,"A flavorful chicken-based dish, seasoned with local spices. (Paytala Chicken)",PDC,406,29,Saturday
 Peanut Chicken,"A flavorful chicken-based dish, seasoned with local spices. (Peanut Chicken)",PDC,393,33,Friday
 Pesto Pasta,A fusion pasta dish with South Asian flavors and herbs. (Pesto Pasta),PDC,394,20,Saturday
 Potato Kebab,A grilled or fried meat-based dish often served with chutney or rice. (Potato Kebab),PDC,328,26,Monday
 Rice with Vegetable,Aromatic rice dish infused with spices and sometimes paired with meat or vegetables. (Rice with Vegetable),PDC,365,11,Thursday
 Sabat Masoor,A traditional dish made with regional ingredients and spices. (Sabat Masoor),PDC,368,22,Tuesday
 Shammi Kebab,A grilled or fried meat-based dish often served with chutney or rice. (Shammi Kebab),PDC,277,21,Friday
-Shelgum,A traditional dish made with regional ingredients and spices. (Shelgum),PDC,297,22,Friday
-Sheljum dish,A traditional dish made with regional ingredients and spices. (Sheljum dish),PDC,312,21,Monday
+Sheljum,A traditional dish made with regional ingredients and spices. (Shelgum),PDC,297,22,"Monday, Friday"
 Steamed Dall,A traditional dish made with regional ingredients and spices. (Steamed Dall),PDC,335,14,Sunday
 Steamed Vegetable,A delicious vegetarian dish combining seasonal vegetables with spices. (Steamed Vegetable),PDC,205,10,Monday
 Stuff Bell Pepper,A traditional dish made with regional ingredients and spices. (Stuff Bell Pepper),PDC,362,17,Friday
@@ -77,6 +72,5 @@ Vegetable/Lite Curry,A delicious vegetarian dish combining seasonal vegetables w
 Virgin Egg Plant,A traditional dish made with regional ingredients and spices. (Virgin Egg Plant),PDC,443,19,Tuesday
 White Lobia,A traditional dish made with regional ingredients and spices. (White Lobia),PDC,384,24,Saturday
 White Rice,Aromatic rice dish infused with spices and sometimes paired with meat or vegetables. (White Rice),PDC,438,10,"Monday, Tuesday, Thursday, Thursday"
-White rice,Aromatic rice dish infused with spices and sometimes paired with meat or vegetables. (White rice),PDC,437,20,"Monday, Tuesday, Thursday, Thursday"
 Yakhni Pulao,Aromatic rice dish infused with spices and sometimes paired with meat or vegetables. (Yakhni Pulao),PDC,415,16,Saturday
 Zeera Pulao,Aromatic rice dish infused with spices and sometimes paired with meat or vegetables. (Zeera Pulao),PDC,522,19,Tuesday

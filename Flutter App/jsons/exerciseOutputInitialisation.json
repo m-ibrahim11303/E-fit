@@ -1,0 +1,38 @@
+{
+    "UUID": "abcde",
+    "usesMachines": true,
+    "currentExercises": [
+        {
+            "name": "Jogging",
+            "numberOfSets": 2,
+            "sets": [300, 260]
+        }
+    ],
+    "currentMachineExercises": [
+        {
+            "name": "Bench press",
+            "numberOfSets": 1,
+            "sets": [
+                {
+                    "reps": 12,
+                    "weight": 10
+                }
+            ]
+        },
+        {
+            "name": "Squat",
+            "numberOfSets": 2,
+            "sets": [
+                {
+                    "reps": 16,
+                    "weight": 30
+                },
+                {
+                    "reps": 14,
+                    "weight": 30
+                }
+            ]
+        }
+
+    ]
+}

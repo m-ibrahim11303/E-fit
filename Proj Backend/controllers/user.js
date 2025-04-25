@@ -239,15 +239,25 @@ export const getDietHistory = async (req, res) => {
     });
 
     // Formatting the data to match frontend structure
-    const days = Object.keys(mealsByDay).map((dateStr, index) => {
+    const todayStr = new Date().toISOString().split('T')[0];
+    const yesterdayStr = new Date(Date.now() - 86400000).toISOString().split('T')[0];
+
+    const days = Object.keys(mealsByDay).map(dateStr => {
       const dayMeals = mealsByDay[dateStr];
-      const dayName = index === 0 ? "Today" :
-        index === 1 ? "Yesterday" :
-          new Date(dateStr).toLocaleDateString('en-US', {
-            weekday: 'long',
-            month: 'short',
-            day: 'numeric'
-          });
+
+      let dayName;
+      if (dateStr === todayStr) {
+        dayName = "Today";
+      } else if (dateStr === yesterdayStr) {
+        dayName = "Yesterday";
+      } else {
+        dayName = new Date(dateStr).toLocaleDateString('en-US', {
+          weekday: 'long',
+          month: 'short',
+          day: 'numeric'
+        });
+      }
+
 
       return {
         name: dayName,
@@ -388,7 +398,7 @@ export const getWorkoutHistory = async (req, res) => {
         message: 'Email is required'
       });
     }
-    
+
     const users = await User.find({ email: email });
     if (users.length === 0) {
       return res.status(404).json({ error: "User not found" });
@@ -418,16 +428,26 @@ export const getWorkoutHistory = async (req, res) => {
       exercisesByDay[dateStr].push(exercise);
     });
 
-    // Format the data for frontend
-    const days = Object.keys(exercisesByDay).map((dateStr, index) => {
+    // Formatting the data for frontend
+    const todayStr = new Date().toISOString().split('T')[0];
+    const yesterdayStr = new Date(Date.now() - 86400000).toISOString().split('T')[0]; // subtract 1 day in ms
+
+    const days = Object.keys(exercisesByDay).map(dateStr => {
       const dayExercises = exercisesByDay[dateStr];
-      const dayName = index === 0 ? "Today" :
-        index === 1 ? "Yesterday" :
-          new Date(dateStr).toLocaleDateString('en-US', {
-            weekday: 'long',
-            month: 'short',
-            day: 'numeric'
-          });
+
+      let dayName;
+      if (dateStr === todayStr) {
+        dayName = "Today";
+      } else if (dateStr === yesterdayStr) {
+        dayName = "Yesterday";
+      } else {
+        dayName = new Date(dateStr).toLocaleDateString('en-US', {
+          weekday: 'long',
+          month: 'short',
+          day: 'numeric'
+        });
+      }
+
 
       return {
         name: dayName,
