@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'package:login_signup_1/bootup/signup_page_2.dart';
 import 'package:login_signup_1/bootup/login_page_1.dart';
+import 'package:login_signup_1/bootup/forget_password/forgot_password_email.dart';
 import 'login_signup_page_1.dart';
 import 'package:login_signup_1/bootup/signup_page_1.dart';
 import 'bootup_page_4.dart';
@@ -398,7 +399,14 @@ class _LoginPage1State extends State<LoginPage1> {
                     Align(
                       alignment: Alignment.centerRight,
                       child: TextButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ForgotPasswordEmail(),
+                            ),
+                          );
+                        },
                         child: Text(
                           'Forgot password?',
                           style: jerseyStyle(24, Color(0xFF9B5D6C)),
