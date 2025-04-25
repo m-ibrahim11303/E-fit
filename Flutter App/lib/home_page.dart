@@ -6,8 +6,8 @@ import 'forum_screen.dart';
 import 'analytics_screen.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'bootup/login_signup_page_1.dart';
+import 'dart:math';
 
-// Global secure storage instance
 final FlutterSecureStorage storage = FlutterSecureStorage();
 
 void main() {
@@ -32,16 +32,34 @@ class _HomeScreenState extends State<HomeScreen> {
   final String imageAsset = 'assets/images/home_page_logo.png';
   String? _userEmail;
 
+  final List<String> motivationalQuotes = [
+    "Every workout counts. Stay consistent.",
+    "Small steps every day lead to big results.",
+    "Energy and persistence conquer all things.",
+    "You are one workout away from a good mood.",
+    "Earn your body.",
+  ];
+
+  String selectedQuote = "";
+
   @override
   void initState() {
     super.initState();
     _fetchEmail();
+    _getRandomQuote();
   }
 
   Future<void> _fetchEmail() async {
     final String? email = await storage.read(key: 'email');
     setState(() {
       _userEmail = email ?? 'No email found';
+    });
+  }
+
+  void _getRandomQuote() {
+    setState(() {
+      selectedQuote =
+          motivationalQuotes[Random().nextInt(motivationalQuotes.length)];
     });
   }
 
@@ -55,7 +73,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _openSettings() {
-    final email = _userEmail ?? 'No email available'; // Fallback value
+    final email = _userEmail ?? 'No email available';
     Navigator.push(
       context,
       MaterialPageRoute(builder: (_) => SettingsScreen(email: email)),
@@ -83,7 +101,6 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: Column(
         children: [
-          // Top Section with Curved Image (50% height)
           Expanded(
             flex: 1,
             child: ClipPath(
@@ -101,54 +118,76 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ),
-          // Bottom Section with 2x2 Grid Buttons
           Expanded(
             flex: 1,
-            child: Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: GridView.count(
-                crossAxisCount: 2,
-                mainAxisSpacing: 20,
-                crossAxisSpacing: 20,
-                childAspectRatio: 1.2,
-                children: [
-                  _CustomButton(
-                    icon: Icons.fitness_center,
-                    label: 'Exercises',
-                    color: const Color(0xFF562634),
-                    onPressed: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (_) => ExercisesScreen()),
+            child: SingleChildScrollView(
+              // Added to prevent potential overflow if still too tight
+              child: Padding(
+                padding: const EdgeInsets.all(15.0), // Reduced padding
+                child: Column(
+                  children: [
+                    Text(
+                      selectedQuote,
+                      style: TextStyle(
+                        fontSize: 18, // Reduced font size
+                        fontStyle: FontStyle.italic,
+                        color: Colors.black54,
+                      ),
+                      textAlign: TextAlign.center,
                     ),
-                  ),
-                  _CustomButton(
-                    icon: Icons.restaurant,
-                    label: 'Diet',
-                    color: const Color(0xFF562634),
-                    onPressed: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (_) => DietScreen()),
+                    const SizedBox(height: 15), // Reduced height
+                    GridView.count(
+                      shrinkWrap: true,
+                      physics:
+                          NeverScrollableScrollPhysics(), // Prevent grid scrolling inside SingleChildScrollView
+                      crossAxisCount: 2,
+                      mainAxisSpacing: 15, // Reduced spacing
+                      crossAxisSpacing: 15, // Reduced spacing
+                      childAspectRatio:
+                          1.3, // Adjusted aspect ratio to make items shorter
+                      children: [
+                        _CustomButton(
+                          icon: Icons.fitness_center,
+                          label: 'Exercises',
+                          color: const Color(0xFF562634),
+                          onPressed: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (_) => ExercisesScreen()),
+                          ),
+                        ),
+                        _CustomButton(
+                          icon: Icons.restaurant,
+                          label: 'Diet',
+                          color: const Color(0xFF562634),
+                          onPressed: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (_) => DietScreen()),
+                          ),
+                        ),
+                        _CustomButton(
+                          icon: Icons.analytics,
+                          label: 'Analytics',
+                          color: const Color(0xFF562634),
+                          onPressed: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (_) => AnalyticsScreen()),
+                          ),
+                        ),
+                        _CustomButton(
+                          icon: Icons.forum,
+                          label: 'Forums',
+                          color: const Color(0xFF562634),
+                          onPressed: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (_) => ForumScreen()),
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                  _CustomButton(
-                    icon: Icons.analytics,
-                    label: 'Analytics',
-                    color: const Color(0xFF562634),
-                    onPressed: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (_) => AnalyticsScreen()),
-                    ),
-                  ),
-                  _CustomButton(
-                    icon: Icons.forum,
-                    label: 'Forums',
-                    color: const Color(0xFF562634),
-                    onPressed: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (_) => ForumScreen()),
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
@@ -214,12 +253,12 @@ class _CustomButton extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(icon, size: 30, color: Colors.white),
-              const SizedBox(height: 10),
+              Icon(icon, size: 28, color: Colors.white), // Reduced icon size
+              const SizedBox(height: 8), // Reduced height
               Text(
                 label,
                 style: const TextStyle(
-                  fontSize: 18,
+                  fontSize: 16, // Reduced font size
                   fontWeight: FontWeight.bold,
                   color: Colors.white,
                 ),

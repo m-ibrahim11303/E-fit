@@ -3,7 +3,6 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-// Model for selected meal items
 class SelectedMealItem {
   final String id;
   final String name;
@@ -18,7 +17,6 @@ class SelectedMealItem {
   });
 }
 
-// Food Service to handle API calls
 class FoodService {
   static const String baseUrl = 'https://e-fit-backend.onrender.com';
 
@@ -62,7 +60,6 @@ class FoodService {
   }
 }
 
-// Meal Log Screen
 class MealLogScreen extends StatefulWidget {
   @override
   _MealLogScreenState createState() => _MealLogScreenState();
@@ -265,7 +262,6 @@ class _MealLogScreenState extends State<MealLogScreen> {
   }
 }
 
-// Eatery Meal Screen
 class EateryMealScreen extends StatefulWidget {
   final Map<String, dynamic> eatery;
 
@@ -524,7 +520,6 @@ class _CustomMealScreenState extends State<CustomMealScreen> {
                   },
                 ),
                 SizedBox(height: 20),
-                // Calories Input
                 TextFormField(
                   controller: _caloriesController,
                   keyboardType: TextInputType.number,
@@ -549,7 +544,6 @@ class _CustomMealScreenState extends State<CustomMealScreen> {
                   },
                 ),
                 SizedBox(height: 20),
-                // Protein Input
                 TextFormField(
                   controller: _proteinController,
                   keyboardType: TextInputType.number,
