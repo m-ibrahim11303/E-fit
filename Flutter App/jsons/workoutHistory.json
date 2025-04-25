@@ -1,0 +1,41 @@
+{
+    "numberOfDays": 3,
+    "days": [
+        {
+            "name": "Today",
+            "noOfExercises": 3,
+            "exercises": [
+                {
+                    "Running": "Set 1: 10 minutes\n"
+                },
+                {
+                    "Bench Press": "Set 1: 12 reps\nSet 2: 10 reps\nSet 3: 8 reps"
+                },
+                {
+                    "Incline Dunbell press": "Set 1: 12 reps"
+                }
+            ]
+        },
+        {
+            "name": "Thursday",
+            "noOfExercises": 1,
+            "exercises": [
+                {
+                    "Bench Press": "Set 1: 12 reps\nSet 2: 10 reps\nSet 3: 8 reps"
+                }
+            ]
+        },
+        {
+            "name": "Wednesday",
+            "noOfExercises": 2,
+            "exercises": [
+                {
+                    "Running": "Set 1: 10 minutes\n"
+                },
+                {
+                    "Bench Press": "Set 1: 12 reps\nSet 2: 10 reps\nSet 3: 8 reps"
+                }
+            ]
+        }
+    ]
+}
