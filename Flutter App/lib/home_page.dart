@@ -7,7 +7,6 @@ import 'analytics_screen.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'bootup/login_signup_page_1.dart';
 
-// Global secure storage instance
 final FlutterSecureStorage storage = FlutterSecureStorage();
 
 void main() {
@@ -55,7 +54,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _openSettings() {
-    final email = _userEmail ?? 'No email available'; // Fallback value
+    final email = _userEmail ?? 'No email available';
     Navigator.push(
       context,
       MaterialPageRoute(builder: (_) => SettingsScreen(email: email)),
@@ -83,7 +82,6 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: Column(
         children: [
-          // Top Section with Curved Image (50% height)
           Expanded(
             flex: 1,
             child: ClipPath(
@@ -101,7 +99,6 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ),
-          // Bottom Section with 2x2 Grid Buttons
           Expanded(
             flex: 1,
             child: Padding(
