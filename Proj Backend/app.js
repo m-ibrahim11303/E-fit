@@ -7,7 +7,7 @@ import { aiRouter } from "./routes/ai.js";
 import { commentRouter } from "./routes/comment.js"
 import { postRouter } from "./routes/post.js"
 import { analyticsRouter } from "./routes/analytics.js"
-
+import { forgetPasswordRouter } from "./routes/forgetPassword.js"
 
 export const app = express();
 
@@ -15,6 +15,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/user", userRouter);
+app.use("/forget-password", forgetPasswordRouter)
 app.use("/dish", dishRouter);
 app.use("/exercise", exerciseRouter);
 app.use("/ai", aiRouter);
@@ -22,4 +23,3 @@ app.use("/ai", aiRouter);
 app.use("/post", postRouter);
 app.use("/comment", commentRouter);
 app.use("/analytics", analyticsRouter);
-

@@ -6,6 +6,7 @@ import { UserBMR } from "../models/bmr_tdee.js"; // <-- Add this line if not alr
 export const getDietAnalytics = async (req, res) => {
     try {
         const { email } = req.query;
+        console.log(`$> Charts requested by ${email}`)
 
         if (!email) {
             return res.status(400).json({
@@ -86,6 +87,7 @@ export const getDietAnalytics = async (req, res) => {
                 ylabel: "Water (ml)"
             }
         ];
+        console.log(`$> Charts sent`)
 
         // --- BMI Calculation ---
         const heightInMeters = user.height / 100;
