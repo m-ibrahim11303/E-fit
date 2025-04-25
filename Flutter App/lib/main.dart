@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart'; // Add secure storage
-import 'bootup/bootup_page_1.dart'; // Import the BootupPage1 widget
-import 'home_page.dart'; // Import the HomeScreen widget
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'bootup/bootup_page_1.dart';
+import 'home_page.dart';
 
 final FlutterSecureStorage storage = FlutterSecureStorage();
 
