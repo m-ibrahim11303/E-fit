@@ -319,11 +319,9 @@ export const logWater = async (req, res) => {
 };
 
 
-// Log user exercises
 export const saveExercises = async (req, res) => {
   try {
     const { email, exercises } = req.body;
-    // Basic validation
     if (!email || !exercises || !Array.isArray(exercises) || exercises.length === 0) {
       return res.status(400).json({
         success: false,
@@ -354,7 +352,6 @@ export const saveExercises = async (req, res) => {
       };
     });
 
-    // Insert all exercises in one operation
     const savedExercises = await UserExercise.insertMany(exercisesToSave);
 
     return res.status(201).json({
@@ -387,7 +384,6 @@ export const saveExercises = async (req, res) => {
   }
 };
 
-// Get exercise history
 export const getWorkoutHistory = async (req, res) => {
   try {
     const { email } = req.query;
@@ -489,6 +485,61 @@ export const getWorkoutHistory = async (req, res) => {
     return res.status(500).json({
       success: false,
       message: 'Failed to fetch workout history',
+      error: error.message
+    });
+  }
+};
+
+
+export const getStreaks = async (req, res) => {
+  try {
+    const { email } = req.query;
+
+    if (!email) {
+      return res.status(400).json({
+        success: false,
+        message: 'Email is required'
+      });
+    }
+
+    const users = await User.find({ email });
+    if (users.length === 0) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    const exercises = await UserExercise.find({ userEmail: email }).sort({ timestamp: -1 });
+
+    if (!exercises || exercises.length === 0) {
+      return res.status(200).json({ success: true, streak: 0 });
+    }
+
+    // Extract dates with at least one exercise
+    const exerciseDatesSet = new Set(
+      exercises.map(ex => ex.timestamp.toISOString().split('T')[0])
+    );
+
+    let streak = 0;
+    let currentDate = new Date();
+
+    // Check backwards from today
+    while (true) {
+      const dateStr = currentDate.toISOString().split('T')[0];
+      if (exerciseDatesSet.has(dateStr)) {
+        streak += 1;
+        // Move to previous day
+        currentDate.setDate(currentDate.getDate() - 1);
+      } else {
+        break;
+      }
+    }
+
+    return res.status(200).json({ success: true, streak });
+
+  } catch (error) {
+    console.error('Error getting streak:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Failed to get streak',
       error: error.message
     });
   }
