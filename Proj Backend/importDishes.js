@@ -6,7 +6,7 @@ const API_URL = "http://localhost:8000/dish/add";
 
 const results = [];
 
-fs.createReadStream("F:/CS 360 - Software Engineering/E-fit/Proj Backend/Eateries Info/green_olive_dishes_days.csv") // or green_olive_dishes.csv
+fs.createReadStream("F:/CS 360 - Software Engineering/E-fit/Proj Backend/Eateries Info/pdc_dishes_days copy.csv") // or green_olive_dishes.csv
   .pipe(csv())
   .on("data", (row) => {
     results.push(row);
@@ -20,7 +20,7 @@ fs.createReadStream("F:/CS 360 - Software Engineering/E-fit/Proj Backend/Eaterie
           eatery: dish.eatery,
           calories: parseInt(dish.calories, 10),
           proteins: parseInt(dish.proteins, 10),
-          day_of_week: dish.day_of_week?.toLowerCase() || ""  // Add the new field safely
+          day_of_week: dish.day_of_week?.toLowerCase() || ""  
         });
 
         console.log(`Added: ${dish.name} - ${response.status}`);
