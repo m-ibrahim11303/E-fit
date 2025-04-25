@@ -17,17 +17,16 @@ export const addDish = async (req, res) => {
   }
 };
 
-export const getAllDishes = async (req, res) => {
+export const getAllDishes = async ( _, res) => {
   try {
     const today = new Date().toLocaleDateString("en-US", { weekday: "long" }).toLowerCase();
-    console.log(`Getting Dishes for ${today}`)
 
     // Find dishes for today or everyday
     const dishes = await FoodDish.find({
       $or: [
         { day_of_week: { $regex: new RegExp(`\\b${today}\\b`, "i") } },
         { day_of_week: { $regex: /everyday/i } },
-        { day_of_week: { $exists: false } }  // Optional: include legacy dishes without a day
+        { day_of_week: { $exists: false } }  
       ]
     });
 

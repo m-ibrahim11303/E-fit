@@ -1,11 +1,10 @@
 import { User } from "../models/user.js";
 import { UserMeals } from "../models/userMeals.js";
-import { waterLog } from '../models/waterlog.js'; // <-- Import this
+import { waterLog } from '../models/waterlog.js';
 
 export const getDietAnalytics = async (req, res) => {
     try {
         const { email } = req.query;
-        console.log(`$> Charts requested by ${email}`)
 
         if (!email) {
             return res.status(400).json({
@@ -92,7 +91,6 @@ export const getDietAnalytics = async (req, res) => {
                 ylabel: "Water (ml)"
             }
         ];
-        console.log(`$> Charts sent`)
 
         return res.status(200).json({
             success: true,

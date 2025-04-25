@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const userExercisesSchema = new mongoose.Schema({
+const userExercises = new mongoose.Schema({
     userEmail: { 
         type: String,
         required: true,
@@ -42,4 +42,4 @@ const userExercisesSchema = new mongoose.Schema({
     }
 });
 
-export const UserExercise = mongoose.model("UserExercises", userExercisesSchema);
+export const UserExercise = mongoose.model("UserExercises", userExercises);
