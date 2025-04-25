@@ -38,7 +38,6 @@ export const getCommentsForPost = async (req, res) => {
 
     res.status(200).json(commentsWithUsernames);
   } catch (error) {
-    console.error("Error fetching comments:", error);
     res.status(500).json({ message: "Error fetching comments", error });
   }
 };

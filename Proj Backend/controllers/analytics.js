@@ -1,12 +1,11 @@
 import { User } from "../models/user.js";
 import { UserMeals } from "../models/userMeals.js";
 import { waterLog } from "../models/waterlog.js";
-import { UserBMR } from "../models/bmr_tdee.js"; // <-- Add this line if not already imported
+import { UserBMR } from "../models/bmr_tdee.js"; 
 
 export const getDietAnalytics = async (req, res) => {
     try {
         const { email } = req.query;
-        console.log(`$> Charts requested by ${email}`)
 
         if (!email) {
             return res.status(400).json({
@@ -87,13 +86,12 @@ export const getDietAnalytics = async (req, res) => {
                 ylabel: "Water (ml)"
             }
         ];
-        console.log(`$> Charts sent`)
 
-        // --- BMI Calculation ---
+        // BMI Calculation 
         const heightInMeters = user.height / 100;
         const bmi = +(user.weight / (heightInMeters * heightInMeters)).toFixed(1);
 
-        // --- Get Most Recent BMR & TDEE ---
+        
         const bmrTdee = await UserBMR.findOne({ userEmail: email }).sort({ timestamp: -1 });
 
         const bmr = bmrTdee ? bmrTdee.bmr : null;
@@ -108,7 +106,6 @@ export const getDietAnalytics = async (req, res) => {
         });
 
     } catch (error) {
-        console.error("Error in getDietAnalytics:", error);
         return res.status(500).json({
             success: false,
             message: "Failed to get diet analytics",

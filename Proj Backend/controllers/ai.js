@@ -5,7 +5,7 @@ import { UserPlan  } from "../models/ai.js";
 import { UserBMR } from "../models/bmr_tdee.js";
 import { startOfDay, endOfDay } from 'date-fns';
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+const genAI = new GoogleGenerativeAI("AIzaSyCkFUbEpYFl7pfkHbLs9JhTQNEW0n-Olgk");
 
 export const getExercisesForAI = async () => {
   const exercises = await Exercise.find().select('name -_id');
@@ -32,7 +32,6 @@ export const getGeminiResponse = async (messages) => {
     const response = await result.response;
     return response.text();
   } catch (err) {
-    console.error("Error getting Gemini response:", err);
     return "Something went wrong with Gemini.";
   }
 };
@@ -133,7 +132,6 @@ export const getGeminiPlan = async (req, res) => {
         res.json({ plan });
   
     } catch (error) {
-      console.error("Error in getGeminiPlan:", error);
       res.status(500).json({ error: "Failed to generate  plan" });
     }
 };
