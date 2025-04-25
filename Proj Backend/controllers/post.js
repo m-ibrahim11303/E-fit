@@ -20,10 +20,8 @@ export const createPost = async (req, res) => {
 export const getAllPosts = async (req, res) => {
   try {
     const posts = await Post.find({}).sort({ createdAt: -1 });
-    // console.log(posts)
     const postsWithNames = await Promise.all(posts.map(async (post) => {
       const user = await User.findOne({ email: post.userEmail }); 
-      // console.log(user)
       return {
         ...post.toObject(),
         userFirstName: user ? user.firstName : "Unknown"

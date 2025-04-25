@@ -3,141 +3,6 @@ import { UserMeals } from "../models/userMeals.js";
 import { waterLog } from "../models/waterlog.js";
 import { UserExercise } from "../models/userExercise.js";
 
-// SignUp user
-export const createUser = async (req, res) => {
-  try {
-    const {
-      firstName,
-      lastName,
-      email,
-      password,
-      gender,
-      dateOfBirth,
-      height,
-      weight
-    } = req.body;
-
-    if (!firstName || !email || !password || !gender || !dateOfBirth || !height || !weight) {
-      return res.status(400).json({ error: "Missing required fields" });
-    }
-
-    const existingUser = await User.findOne({ email });
-    if (existingUser) {
-      console.log("Email already in use:", email);
-      return res.status(400).json({ error: "Email already in use" });
-    }
-
-    const newUser = await User.create({
-      firstName,
-      lastName: lastName || "",
-      email,
-      password,
-      gender,
-      dateOfBirth,
-      height: Number(height),
-      weight: Number(weight)
-    });
-
-    return res.status(201).json({ message: "User created", email: newUser.email });
-
-  } catch (err) {
-    console.error("Error creating user:", err.message);
-    return res.status(500).json({ error: err.message });
-  }
-};
-
-// Login
-export const loginUser = async (req, res) => {
-  try {
-    const { email, password } = req.query;
-
-    if (!email || !password) {
-      return res.status(400).json({ error: "All fields are required" });
-    }
-
-    const users = await User.find({ email: email });
-
-    if (users.length === 0) {
-      return res.status(404).json({ error: "User not found", sessionCookie: null });
-    }
-
-    const user = users[0]; // email is unique
-
-    if (user.password !== password) {
-      return res.status(401).json({ error: "Incorrect password", sessionCookie: null });
-    }
-
-    return res.status(200).json({
-      message: "Login successful",
-      sessionCookie: user.email
-    });
-  } catch (error) {
-    return res.status(500).json({ error: error.message, sessionCookie: null });
-  }
-};
-
-export const changePassword = async (req, res) => {
-  try {
-    const { email, currentPassword, newPassword } = req.body;
-
-    if (!email || !currentPassword || !newPassword) {
-      return res.status(400).json({ error: "Email, current password, and new password are required" });
-    }
-
-    const user = await User.findOne({ email });
-
-    if (!user) {
-      return res.status(404).json({ error: "User not found" });
-    }
-
-    if (user.password !== currentPassword) {
-      return res.status(401).json({ error: "Incorrect current password" });
-    }
-
-    user.password = newPassword;
-    await user.save();
-
-    return res.status(200).json({ message: "Password changed successfully" });
-  } catch (error) {
-    console.error("Error changing password:", error.message);
-    return res.status(500).json({ error: "Server error" });
-  }
-};
-
-export const deleteUser = async (req, res) => {
-  try {
-    const { email, password } = req.body;
-
-    if (!email || !password) {
-      return res.status(400).json({ error: "Email and password are required" });
-    }
-
-    const user = await User.findOne({ email });
-
-    if (!user) {
-      return res.status(404).json({ error: "User not found" });
-    }
-
-    if (user.password !== password) {
-      return res.status(401).json({ error: "Incorrect password" });
-    }
-
-    // Delete user and associated data
-    await Promise.all([
-      User.deleteOne({ email }),
-      UserMeals.deleteMany({ userEmail: email }),
-      waterLog.deleteMany({ email }),
-      UserExercise.deleteMany({ userEmail: email }),
-    ]);
-
-    return res.status(200).json({ message: "User and all associated data deleted successfully" });
-
-  } catch (error) {
-    console.error("Error deleting user:", error.message);
-    return res.status(500).json({ error: "Server error" });
-  }
-};
-
 
 // Save user meals
 export const saveMeals = async (req, res) => {
@@ -188,7 +53,6 @@ export const saveMeals = async (req, res) => {
     });
 
   } catch (error) {
-    console.error('Error saving meals:', error);
     return res.status(500).json({
       success: false,
       message: 'Failed to save meals',
@@ -200,7 +64,7 @@ export const saveMeals = async (req, res) => {
 // Diet history for user
 export const getDietHistory = async (req, res) => {
   try {
-    const { email } = req.query; // Get email from query params
+    const { email } = req.query; 
 
     if (!email) {
       return res.status(400).json({
@@ -214,7 +78,6 @@ export const getDietHistory = async (req, res) => {
       return res.status(404).json({ error: "User not found" });
     }
 
-    // Get meals from database, sorted by timestamp (newest first)
     const meals = await UserMeals.find({ userEmail: email })
       .sort({ timestamp: -1 });
 
@@ -279,7 +142,6 @@ export const getDietHistory = async (req, res) => {
     });
 
   } catch (error) {
-    console.error('Error fetching diet history:', error);
     return res.status(500).json({
       success: false,
       message: 'Failed to fetch diet history',
@@ -313,7 +175,6 @@ export const logWater = async (req, res) => {
 
     res.status(200).json({ message: 'Water intake logged successfully' });
   } catch (error) {
-    console.error('Error logging water intake:', error);
     res.status(500).json({ message: 'Server error' });
   }
 };
@@ -375,7 +236,6 @@ export const saveExercises = async (req, res) => {
     });
 
   } catch (error) {
-    console.error('Error saving exercises:', error);
     return res.status(500).json({
       success: false,
       message: 'Failed to save exercises',
@@ -481,7 +341,6 @@ export const getWorkoutHistory = async (req, res) => {
     });
 
   } catch (error) {
-    console.error('Error fetching workout history:', error);
     return res.status(500).json({
       success: false,
       message: 'Failed to fetch workout history',
@@ -536,7 +395,6 @@ export const getStreaks = async (req, res) => {
     return res.status(200).json({ success: true, streak });
 
   } catch (error) {
-    console.error('Error getting streak:', error);
     return res.status(500).json({
       success: false,
       message: 'Failed to get streak',

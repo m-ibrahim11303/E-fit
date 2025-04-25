@@ -1,6 +1,8 @@
 import express from "express";
 
-import { createUser, loginUser, changePassword, deleteUser, saveMeals , getDietHistory, logWater, saveExercises, getWorkoutHistory, getStreaks} from "../controllers/user.js";
+import { saveMeals , getDietHistory, logWater, saveExercises, getWorkoutHistory, getStreaks} from "../controllers/user.js";
+import { createUser, loginUser, changePassword, deleteUser } from "../controllers/auth.js";
+
 
 
 export const userRouter = express.Router();

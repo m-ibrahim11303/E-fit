@@ -2,7 +2,7 @@ import nodemailer from "nodemailer";
 import { User } from "../models/user.js";
 
 
-let otpStore = {}; // Store OTPs temporarily (use Redis/DB in production)
+let otpStore = {}; 
 
 const generateOTP = () => Math.floor(100000 + Math.random() * 900000).toString();
 
@@ -38,7 +38,6 @@ export const sendForgotPasswordOTP = async (req, res) => {
     await transporter.sendMail(mailOptions);
     res.status(200).json({ message: "OTP sent successfully" });
   } catch (err) {
-    console.error("Email send error:", err);
     res.status(500).json({ error: "Failed to send OTP" });
   }
 };

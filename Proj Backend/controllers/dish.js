@@ -1,6 +1,5 @@
 import { FoodDish } from "../models/foodDish.js";
 
-// Add new dish to DB
 export const addDish = async (req, res) => {
   try {
     const { name, description, eatery, calories, proteins, day_of_week } = req.body;
@@ -20,14 +19,13 @@ export const addDish = async (req, res) => {
 export const getAllDishes = async (req, res) => {
   try {
     const today = new Date().toLocaleDateString("en-US", { weekday: "long" }).toLowerCase();
-    console.log(`Getting Dishes for ${today}`)
 
     // Find dishes for today or everyday
     const dishes = await FoodDish.find({
       $or: [
         { day_of_week: { $regex: new RegExp(`\\b${today}\\b`, "i") } },
         { day_of_week: { $regex: /everyday/i } },
-        { day_of_week: { $exists: false } }  // Optional: include legacy dishes without a day
+        { day_of_week: { $exists: false } }
       ]
     });
 
