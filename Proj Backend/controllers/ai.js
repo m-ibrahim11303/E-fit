@@ -5,7 +5,12 @@ import { UserPlan  } from "../models/ai.js";
 import { UserBMR } from "../models/bmr_tdee.js";
 import { startOfDay, endOfDay } from 'date-fns';
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+// import dotenv from 'dotenv';
+// dotenv.config();
+
+
+// const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+const genAI = new GoogleGenerativeAI("AIzaSyCkFUbEpYFl7pfkHbLs9JhTQNEW0n-Olgk");
 
 export const getExercisesForAI = async () => {
   const exercises = await Exercise.find().select('name -_id');
@@ -39,6 +44,8 @@ export const getGeminiResponse = async (messages) => {
 
 export const getGeminiPlan = async (req, res) => {
     try {
+     
+
         const { email, BMR, TDEE, caloriesToEat, caloriesToBurn } = req.body;
 
         await UserBMR.deleteOne({ userEmail: email });
