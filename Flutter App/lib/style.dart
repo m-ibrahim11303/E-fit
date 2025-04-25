@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-// TEXT STYLE
 TextStyle jerseyStyle(double fontSize, [Color color = Colors.white]) {
   return TextStyle(
     fontFamily: 'Jersey 25',
@@ -9,7 +8,6 @@ TextStyle jerseyStyle(double fontSize, [Color color = Colors.white]) {
   );
 }
 
-// CHANGE PAGE
 void slideTo(BuildContext context, Widget destination) {
   Navigator.push(
     context,
