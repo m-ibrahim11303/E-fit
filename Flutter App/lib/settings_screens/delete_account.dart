@@ -3,6 +3,7 @@ import 'package:login_signup_1/bootup/signup_page_1.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:crypto/crypto.dart';
+import 'package:login_signup_1/style.dart';
 
 Future<void> deleteAccount(BuildContext context, String email) async {
   final TextEditingController passwordController = TextEditingController();
@@ -10,25 +11,41 @@ Future<void> deleteAccount(BuildContext context, String email) async {
   final shouldDelete = await showDialog<bool>(
     context: context,
     builder: (context) => AlertDialog(
-      title: Text('Confirm Deletion'),
+      title: Text(
+        'Confirm Deletion',
+        style: jerseyStyle(24, darkMaroon),
+      ),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text('Enter your password to delete your account:'),
+          Text(
+            'Enter your password to delete your account:',
+            style: jerseyStyle(16, darkMaroon),
+          ),
           TextField(
             controller: passwordController,
             obscureText: true,
-            decoration: InputDecoration(labelText: 'Password'),
+            style: jerseyStyle(18, darkMaroon), 
+            decoration: InputDecoration(
+              labelText: 'Password',
+              labelStyle: jerseyStyle(18, lightMaroon),
+            ),
           ),
         ],
       ),
       actions: [
         TextButton(
-          child: Text('Cancel'),
+          child: Text(
+            'Cancel',
+            style: jerseyStyle(18, darkMaroon),
+          ),
           onPressed: () => Navigator.pop(context, false),
         ),
         TextButton(
-          child: Text('Delete', style: TextStyle(color: Colors.red)),
+          child: Text(
+            'Delete',
+            style: jerseyStyle(18, errorRed),
+          ),
           onPressed: () => Navigator.pop(context, true),
         ),
       ],
@@ -46,25 +63,63 @@ Future<void> deleteAccount(BuildContext context, String email) async {
       );
 
       if (response.statusCode == 200) {
+        if (!context.mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Account deleted successfully')),
+          SnackBar(
+            content: Text(
+              'Account deleted successfully',
+              style: jerseyStyle(16, brightWhite),
+            ),
+            backgroundColor: darkMaroon,
+          ),
         );
-
         Navigator.pushAndRemoveUntil(
           context,
-          MaterialPageRoute(builder: (context) => SignupPage1()),
+          MaterialPageRoute(
+              builder: (context) =>
+                  const SignupPage1()),
           (Route<dynamic> route) => false,
         );
       } else {
+        if (!context.mounted) return;
+        String errorMessage = 'Failed: Status Code ${response.statusCode}';
+        try {
+          final decodedBody = jsonDecode(response.body);
+          if (decodedBody is Map && decodedBody.containsKey('message')) {
+            errorMessage = 'Failed: ${decodedBody['message']}';
+          } else {
+            errorMessage = 'Failed: ${response.body}';
+          }
+        } catch (_) {
+          errorMessage = 'Failed: ${response.body}';
+        }
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed: ${response.body}')),
+          SnackBar(
+            content: Text(
+              errorMessage,
+              style: jerseyStyle(16, brightWhite),
+            ),
+            backgroundColor:
+                errorRed,
+          ),
         );
       }
     } catch (e) {
+      if (!context.mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error: $e')),
+        SnackBar(
+          content: Text(
+            'Error: $e',
+            style: jerseyStyle(16, brightWhite),
+          ),
+          backgroundColor: errorRed,
+        ),
       );
+    } finally {
+      passwordController.dispose();
     }
+  } else {
+    passwordController.dispose();
   }
 }
 

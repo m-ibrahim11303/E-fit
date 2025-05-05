@@ -36,9 +36,14 @@ dependencies:
   flutter_secure_storage: ^9.0.0
   cupertino_icons: ^1.0.8
   fl_chart: ^0.68.0
+  intl: ^0.19.0
 
 dev_dependencies:
   flutter_test:
+    sdk: flutter
+  integration_test:
+    sdk: flutter
+  flutter_driver:
     sdk: flutter
   # http: ^1.1.0
   http: ^1.2.1
@@ -95,11 +100,16 @@ flutter:
     - assets/images/background_signup_page_1.png
     - assets/images/background_signup_page_2.png
     - assets/images/background_login_page_1_white.png
+    - assets/images/background_login_page_1_old.png
+
     # images
     - assets/images/home_page_logo.png
     - assets/images/analytics_place_holder.png
     - assets/images/analytics_place_holder2.png
     - assets/images/analytics_place_holder3.png
+    - assets/images/gold.png
+    - assets/images/silver.png
+    - assets/images/bronze.png
 
   #     - assets/fonts/Jersey25-Regular.ttf
 

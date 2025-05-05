@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:crypto/crypto.dart';
+import 'package:login_signup_1/style.dart';
 
 Future<void> changePassword(BuildContext context, String email) async {
   final currentController = TextEditingController();
@@ -11,35 +12,56 @@ Future<void> changePassword(BuildContext context, String email) async {
   final shouldChange = await showDialog<bool>(
     context: context,
     builder: (context) => AlertDialog(
-      title: Text('Change Password'),
+      title: Text(
+        'Change Password',
+        style: jerseyStyle(24, darkMaroon),
+      ),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           TextField(
             controller: currentController,
             obscureText: true,
-            decoration: InputDecoration(labelText: 'Current Password'),
+            style: jerseyStyle(18, darkMaroon),
+            decoration: InputDecoration(
+              labelText: 'Current Password',
+              labelStyle: jerseyStyle(18, lightMaroon), 
+            ),
           ),
           TextField(
             controller: newController,
             obscureText: true,
-            decoration: InputDecoration(labelText: 'New Password'),
+            style: jerseyStyle(18, darkMaroon),
+            decoration: InputDecoration(
+              labelText: 'New Password',
+              labelStyle: jerseyStyle(18, lightMaroon),
+            ),
           ),
           TextField(
             controller: confirmController,
             obscureText: true,
-            decoration: InputDecoration(labelText: 'Confirm New Password'),
+            style: jerseyStyle(18, darkMaroon), 
+            decoration: InputDecoration(
+              labelText: 'Confirm New Password',
+              labelStyle: jerseyStyle(18, lightMaroon),
+            ),
           ),
         ],
       ),
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context, false),
-          child: Text('Cancel'),
+          child: Text(
+            'Cancel',
+            style: jerseyStyle(18, darkMaroon),
+          ),
         ),
         TextButton(
           onPressed: () => Navigator.pop(context, true),
-          child: Text('Change'),
+          child: Text(
+            'Change',
+            style: jerseyStyle(18, darkMaroon),
+          ),
         ),
       ],
     ),
@@ -78,12 +100,27 @@ Future<void> changePassword(BuildContext context, String email) async {
       if (response.statusCode == 200) {
         _showSnackbar(context, 'Password updated successfully.');
       } else {
-        _showSnackbar(context, 'Failed: ${response.body}');
+        String errorMessage = 'Failed: Status Code ${response.statusCode}';
+        try {
+          final decodedBody = jsonDecode(response.body);
+          if (decodedBody is Map && decodedBody.containsKey('message')) {
+            errorMessage = 'Failed: ${decodedBody['message']}';
+          } else {
+            errorMessage = 'Failed: ${response.body}';
+          }
+        } catch (_) {
+          errorMessage = 'Failed: ${response.body}';
+        }
+        _showSnackbar(context, errorMessage);
       }
     } catch (e) {
       _showSnackbar(context, 'Error: $e');
     }
   }
+
+  currentController.dispose();
+  newController.dispose();
+  confirmController.dispose();
 }
 
 String hashPassword(String password) {
@@ -98,5 +135,13 @@ bool isValidPassword(String password) {
 }
 
 void _showSnackbar(BuildContext context, String message) {
-  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      content: Text(
+        message,
+        style: jerseyStyle(16, brightWhite),
+      ),
+      backgroundColor: Colors.black87,
+    ),
+  );
 }

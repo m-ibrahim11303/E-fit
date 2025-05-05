@@ -1,34 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http; // Add http package for API calls
-import 'dart:convert'; // For JSON encoding/decoding
-import 'signup_page_2.dart'; // Import the VerifyEmailPage
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 import 'package:login_signup_1/home_page.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart'; // Add secure storage
-import 'package:crypto/crypto.dart'; // Add this for SHA-256 hashing
-import 'package:login_signup_1/bootup/signup_page_1.dart';
-import 'package:login_signup_1/bootup/signup_page_3.dart'; // Ensure this import is correct
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:crypto/crypto.dart';
+import 'package:login_signup_1/style.dart';
 
-// Global variables
 String name_ = "";
 String password_ = "";
 String email_ = "";
 
-// Global secure storage instance
 final FlutterSecureStorage storage = FlutterSecureStorage();
 
-// Define jerseyStyle globally
-TextStyle jerseyStyle(double fontSize, [Color color = Colors.white]) {
-  return TextStyle(
-    fontFamily: 'Jersey 25',
-    fontSize: fontSize,
-    color: color,
-  );
-}
-
 class SignUpPage3 extends StatefulWidget {
-  final String email; // Email from previous screen
-  final String password; // Password from previous screen
-  final String name; // Name from previous screen
+  final String email;
+  final String password;
+  final String name;
 
   const SignUpPage3({
     Key? key,
@@ -55,12 +42,10 @@ class _SignUpPage3State extends State<SignUpPage3> {
   void initState() {
     super.initState();
 
-    // Set the global variables from widget values
     name_ = widget.name;
     email_ = widget.email;
     password_ = widget.password;
 
-    // Name processing from global variable
     String first_name = '';
     String other_names = '';
 
@@ -106,22 +91,21 @@ class _SignUpPage3State extends State<SignUpPage3> {
     }
   }
 
-  // Function to show popup and navigate
   void _showResultPopup(String message, bool isSuccess) {
     showDialog(
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
-        Future.delayed(const Duration(seconds: 10), () {
-          Navigator.of(context).pop(); // Close the popup
+        Future.delayed(const Duration(seconds: 3), () {
+          Navigator.of(context).pop();
 
           if (isSuccess) {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => HomeScreen()),
-            );
+            slideTo(context, HomeScreen());
+            // Navigator.pushReplacement(
+            //   context,
+            //   MaterialPageRoute(builder: (context) => HomeScreen()),
+            // );
           }
-          // Do nothing if sign-up failed (user stays on same screen)
         });
 
         return AlertDialog(
@@ -130,13 +114,13 @@ class _SignUpPage3State extends State<SignUpPage3> {
             children: [
               Icon(
                 isSuccess ? Icons.check_circle : Icons.error,
-                color: isSuccess ? Colors.green : Colors.red,
+                color: isSuccess ? goodGreen : errorRed,
                 size: 50,
               ),
               const SizedBox(height: 16),
               Text(
                 message,
-                style: jerseyStyle(16, Colors.black),
+                style: jerseyStyle(16, darkMaroon),
                 textAlign: TextAlign.center,
               ),
             ],
@@ -146,9 +130,7 @@ class _SignUpPage3State extends State<SignUpPage3> {
     );
   }
 
-  // Function to handle the API call and navigation
   Future<void> _completeSignUp() async {
-    // Create JSON object with user data
     Map<String, dynamic> userData = {
       'firstName': _firstNameController.text,
       'lastName': _lastNameController.text,
@@ -156,13 +138,11 @@ class _SignUpPage3State extends State<SignUpPage3> {
       'weight': _weightController.text,
       'height': _heightController.text,
       'gender': _selectedGender,
-      'email': email_, // Include email from previous screen
-      'password':
-          _hashPassword(password_), // Include password from previous screen
+      'email': email_,
+      'password': _hashPassword(password_),
     };
 
     try {
-      // Make GET request to API (Note: typically this would be a POST request for signup)
       final response = await http.post(
         Uri.parse('https://e-fit-backend.onrender.com/user/create'),
         headers: {'Content-Type': 'application/json'},
@@ -170,12 +150,9 @@ class _SignUpPage3State extends State<SignUpPage3> {
       );
 
       if (response.statusCode == 201) {
-        // Parse the response
         final responseData = jsonDecode(response.body);
 
-        // Check if response contains email
         if (responseData['email'] != null) {
-          // Store email in secure storage
           await storage.write(key: 'email', value: email_);
           _showResultPopup('Sign up successful!', true);
         } else {
@@ -201,16 +178,16 @@ class _SignUpPage3State extends State<SignUpPage3> {
       margin: const EdgeInsets.symmetric(vertical: 8.0),
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       decoration: BoxDecoration(
-        border: Border.all(color: Colors.grey),
+        border: Border.all(color: lightMaroon),
         borderRadius: BorderRadius.circular(8.0),
       ),
       child: TextField(
         controller: controller,
         keyboardType: keyboardType,
-        style: jerseyStyle(20, Colors.black),
+        style: jerseyStyle(20, darkMaroon),
         decoration: InputDecoration(
           hintText: hintText,
-          hintStyle: jerseyStyle(20, Colors.grey),
+          hintStyle: jerseyStyle(20, lightMaroon),
           border: InputBorder.none,
           suffixIcon: suffixIcon,
         ),
@@ -228,11 +205,11 @@ class _SignUpPage3State extends State<SignUpPage3> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('SIGN UP', style: jerseyStyle(32, Colors.black)),
+                Text('SIGN UP', style: jerseyStyle(32, darkMaroon)),
                 const SizedBox(height: 8),
                 Text(
-                  'The lower abdomen and hips are the most difficult areas of the body to reduce when...',
-                  style: jerseyStyle(16, Colors.grey),
+                  'The lower abdomen and hips are the most difficult areas of the body to reduce when losing weight.',
+                  style: jerseyStyle(16, lightMaroon),
                 ),
                 const SizedBox(height: 20),
                 _buildTextField(
@@ -250,7 +227,7 @@ class _SignUpPage3State extends State<SignUpPage3> {
                     padding: const EdgeInsets.symmetric(
                         horizontal: 16.0, vertical: 16.0),
                     decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey),
+                      border: Border.all(color: lightMaroon),
                       borderRadius: BorderRadius.circular(8.0),
                     ),
                     child: Row(
@@ -262,7 +239,7 @@ class _SignUpPage3State extends State<SignUpPage3> {
                               : '${_selectedDate!.day}/${_selectedDate!.month}/${_selectedDate!.year}',
                           style: jerseyStyle(
                             20,
-                            _selectedDate == null ? Colors.grey : Colors.black,
+                            _selectedDate == null ? lightMaroon : darkMaroon,
                           ),
                         ),
                         Image.asset(
@@ -277,31 +254,31 @@ class _SignUpPage3State extends State<SignUpPage3> {
                 ),
                 _buildTextField(
                   controller: _weightController,
-                  hintText: 'Weight',
+                  hintText: 'Weight (Kg)',
                   keyboardType: TextInputType.number,
                 ),
                 _buildTextField(
                   controller: _heightController,
-                  hintText: 'Height',
+                  hintText: 'Height (cm)',
                   keyboardType: TextInputType.number,
                 ),
                 Container(
                   margin: const EdgeInsets.symmetric(vertical: 8.0),
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey),
+                    border: Border.all(color: lightMaroon),
                     borderRadius: BorderRadius.circular(8.0),
                   ),
                   child: DropdownButtonHideUnderline(
                     child: DropdownButton<String>(
                       value: _selectedGender,
-                      hint: Text('Gender', style: jerseyStyle(20, Colors.grey)),
+                      hint: Text('Gender', style: jerseyStyle(20, lightMaroon)),
                       isExpanded: true,
                       items: _genders.map((String gender) {
                         return DropdownMenuItem<String>(
                           value: gender,
-                          child: Text(gender,
-                              style: jerseyStyle(20, Colors.black)),
+                          child:
+                              Text(gender, style: jerseyStyle(20, darkMaroon)),
                         );
                       }).toList(),
                       onChanged: (String? newValue) {
@@ -316,7 +293,7 @@ class _SignUpPage3State extends State<SignUpPage3> {
                 Center(
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF562634),
+                      backgroundColor: darkMaroon,
                       fixedSize: const Size(350, 59),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8.0),
@@ -324,7 +301,7 @@ class _SignUpPage3State extends State<SignUpPage3> {
                     ),
                     onPressed: _completeSignUp,
                     child: Text('Complete sign up',
-                        style: jerseyStyle(20, Colors.white)),
+                        style: jerseyStyle(20, brightWhite)),
                   ),
                 ),
               ],

@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:login_signup_1/style.dart';
 
-/// ------------------ MODELS ------------------
-
-/// A model for a single exercise.
 class Exercise {
   final String name;
   final bool machineUse;
@@ -108,7 +106,6 @@ class ExerciseJourney {
   }
 }
 
-/// ------------------ API SERVICE ------------------
 class ExerciseService {
   static const String baseUrl = 'https://e-fit-backend.onrender.com/user';
   static final storage = FlutterSecureStorage();
@@ -150,8 +147,6 @@ class ExerciseService {
     }
   }
 }
-
-/// ------------------ HOME SCREEN ------------------
 
 class ExercisesListScreen extends StatefulWidget {
   @override
@@ -212,7 +207,7 @@ class _ExercisesListScreenState extends State<ExercisesListScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('No exercises to save!'),
-          backgroundColor: Colors.red,
+          backgroundColor: errorRed,
         ),
       );
       return;
@@ -225,28 +220,24 @@ class _ExercisesListScreenState extends State<ExercisesListScreen> {
     try {
       await ExerciseService.saveExercises(chosenExercises);
 
-      // Show success message only on successful save
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Exercises saved successfully!'),
-          backgroundColor: Colors.green,
+          backgroundColor: goodGreen,
         ),
       );
 
-      // Clear the selected exercises after successful save
       setState(() {
         chosenExercises.clear();
       });
     } catch (e) {
-      // Show error message only if there's an actual error
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Failed to save exercises: ${e.toString()}'),
-          backgroundColor: Colors.red,
+          backgroundColor: errorRed,
         ),
       );
     } finally {
-      // Ensure the saving state is reset regardless of success or failure
       setState(() {
         _isSaving = false;
       });
@@ -257,9 +248,12 @@ class _ExercisesListScreenState extends State<ExercisesListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+            icon: Icon(Icons.arrow_back, color: Colors.white),
+            onPressed: () => Navigator.pop(context)),
         title: Text('Log Workout'),
-        titleTextStyle: TextStyle(color: Colors.white, fontSize: 20),
-        flexibleSpace: Container(color: Color(0xFF562634)),
+        titleTextStyle: TextStyle(color: brightWhite, fontSize: 20, fontFamily: "Jersey 25"),
+        flexibleSpace: Container(color: darkMaroon),
       ),
       body: Container(
         decoration: BoxDecoration(
@@ -282,7 +276,7 @@ class _ExercisesListScreenState extends State<ExercisesListScreen> {
               SizedBox(height: 30),
               Text(
                 'Selected Exercises:',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, fontFamily: "Jersey 25"),
               ),
               SizedBox(height: 10),
               ...chosenExercises.map((entry) {
@@ -300,9 +294,11 @@ class _ExercisesListScreenState extends State<ExercisesListScreen> {
                 return ListTile(
                   contentPadding: EdgeInsets.symmetric(horizontal: 0),
                   title: Text(exercise.name),
+                  titleTextStyle: TextStyle(fontFamily: "Jersey 25"),
                   subtitle: Text(subtitle),
+                  subtitleTextStyle: TextStyle(fontFamily: "Jersey 25"),
                   trailing: IconButton(
-                    icon: Icon(Icons.close, color: Colors.red),
+                    icon: Icon(Icons.close, color: errorRed),
                     onPressed: () => removeChosenExercise(entry['id']),
                   ),
                 );
@@ -310,7 +306,7 @@ class _ExercisesListScreenState extends State<ExercisesListScreen> {
               SizedBox(height: 20),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Color(0xFF562634),
+                  backgroundColor: darkMaroon,
                   padding: EdgeInsets.symmetric(vertical: 15),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15),
@@ -320,7 +316,7 @@ class _ExercisesListScreenState extends State<ExercisesListScreen> {
                 child: _isSaving
                     ? CircularProgressIndicator(color: Colors.white)
                     : Text('Save All Exercises',
-                        style: TextStyle(color: Colors.white)),
+                        style: TextStyle(color: Colors.white, fontFamily: "Jersey 25")),
               ),
             ],
           ],
@@ -329,8 +325,6 @@ class _ExercisesListScreenState extends State<ExercisesListScreen> {
     );
   }
 }
-
-/// ------------------ EXERCISE CARD ------------------
 
 class ExerciseCard extends StatelessWidget {
   final Exercise exercise;
@@ -369,6 +363,7 @@ class ExerciseCard extends StatelessWidget {
                 child: Text(
                   exercise.name,
                   style: TextStyle(
+                    fontFamily: "Jersey 25",
                     fontSize: 20,
                     fontWeight: FontWeight.w600,
                     color: Colors.grey[800],
@@ -383,8 +378,6 @@ class ExerciseCard extends StatelessWidget {
     );
   }
 }
-
-/// ------------------ EXERCISE SETUP SCREEN ------------------
 
 class ExerciseSetupScreen extends StatefulWidget {
   final Exercise exercise;
@@ -449,7 +442,7 @@ class _ExerciseSetupScreenState extends State<ExerciseSetupScreen> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text('Workout added! Make sure to save before leaving!'),
-        backgroundColor: Colors.green,
+        backgroundColor: goodGreen,
       ),
     );
 
@@ -463,7 +456,7 @@ class _ExerciseSetupScreenState extends State<ExerciseSetupScreen> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(message),
-        backgroundColor: Colors.red,
+        backgroundColor: errorRed,
       ),
     );
   }
@@ -472,13 +465,17 @@ class _ExerciseSetupScreenState extends State<ExerciseSetupScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+            icon: Icon(Icons.arrow_back, color: Colors.white),
+            onPressed: () => Navigator.pop(context)),
         title: Text(widget.exercise.name),
         titleTextStyle: TextStyle(
-          color: Colors.white,
+          fontFamily: "Jersey 25",
+          color: brightWhite,
           fontSize: 20,
           fontWeight: FontWeight.bold,
         ),
-        flexibleSpace: Container(color: Color(0xFF562634)),
+        flexibleSpace: Container(color: darkMaroon),
       ),
       body: Container(
         decoration: BoxDecoration(
@@ -493,7 +490,7 @@ class _ExerciseSetupScreenState extends State<ExerciseSetupScreen> {
           children: [
             Text(
               'Select Number of Sets',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, fontFamily: "Jersey 25"),
             ),
             SizedBox(height: 8),
             Wrap(
@@ -511,7 +508,7 @@ class _ExerciseSetupScreenState extends State<ExerciseSetupScreen> {
                     '$setCount',
                     style: TextStyle(
                       color: isSelected ? Colors.white : Colors.black87,
-                      fontSize: 16,
+                      fontSize: 16, fontFamily: "Jersey 25"
                     ),
                   ),
                 );
@@ -555,13 +552,13 @@ class _ExerciseSetupScreenState extends State<ExerciseSetupScreen> {
               SizedBox(height: 24),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Color(0xFF562634),
+                  backgroundColor: darkMaroon,
                   padding: EdgeInsets.symmetric(vertical: 15),
                 ),
                 onPressed: submitSetup,
                 child: Text(
                   'Add Workout',
-                  style: TextStyle(fontSize: 18, color: Colors.white),
+                  style: TextStyle(fontSize: 18, color: brightWhite, fontFamily: "Jersey 25"),
                 ),
               ),
             ],

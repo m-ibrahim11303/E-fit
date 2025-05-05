@@ -22,7 +22,6 @@ class _StepCounterScreenState extends State<StepCounterScreen> {
 
   void onStepCount(StepCount event) {
     setState(() {
-      // Subtract the initial step count from the new step count
       _steps = (event.steps - _initialStepCount).toString();
     });
   }
@@ -59,7 +58,10 @@ class _StepCounterScreenState extends State<StepCounterScreen> {
   Future<void> initPlatformState() async {
     bool granted = await _checkActivityRecognitionPermission();
     if (!granted) {
-      // optionally: show a dialog here
+      setState(() {
+        _status = 'Permission not granted';
+      });
+      return;
     }
 
     _pedestrianStatusStream = Pedometer.pedestrianStatusStream;
@@ -81,6 +83,9 @@ class _StepCounterScreenState extends State<StepCounterScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+            icon: Icon(Icons.arrow_back, color: Colors.white),
+            onPressed: () => Navigator.pop(context)),
         title: Text('Step Counter'),
       ),
       body: Center(

@@ -2,8 +2,9 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
+import 'package:login_signup_1/style.dart';
 import 'start_journey.dart';
-import 'continue_journey.dart';
+import 'user_info_flow_manager.dart';
 import 'step_counter_screen.dart';
 
 class ExercisesScreen extends StatefulWidget {
@@ -12,8 +13,7 @@ class ExercisesScreen extends StatefulWidget {
 }
 
 class _ExercisesScreenState extends State<ExercisesScreen> {
-  int _completedExercisesToday = 0; // To store exercises completed today
-  final int _totalExercises = 25;
+  int _completedExercisesToday = 0;
   int _stepsWalked = 8450;
   bool _isLoading = true;
   String? _errorMessage;
@@ -28,7 +28,6 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
 
   Future<void> _fetchWorkoutHistory() async {
     try {
-      // Retrieve email from secure storage
       String? email = await _storage.read(key: 'email');
       if (email == null) {
         setState(() {
@@ -38,7 +37,6 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
         return;
       }
 
-      // Make API call
       final response = await http.get(
         Uri.parse(
             'https://e-fit-backend.onrender.com/user/workouthistory?email=$email'),
@@ -47,10 +45,8 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
         if (data['success']) {
-          // Parse the JSON to find exercises completed today
           int exercisesToday = 0;
           final days = data['data']['days'] as List<dynamic>;
-          // Assume "Yesterday" represents today based on JSON structure
           for (var day in days) {
             if (day['name'] == 'Today') {
               exercisesToday = day['noOfExercises'] ?? 0;
@@ -83,7 +79,6 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
     }
   }
 
-  // Helper to get day name
   String _getDayName(int weekday) {
     const days = [
       'Monday',
@@ -97,7 +92,6 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
     return days[weekday - 1];
   }
 
-  // Helper to get month name
   String _getMonthName(int month) {
     const months = [
       'Jan',
@@ -120,15 +114,19 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+            icon: Icon(Icons.arrow_back, color: Colors.white),
+            onPressed: () => Navigator.pop(context)),
         title: Text('Fitness Journey'),
         titleTextStyle: TextStyle(
-          color: Colors.white,
+          fontFamily: "Jersey 25",
+          color: brightWhite,
           fontSize: 20,
           fontWeight: FontWeight.bold,
         ),
         flexibleSpace: Container(
           decoration: BoxDecoration(
-            color: Color(0xFF562634),
+            color: darkMaroon,
           ),
         ),
       ),
@@ -151,7 +149,7 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
                         Container(
                           padding: EdgeInsets.all(16),
                           decoration: BoxDecoration(
-                            color: Colors.white,
+                            color: brightWhite,
                             borderRadius: BorderRadius.circular(15),
                             boxShadow: [
                               BoxShadow(
@@ -167,14 +165,7 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
                                 icon: Icons.check_circle,
                                 value: '$_completedExercisesToday',
                                 label: 'Exercises Completed Today',
-                                color: Color(0xFF562634),
-                              ),
-                              Divider(height: 30),
-                              _ProgressStat(
-                                icon: Icons.directions_walk,
-                                value: '$_stepsWalked',
-                                label: 'Steps Walked',
-                                color: Color(0xFF562634),
+                                color: darkMaroon,
                               ),
                             ],
                           ),
@@ -185,9 +176,10 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               _JourneyButton(
+                                // key: Key("log_exercises_button"),
                                 icon: Icons.flag,
                                 label: 'Log Exercises',
-                                color: Color(0xFF562634),
+                                color: darkMaroon,
                                 onPressed: () {
                                   Navigator.push(
                                     context,
@@ -199,9 +191,10 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
                               ),
                               SizedBox(height: 30),
                               _JourneyButton(
+                                // key: Key("log_exercises_button"),
                                 icon: Icons.auto_awesome,
                                 label: 'Recommended for you',
-                                color: Color(0xFF562634),
+                                color: darkMaroon,
                                 onPressed: () {
                                   Navigator.push(
                                     context,
@@ -215,7 +208,7 @@ class _ExercisesScreenState extends State<ExercisesScreen> {
                               _JourneyButton(
                                 icon: Icons.directions_walk,
                                 label: 'Step Counter',
-                                color: Color(0xFF562634),
+                                color: darkMaroon,
                                 onPressed: () {
                                   Navigator.push(
                                     context,
@@ -260,7 +253,7 @@ class _ProgressStat extends StatelessWidget {
           children: [
             Text(
               label,
-              style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+              style: TextStyle(fontSize: 14, color: Colors.grey[600], fontFamily: "Jersey 25"),
             ),
             Text(
               value,
@@ -308,11 +301,12 @@ class _JourneyButton extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(icon, size: 32, color: Colors.white),
+                Icon(icon, size: 32, color: brightWhite),
                 SizedBox(width: 15),
                 Text(
                   label,
                   style: TextStyle(
+                    fontFamily: "Jersey 25",
                     fontSize: 22,
                     fontWeight: FontWeight.w600,
                     color: Colors.white,

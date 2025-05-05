@@ -4,18 +4,18 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'water_screen.dart';
 import 'food_screen.dart';
+import 'package:login_signup_1/style.dart';
 
-// Diet screen
 class DietScreen extends StatefulWidget {
   @override
   _DietScreenState createState() => _DietScreenState();
 }
 
 class _DietScreenState extends State<DietScreen> {
-  double waterIntake = 0; // in ml
-  double proteinIntake = 0; // in grams
-  double caloriesIntake = 0; // in kcal
-  bool isLoading = true; // To show loading state
+  double waterIntake = 0;
+  double proteinIntake = 0;
+  double caloriesIntake = 0;
+  bool isLoading = true;
   final storage = FlutterSecureStorage();
 
   @override
@@ -26,7 +26,6 @@ class _DietScreenState extends State<DietScreen> {
 
   Future<void> fetchTodayIntake() async {
     try {
-      // Retrieve email from secure storage
       String? email = await storage.read(key: 'email');
       if (email == null) {
         print('No email found in secure storage');
@@ -36,7 +35,6 @@ class _DietScreenState extends State<DietScreen> {
         return;
       }
 
-      // Make API call
       final response = await http.get(
         Uri.parse(
             'https://e-fit-backend.onrender.com/analytics/charts?email=$email'),
@@ -47,7 +45,6 @@ class _DietScreenState extends State<DietScreen> {
         if (jsonData['success'] == true) {
           final data = jsonData['data'] as List;
 
-          // Extract "Today" values
           double calories = 0;
           double protein = 0;
           double water = 0;
@@ -65,7 +62,6 @@ class _DietScreenState extends State<DietScreen> {
             }
           }
 
-          // Update state
           setState(() {
             caloriesIntake = calories;
             proteinIntake = protein;
@@ -97,12 +93,12 @@ class _DietScreenState extends State<DietScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Diet Tracker'),
-        titleTextStyle: TextStyle(
-          color: Colors.white,
-          fontSize: 20,
-        ),
+        titleTextStyle: jerseyStyle(20, brightWhite),
+        //   color: Colors.white,
+        //   fontSize: 20,
+        // ),
         flexibleSpace: Container(
-          color: Color(0xFF562634),
+          color: darkMaroon,
         ),
       ),
       body: Container(
@@ -118,7 +114,6 @@ class _DietScreenState extends State<DietScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              // Daily Intake Summary
               Container(
                 padding: EdgeInsets.all(16),
                 decoration: BoxDecoration(
@@ -168,7 +163,6 @@ class _DietScreenState extends State<DietScreen> {
                       ),
               ),
               SizedBox(height: 30),
-              // Logging Buttons
               Expanded(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -176,7 +170,7 @@ class _DietScreenState extends State<DietScreen> {
                     _DietButton(
                       icon: Icons.restaurant,
                       label: 'Log Meal',
-                      color: Color(0xFF562634),
+                      color: darkMaroon,
                       onPressed: () async {
                         final result = await Navigator.push(
                           context,
@@ -194,7 +188,7 @@ class _DietScreenState extends State<DietScreen> {
                     _DietButton(
                       icon: Icons.local_drink,
                       label: 'Log Drink',
-                      color: Color(0xFF562634),
+                      color: darkMaroon,
                       onPressed: () async {
                         final water = await Navigator.push(
                           context,
@@ -218,7 +212,6 @@ class _DietScreenState extends State<DietScreen> {
   }
 }
 
-// _IntakeStat and _DietButton remain unchanged
 class _IntakeStat extends StatelessWidget {
   final IconData icon;
   final double value;
@@ -245,11 +238,13 @@ class _IntakeStat extends StatelessWidget {
           children: [
             Text(
               label,
-              style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+              style: jerseyStyle(14, intakeStatGrey),
+              // style: TextStyle(fontSize: 14, color: Colors.grey[600]),
             ),
             Text(
               '${value.toStringAsFixed(0)}$unit',
               style: TextStyle(
+                fontFamily: "Jersey 25",
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
                 color: Colors.grey[800],
@@ -293,14 +288,15 @@ class _DietButton extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(icon, size: 32, color: Colors.white),
+                Icon(icon, size: 32, color: brightWhite),
                 SizedBox(width: 15),
                 Text(
                   label,
                   style: TextStyle(
+                    fontFamily: "Jersey 25",
                     fontSize: 22,
                     fontWeight: FontWeight.w600,
-                    color: Colors.white,
+                    color: brightWhite,
                   ),
                 ),
               ],

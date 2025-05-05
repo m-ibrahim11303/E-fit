@@ -1,22 +1,13 @@
 import 'package:flutter/material.dart';
-// Ensure these imports point to the correct files in your project structure
 import 'package:login_signup_1/bootup/signup_page_3.dart';
 import 'package:login_signup_1/bootup/login_page_1.dart';
 import 'package:login_signup_1/bootup/login_signup_page_1.dart';
+import 'package:login_signup_1/style.dart'; // Assuming this file exists and defines styles/colors like jerseyStyle, lightMaroon, hintMaroon, errorRed, darkMaroon, brightWhite and the slideTo function
 
-// Define jerseyStyle globally
-TextStyle jerseyStyle(double fontSize, [Color color = Colors.white]) {
-  return TextStyle(
-    fontFamily: 'Jersey 25',
-    fontSize: fontSize,
-    color: color,
-  );
-}
-
-// --- FullNameInputWidget ---
+// FullNameInputWidget remains the same as before
 class FullNameInputWidget extends StatefulWidget {
   final TextEditingController controller;
-  final Function(bool isValid) onValidChanged; // Callback for validity
+  final Function(bool isValid) onValidChanged;
 
   const FullNameInputWidget({
     Key? key,
@@ -34,10 +25,13 @@ class _FullNameInputWidgetState extends State<FullNameInputWidget> {
   @override
   void initState() {
     super.initState();
-    // Add listener to report changes
     widget.controller.addListener(_validate);
-    // Report initial state (usually invalid as it's empty)
-    _validate();
+    // Initial validation call in case the controller already has text
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        _validate();
+      }
+    });
   }
 
   String? _validateName(String value) {
@@ -47,75 +41,74 @@ class _FullNameInputWidgetState extends State<FullNameInputWidget> {
     if (value.length < 2) {
       return 'Name must be at least 2 characters';
     }
-    return null; // Valid
+    return null;
   }
 
   void _validate() {
+    // Ensure validation logic only runs if the widget is still mounted
+    if (!mounted) return;
+
     final value = widget.controller.text;
     final newErrorMessage = _validateName(value);
-    if (mounted && newErrorMessage != _errorMessage) {
+    final bool newValidity = newErrorMessage == null;
+    final bool validityChanged = (_errorMessage == null) != newValidity;
+
+    if (newErrorMessage != _errorMessage) {
       setState(() {
         _errorMessage = newErrorMessage;
       });
-      widget.onValidChanged(_errorMessage == null); // Report validity
-    } else if (!mounted && newErrorMessage != _errorMessage) {
-      // If not mounted but state changes (less likely with listener but possible)
-      // just report the validity change
-      widget.onValidChanged(newErrorMessage == null);
+    }
+
+    // Only call the callback if the validity state actually changed
+    if (validityChanged) {
+      widget.onValidChanged(newValidity);
     }
   }
 
   @override
   void dispose() {
-    widget.controller.removeListener(_validate); // Clean up listener
+    widget.controller.removeListener(_validate);
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    // Use ValueListenableBuilder or similar if direct controller listening causes issues
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
-          // Changed border to bottom only for consistency if desired, or keep Border.all
           decoration: const BoxDecoration(
             border: Border(
               bottom: BorderSide(color: Colors.black, width: 1),
             ),
           ),
-          // decoration: BoxDecoration(
-          //   border: Border.all(color: Colors.black, width: 1),
-          // ),
           child: Row(
             children: [
               Expanded(
                 child: TextField(
-                  controller: widget.controller, // Use passed controller
-                  keyboardType: TextInputType.name, // More specific type
-                  textCapitalization:
-                      TextCapitalization.words, // Capitalize names
-                  style: jerseyStyle(24, Color(0xFF9B5D6C)), // Consistent style
+                  controller: widget.controller,
+                  keyboardType: TextInputType.name,
+                  textCapitalization: TextCapitalization.words,
+                  style: jerseyStyle(24, lightMaroon),
                   decoration: InputDecoration(
                     hintText: 'Full Name',
-                    hintStyle: jerseyStyle(20, Color(0x9938000A)),
+                    hintStyle: jerseyStyle(20, hintMaroon),
                     border: InputBorder.none,
                     prefixIconConstraints: const BoxConstraints(
-                      minWidth: 24, // Adjusted constraints
+                      minWidth: 24,
                       minHeight: 24,
                     ),
                     prefixIcon: Padding(
-                      padding: const EdgeInsets.only(
-                          right: 8.0, left: 5.0), // Adjust padding
+                      padding: const EdgeInsets.only(right: 8.0, left: 5.0),
                       child: Image.asset(
-                        'assets/images/profile_icon.png',
+                        'assets/images/profile_icon.png', // Ensure this asset exists
                         height: 30,
                         width: 30,
                         fit: BoxFit.contain,
                       ),
                     ),
                     suffixIconConstraints: const BoxConstraints(
-                      minWidth: 24, // Adjusted constraints
+                      minWidth: 24,
                       minHeight: 24,
                     ),
                     suffixIcon: _errorMessage == null &&
@@ -123,7 +116,7 @@ class _FullNameInputWidgetState extends State<FullNameInputWidget> {
                         ? Padding(
                             padding: const EdgeInsets.only(right: 10.0),
                             child: Image.asset(
-                              'assets/images/tick_icon.png',
+                              'assets/images/tick_icon.png', // Ensure this asset exists
                               height: 40,
                               width: 40,
                               fit: BoxFit.contain,
@@ -131,40 +124,36 @@ class _FullNameInputWidgetState extends State<FullNameInputWidget> {
                           )
                         : null,
                   ),
-                  // Use listener instead of onChanged for debouncing if needed, but listener is fine here
-                  // onChanged: (value) => _validate(), // Can use onChanged directly too
                 ),
               ),
             ],
           ),
         ),
-        // Error Message Area
         Container(
-          height:
-              20, // Reserve space for error message to prevent layout shifts
+          height: 20,
           padding: const EdgeInsets.only(top: 4.0),
           child: _errorMessage != null
               ? Text(
                   _errorMessage!,
                   style: const TextStyle(
-                    color: Colors.red,
+                    color: errorRed,
                     fontSize: 14,
-                    height: 1.0, // Prevent extra vertical space
+                    height: 1.0, // Reduces spacing around text
                   ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 )
-              : null, // Render nothing if no error
+              : null, // Use null instead of SizedBox to truly take no space
         ),
       ],
     );
   }
 }
 
-// --- EmailInputWidget ---
+// EmailInputWidget remains the same as before
 class EmailInputWidget extends StatefulWidget {
   final TextEditingController controller;
-  final Function(bool isValid) onValidChanged; // Callback for validity
+  final Function(bool isValid) onValidChanged;
 
   const EmailInputWidget({
     Key? key,
@@ -183,37 +172,52 @@ class _EmailInputWidgetState extends State<EmailInputWidget> {
   void initState() {
     super.initState();
     widget.controller.addListener(_validate);
-    _validate(); // Report initial state
+    // Initial validation call in case the controller already has text
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        _validate();
+      }
+    });
   }
 
   String? _validateEmail(String value) {
     if (value.isEmpty) {
       return 'Email cannot be empty';
     }
+    // Basic email regex, consider a more robust one if needed
     final emailRegex =
         RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
     if (!emailRegex.hasMatch(value)) {
       return 'Please enter a valid email address';
     }
-    return null; // Valid
+    return null;
   }
 
   void _validate() {
+    // Ensure validation logic only runs if the widget is still mounted
+    if (!mounted) return;
+
     final value = widget.controller.text;
     final newErrorMessage = _validateEmail(value);
-    if (mounted && newErrorMessage != _errorMessage) {
+    final bool newValidity = newErrorMessage == null;
+    // Check if the actual validity state (valid/invalid) changed
+    final bool validityChanged = (_errorMessage == null) != newValidity;
+
+    if (newErrorMessage != _errorMessage) {
       setState(() {
         _errorMessage = newErrorMessage;
       });
-      widget.onValidChanged(_errorMessage == null); // Report validity
-    } else if (!mounted && newErrorMessage != _errorMessage) {
-      widget.onValidChanged(newErrorMessage == null);
+    }
+
+    // Only call the callback if the validity state actually changed
+    if (validityChanged) {
+      widget.onValidChanged(newValidity);
     }
   }
 
   @override
   void dispose() {
-    widget.controller.removeListener(_validate); // Clean up listener
+    widget.controller.removeListener(_validate);
     super.dispose();
   }
 
@@ -228,36 +232,32 @@ class _EmailInputWidgetState extends State<EmailInputWidget> {
               bottom: BorderSide(color: Colors.black, width: 1),
             ),
           ),
-          // decoration: BoxDecoration(
-          //   border: Border.all(color: Colors.black, width: 1),
-          // ),
           child: Row(
             children: [
               Expanded(
                 child: TextField(
-                  controller: widget.controller, // Use passed controller
+                  controller: widget.controller,
                   keyboardType: TextInputType.emailAddress,
-                  style: jerseyStyle(24, Color(0xFF9B5D6C)), // Consistent style
+                  style: jerseyStyle(24, lightMaroon),
                   decoration: InputDecoration(
                     hintText: 'Email',
-                    hintStyle: jerseyStyle(20, Color(0x9938000A)),
+                    hintStyle: jerseyStyle(20, hintMaroon),
                     border: InputBorder.none,
                     prefixIconConstraints: const BoxConstraints(
-                      minWidth: 24, // Adjusted constraints
+                      minWidth: 24,
                       minHeight: 24,
                     ),
                     prefixIcon: Padding(
-                      padding: const EdgeInsets.only(
-                          right: 8.0, left: 5.0), // Adjust padding
+                      padding: const EdgeInsets.only(right: 8.0, left: 5.0),
                       child: Image.asset(
-                        'assets/images/mail_icon.png',
+                        'assets/images/mail_icon.png', // Ensure this asset exists
                         height: 30,
                         width: 30,
                         fit: BoxFit.contain,
                       ),
                     ),
                     suffixIconConstraints: const BoxConstraints(
-                      minWidth: 24, // Adjusted constraints
+                      minWidth: 24,
                       minHeight: 24,
                     ),
                     suffixIcon: _errorMessage == null &&
@@ -265,7 +265,7 @@ class _EmailInputWidgetState extends State<EmailInputWidget> {
                         ? Padding(
                             padding: const EdgeInsets.only(right: 10.0),
                             child: Image.asset(
-                              'assets/images/tick_icon.png',
+                              'assets/images/tick_icon.png', // Ensure this asset exists
                               height: 40,
                               width: 40,
                               fit: BoxFit.contain,
@@ -273,38 +273,36 @@ class _EmailInputWidgetState extends State<EmailInputWidget> {
                           )
                         : null,
                   ),
-                  // onChanged: (value) => _validate(), // Can use onChanged directly too
                 ),
               ),
             ],
           ),
         ),
-        // Error Message Area
         Container(
-          height: 20, // Reserve space for error message
+          height: 20,
           padding: const EdgeInsets.only(top: 4.0),
           child: _errorMessage != null
               ? Text(
                   _errorMessage!,
                   style: const TextStyle(
-                    color: Colors.red,
+                    color: errorRed,
                     fontSize: 14,
-                    height: 1.0,
+                    height: 1.0, // Reduces spacing around text
                   ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 )
-              : null,
+              : null, // Use null instead of SizedBox to truly take no space
         ),
       ],
     );
   }
 }
 
-// --- PasswordInputWidget ---
+// PasswordInputWidget remains the same as before
 class PasswordInputWidget extends StatefulWidget {
   final TextEditingController passwordController;
-  final Function(bool isValid) onValidChanged; // Callback for validity
+  final Function(bool isValid) onValidChanged;
 
   const PasswordInputWidget({
     Key? key,
@@ -322,17 +320,23 @@ class _PasswordInputWidgetState extends State<PasswordInputWidget> {
   bool _hasNumbers = false;
   bool _hasLowerCase = false;
   bool _hasUpperCase = false;
-  bool _withinMaxLength = true; // Assume true initially until text exceeds
+  bool _withinMaxLength = true; // Assume true initially for empty string
   bool _isValid = false; // Track overall validity
 
   @override
   void initState() {
     super.initState();
     widget.passwordController.addListener(_validatePassword);
-    _validatePassword(); // Report initial state
+    // Initial validation call in case the controller already has text (e.g., autofill)
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        _validatePassword();
+      }
+    });
   }
 
   void _toggleVisibility() {
+    // Check mounted before calling setState
     if (mounted) {
       setState(() {
         _obscureText = !_obscureText;
@@ -341,57 +345,61 @@ class _PasswordInputWidgetState extends State<PasswordInputWidget> {
   }
 
   void _validatePassword() {
+    // Ensure validation logic only runs if the widget is still mounted
+    if (!mounted) return;
+
     final value = widget.passwordController.text;
+
+    // Calculate new states for criteria
     final newHasMinLength = value.length >= 8;
     final newHasNumbers = RegExp(r'[0-9]').hasMatch(value);
     final newHasLowerCase = RegExp(r'[a-z]').hasMatch(value);
     final newHasUpperCase = RegExp(r'[A-Z]').hasMatch(value);
     final newWithinMaxLength = value.length <= 30;
 
+    // Calculate new overall validity
     final newIsValid = newHasMinLength &&
         newHasNumbers &&
         newHasLowerCase &&
         newHasUpperCase &&
         newWithinMaxLength;
 
-    bool stateChanged = newHasMinLength != _hasMinLength ||
+    // Check if any visual criteria state changed
+    bool criteriaStateChanged = newHasMinLength != _hasMinLength ||
         newHasNumbers != _hasNumbers ||
         newHasLowerCase != _hasLowerCase ||
         newHasUpperCase != _hasUpperCase ||
         newWithinMaxLength != _withinMaxLength;
 
+    // Check if the overall validity actually changed
     bool validityChanged = newIsValid != _isValid;
 
-    if (mounted && stateChanged) {
+    // Update UI state only if criteria changed
+    if (criteriaStateChanged) {
       setState(() {
         _hasMinLength = newHasMinLength;
         _hasNumbers = newHasNumbers;
         _hasLowerCase = newHasLowerCase;
         _hasUpperCase = newHasUpperCase;
         _withinMaxLength = newWithinMaxLength;
-        _isValid = newIsValid;
       });
-      if (validityChanged) {
-        widget.onValidChanged(_isValid); // Report validity change
-      }
-    } else if (!mounted && validityChanged) {
-      widget
-          .onValidChanged(newIsValid); // Report validity change if not mounted
-    } else if (mounted && validityChanged) {
-      // If only validity changed but not the individual flags (e.g. going from 7 to 8 chars)
-      _isValid = newIsValid;
+    }
+
+    // Update internal validity state and notify parent *only* if validity changed
+    if (validityChanged) {
+      _isValid = newIsValid; // Update internal state tracker
       widget.onValidChanged(_isValid);
     }
   }
 
   Widget _buildValidationItem(String text, bool isValid) {
     return Row(
-      mainAxisSize: MainAxisSize.min, // Take only needed space
+      mainAxisSize: MainAxisSize.min,
       children: [
         Image.asset(
           isValid
-              ? 'assets/images/green_check_icon.png'
-              : 'assets/images/red_cross_icon.png',
+              ? 'assets/images/green_check_icon.png' // Ensure this asset exists
+              : 'assets/images/red_cross_icon.png', // Ensure this asset exists
           height: 16,
           width: 16,
           fit: BoxFit.contain,
@@ -399,7 +407,8 @@ class _PasswordInputWidgetState extends State<PasswordInputWidget> {
         const SizedBox(width: 8),
         Text(
           text,
-          style: jerseyStyle(16, Color(0x9938000A)),
+          style: jerseyStyle(
+              16, hintMaroon), // Assuming jerseyStyle handles size/color
         ),
       ],
     );
@@ -422,21 +431,17 @@ class _PasswordInputWidgetState extends State<PasswordInputWidget> {
               bottom: BorderSide(color: Colors.black, width: 1),
             ),
           ),
-          // decoration: BoxDecoration(
-          //   border: Border.all(color: Colors.black, width: 1),
-          // ),
           child: Row(
             children: [
               Expanded(
                 child: TextField(
                   controller: widget.passwordController,
                   obscureText: _obscureText,
-                  keyboardType:
-                      TextInputType.visiblePassword, // Appropriate type
-                  style: jerseyStyle(24, Color(0xFF9B5D6C)), // Consistent style
+                  keyboardType: TextInputType.visiblePassword,
+                  style: jerseyStyle(24, lightMaroon),
                   decoration: InputDecoration(
                     hintText: 'Password',
-                    hintStyle: jerseyStyle(20, Color(0x9938000A)),
+                    hintStyle: jerseyStyle(20, hintMaroon),
                     border: InputBorder.none,
                     prefixIconConstraints: const BoxConstraints(
                       minWidth: 24,
@@ -445,7 +450,7 @@ class _PasswordInputWidgetState extends State<PasswordInputWidget> {
                     prefixIcon: Padding(
                       padding: const EdgeInsets.only(right: 8.0, left: 5.0),
                       child: Image.asset(
-                        'assets/images/lock_icon.png',
+                        'assets/images/lock_icon.png', // Ensure this asset exists
                         height: 30,
                         width: 30,
                         fit: BoxFit.contain,
@@ -461,8 +466,8 @@ class _PasswordInputWidgetState extends State<PasswordInputWidget> {
                         padding: const EdgeInsets.only(right: 15.0),
                         child: Image.asset(
                           _obscureText
-                              ? 'assets/images/no_see_icon.png'
-                              : 'assets/images/see_icon.png',
+                              ? 'assets/images/no_see_icon.png' // Ensure this asset exists
+                              : 'assets/images/see_icon.png', // Ensure this asset exists
                           height: 25,
                           width: 25,
                           fit: BoxFit.contain,
@@ -470,23 +475,19 @@ class _PasswordInputWidgetState extends State<PasswordInputWidget> {
                       ),
                     ),
                   ),
-                  // onChanged: (value) => _validatePassword(), // Listener handles this
                 ),
               ),
             ],
           ),
         ),
         const SizedBox(height: 8),
-        // Use Wrap for better responsiveness if needed, Column is fine for fixed width
         Padding(
-          padding:
-              const EdgeInsets.only(left: 5.0), // Indent validation slightly
+          padding: const EdgeInsets.only(left: 5.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _buildValidationItem('At least 8 characters', _hasMinLength),
-              _buildValidationItem(
-                  'Contains numbers (0-9)', _hasNumbers), // More specific text
+              _buildValidationItem('Contains numbers (0-9)', _hasNumbers),
               _buildValidationItem('Contains lowercase (a-z)', _hasLowerCase),
               _buildValidationItem('Contains uppercase (A-Z)', _hasUpperCase),
               _buildValidationItem('Maximum 30 characters', _withinMaxLength),
@@ -498,12 +499,11 @@ class _PasswordInputWidgetState extends State<PasswordInputWidget> {
   }
 }
 
-// --- ConfirmPasswordInputWidget ---
+// ConfirmPasswordInputWidget remains the same as before
 class ConfirmPasswordInputWidget extends StatefulWidget {
-  final TextEditingController passwordController; // Original password
-  final TextEditingController
-      confirmPasswordController; // Controller for this field
-  final Function(bool isValid) onValidChanged; // Callback for validity
+  final TextEditingController passwordController;
+  final TextEditingController confirmPasswordController;
+  final Function(bool isValid) onValidChanged;
 
   const ConfirmPasswordInputWidget({
     Key? key,
@@ -521,6 +521,7 @@ class _ConfirmPasswordInputWidgetState
     extends State<ConfirmPasswordInputWidget> {
   bool _obscureText = true;
   String? _errorMessage;
+  bool _isValid = false; // Track internal validity state
 
   @override
   void initState() {
@@ -528,7 +529,12 @@ class _ConfirmPasswordInputWidgetState
     // Listen to both controllers
     widget.passwordController.addListener(_validateConfirmPassword);
     widget.confirmPasswordController.addListener(_validateConfirmPassword);
-    _validateConfirmPassword(); // Report initial state
+    // Initial validation call
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        _validateConfirmPassword();
+      }
+    });
   }
 
   void _toggleVisibility() {
@@ -540,43 +546,42 @@ class _ConfirmPasswordInputWidgetState
   }
 
   void _validateConfirmPassword() {
+    // Ensure validation logic only runs if the widget is still mounted
+    if (!mounted) return;
+
     final originalPassword = widget.passwordController.text;
     final confirmPassword = widget.confirmPasswordController.text;
     String? newErrorMessage;
 
-    if (confirmPassword.isEmpty && originalPassword.isNotEmpty) {
-      // Only show error if original password has been touched
-      // Or always show if empty:
-      // newErrorMessage = 'Please confirm your password';
-      newErrorMessage =
-          null; // Or 'Confirm password cannot be empty' if needed immediately
-    } else if (confirmPassword.isNotEmpty &&
-        confirmPassword != originalPassword) {
+    // Determine error message
+    if (confirmPassword.isNotEmpty && confirmPassword != originalPassword) {
       newErrorMessage = 'Passwords do not match';
     } else {
-      newErrorMessage = null; // Valid or original is empty
+      newErrorMessage = null; // No error if empty or matches
     }
 
-    // Only update state and report if error message *changes*
-    if (mounted && newErrorMessage != _errorMessage) {
+    // Determine validity: must not be empty and must match (no error)
+    final bool newValidity =
+        confirmPassword.isNotEmpty && newErrorMessage == null;
+
+    // Check if error message needs UI update
+    if (newErrorMessage != _errorMessage) {
       setState(() {
         _errorMessage = newErrorMessage;
       });
-      // Valid only if not empty and matches (or if original is also empty)
-      bool isValid = confirmPassword.isNotEmpty && newErrorMessage == null;
-      widget.onValidChanged(isValid);
-    } else if (!mounted && newErrorMessage != _errorMessage) {
-      bool isValid = confirmPassword.isNotEmpty && newErrorMessage == null;
-      widget.onValidChanged(isValid);
+    }
+
+    // Check if validity state changed and notify parent if it did
+    if (newValidity != _isValid) {
+      _isValid = newValidity; // Update internal tracker
+      widget.onValidChanged(_isValid);
     }
   }
 
   @override
   void dispose() {
-    // Remove listeners
     widget.passwordController.removeListener(_validateConfirmPassword);
     widget.confirmPasswordController.removeListener(_validateConfirmPassword);
-    // Don't dispose the confirmPasswordController here, it's managed by the parent (_SignupPage1State)
     super.dispose();
   }
 
@@ -591,21 +596,17 @@ class _ConfirmPasswordInputWidgetState
               bottom: BorderSide(color: Colors.black, width: 1),
             ),
           ),
-          // decoration: BoxDecoration(
-          //   border: Border.all(color: Colors.black, width: 1),
-          // ),
           child: Row(
             children: [
               Expanded(
                 child: TextField(
-                  controller: widget
-                      .confirmPasswordController, // Use dedicated controller
+                  controller: widget.confirmPasswordController,
                   obscureText: _obscureText,
                   keyboardType: TextInputType.visiblePassword,
-                  style: jerseyStyle(24, Color(0xFF9B5D6C)), // Consistent style
+                  style: jerseyStyle(24, lightMaroon),
                   decoration: InputDecoration(
                     hintText: 'Confirm Password',
-                    hintStyle: jerseyStyle(20, Color(0x9938000A)),
+                    hintStyle: jerseyStyle(20, hintMaroon),
                     border: InputBorder.none,
                     prefixIconConstraints: const BoxConstraints(
                       minWidth: 24,
@@ -614,7 +615,7 @@ class _ConfirmPasswordInputWidgetState
                     prefixIcon: Padding(
                       padding: const EdgeInsets.only(right: 8.0, left: 5.0),
                       child: Image.asset(
-                        'assets/images/lock_icon.png',
+                        'assets/images/lock_icon.png', // Ensure this asset exists
                         height: 30,
                         width: 30,
                         fit: BoxFit.contain,
@@ -624,34 +625,31 @@ class _ConfirmPasswordInputWidgetState
                       minWidth: 24,
                       minHeight: 24,
                     ),
-                    // Combine Tick and Visibility Toggle
+                    // Combine tick and visibility toggle in a Row
                     suffixIcon: Row(
-                      mainAxisSize:
-                          MainAxisSize.min, // Prevent row taking full width
+                      mainAxisSize: MainAxisSize.min, // Use minimum space
                       children: [
-                        // Show tick only if valid and not empty
+                        // Show tick only if valid (no error message and not empty)
                         if (_errorMessage == null &&
                             widget.confirmPasswordController.text.isNotEmpty)
                           Padding(
-                            padding: const EdgeInsets.only(
-                                right: 5.0), // Space before eye
+                            padding: const EdgeInsets.only(right: 5.0),
                             child: Image.asset(
-                              'assets/images/tick_icon.png',
+                              'assets/images/tick_icon.png', // Ensure this asset exists
                               height: 40,
                               width: 40,
                               fit: BoxFit.contain,
                             ),
                           ),
-                        // Visibility Toggle
+                        // Visibility toggle
                         GestureDetector(
                           onTap: _toggleVisibility,
                           child: Padding(
-                            padding: const EdgeInsets.only(
-                                right: 15.0), // Outer padding
+                            padding: const EdgeInsets.only(right: 15.0),
                             child: Image.asset(
                               _obscureText
-                                  ? 'assets/images/no_see_icon.png'
-                                  : 'assets/images/see_icon.png',
+                                  ? 'assets/images/no_see_icon.png' // Ensure this asset exists
+                                  : 'assets/images/see_icon.png', // Ensure this asset exists
                               height: 25,
                               width: 25,
                               fit: BoxFit.contain,
@@ -661,35 +659,32 @@ class _ConfirmPasswordInputWidgetState
                       ],
                     ),
                   ),
-                  // onChanged: (value) => _validateConfirmPassword(), // Listener handles this
                 ),
               ),
             ],
           ),
         ),
-        // Error Message Area
         Container(
-          height: 20, // Reserve space for error message
+          height: 20,
           padding: const EdgeInsets.only(top: 4.0),
           child: _errorMessage != null
               ? Text(
                   _errorMessage!,
                   style: const TextStyle(
-                    color: Colors.red,
+                    color: errorRed,
                     fontSize: 14,
-                    height: 1.0,
+                    height: 1.0, // Reduces spacing around text
                   ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 )
-              : null,
+              : null, // Use null instead of SizedBox
         ),
       ],
     );
   }
 }
 
-// --- SignupPage1 (StatefulWidget) ---
 class SignupPage1 extends StatefulWidget {
   const SignupPage1({Key? key}) : super(key: key);
 
@@ -698,20 +693,19 @@ class SignupPage1 extends StatefulWidget {
 }
 
 class _SignupPage1State extends State<SignupPage1> {
-  // Controllers
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController =
-      TextEditingController(); // Add controller
+      TextEditingController();
 
-  // Validity Flags
+  // Track the validity state from child widgets
   bool _isNameValid = false;
   bool _isEmailValid = false;
   bool _isPasswordValid = false;
   bool _isConfirmPasswordValid = false;
 
-  // Getter for overall form validity
+  // Compute overall form validity based on individual field validity
   bool get _isFormValid =>
       _isNameValid &&
       _isEmailValid &&
@@ -720,7 +714,6 @@ class _SignupPage1State extends State<SignupPage1> {
 
   @override
   void dispose() {
-    // Dispose all controllers
     _nameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
@@ -728,12 +721,15 @@ class _SignupPage1State extends State<SignupPage1> {
     super.dispose();
   }
 
-  // --- Callback Methods ---
+  // Callbacks to update state based on child widget validity changes
+  // Use mounted check before calling setState
   void _updateNameValidity(bool isValid) {
     if (mounted && _isNameValid != isValid) {
       setState(() {
         _isNameValid = isValid;
       });
+    } else if (!mounted && _isNameValid != isValid) {
+      _isNameValid = isValid;
     }
   }
 
@@ -742,6 +738,8 @@ class _SignupPage1State extends State<SignupPage1> {
       setState(() {
         _isEmailValid = isValid;
       });
+    } else if (!mounted && _isEmailValid != isValid) {
+      _isEmailValid = isValid;
     }
   }
 
@@ -749,9 +747,9 @@ class _SignupPage1State extends State<SignupPage1> {
     if (mounted && _isPasswordValid != isValid) {
       setState(() {
         _isPasswordValid = isValid;
-        // Re-validate confirm password whenever password changes validity
-        // This is handled by the listener in ConfirmPasswordInputWidget already
       });
+    } else if (!mounted && _isPasswordValid != isValid) {
+      _isPasswordValid = isValid;
     }
   }
 
@@ -760,264 +758,266 @@ class _SignupPage1State extends State<SignupPage1> {
       setState(() {
         _isConfirmPasswordValid = isValid;
       });
+    } else if (!mounted && _isConfirmPasswordValid != isValid) {
+      _isConfirmPasswordValid = isValid;
     }
   }
 
-  // --- Navigation ---
   void _navigateToSignupPage3() {
-    // Double-check validity before navigating (optional safety)
+    // Double check form validity before navigation
     if (!_isFormValid) return;
+    // Check mounted before accessing context for navigation
+    if (!mounted) return;
 
     String email = _emailController.text;
     String password = _passwordController.text;
     String name = _nameController.text;
 
-    // Ensure context is still valid before navigating
-    if (!mounted) return;
-
-    Navigator.push(
-      context,
-      PageRouteBuilder(
-        transitionDuration: const Duration(milliseconds: 500),
-        pageBuilder: (context, animation, secondaryAnimation) => SignUpPage3(
-          // Pass the validated data
-          email: email,
-          password: password, // Pass the original password
-          name: name,
-        ),
-        transitionsBuilder: (context, animation, secondaryAnimation, child) {
-          const begin = Offset(1.0, 0.0);
-          const end = Offset.zero;
-          final tween = Tween(begin: begin, end: end)
-              .chain(CurveTween(curve: Curves.easeOut)); // Smoother curve
-          final offsetAnimation = animation.drive(tween);
-          return SlideTransition(
-            position: offsetAnimation,
-            child: child,
-          );
-        },
-      ),
-    );
+    // Assuming slideTo is a helper function for navigation defined in style.dart
+    slideTo(context, SignUpPage3(email: email, password: password, name: name));
   }
 
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+
+    // Removed the outer Stack. The Scaffold now directly contains the SingleChildScrollView.
     return Scaffold(
-      // resizeToAvoidBottomInset: false, // Consider if needed based on background behavior
-      body: SafeArea(
-        child: Stack(
-          children: [
-            // Background
-            Positioned.fill(
-              child: Image.asset(
-                'assets/images/background_signup_page_1.png',
-                fit: BoxFit.cover,
-              ),
+      // Set a background color for the Scaffold area outside the scroll view / safe area,
+      // though the Container's background should cover most cases.
+      backgroundColor: Colors.white,
+      resizeToAvoidBottomInset: true,
+      body: SingleChildScrollView(
+        // Make the entire body scrollable
+        child: Container(
+          // This container holds the background and content
+          constraints: BoxConstraints(
+            // Ensures the container is at least screen height, making the background cover it.
+            minHeight: screenHeight,
+          ),
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              // The background image is now part of this scrollable container
+              image: AssetImage(
+                  'assets/images/background_signup_page_1.png'), // Ensure this asset exists
+              fit: BoxFit.cover, // Cover the entire container area
+              // Optional: Align the image if needed, e.g., Alignment.topCenter
+              // alignment: Alignment.topCenter,
             ),
-            // Scrollable Form Content
-            SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Back Button
-                    IconButton(
+          ),
+          // SafeArea is placed inside the container to pad the actual content column
+          child: SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                  horizontal: 16.0), // Horizontal padding for content
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                // Ensures Column takes minimum vertical space needed by children inside SingleChildScrollView
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // --- Content Widgets Start ---
+                  Padding(
+                    padding: const EdgeInsets.only(
+                        top: 16.0), // Top padding for back button
+                    child: IconButton(
                       icon: Image.asset(
-                        'assets/images/app_navigation_left_icon.png',
-                        width: 50,
-                        height: 50,
+                        'assets/images/app_navigation_left_icon.png', // Ensure this asset exists
+                        width: 30,
+                        height: 30,
                         fit: BoxFit.contain,
                       ),
+                      iconSize: 30,
+                      padding: EdgeInsets.zero,
+                      constraints: const BoxConstraints(),
                       onPressed: () {
-                        // Go back to the previous screen (likely LoginSignupPage1)
                         if (Navigator.canPop(context)) {
                           Navigator.pop(context);
                         } else {
-                          // Fallback if cannot pop (e.g., started directly on this page)
                           Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
                                   builder: (_) => const LoginSignupPage1()));
                         }
-                        // Navigator.pushReplacement( // Use Replacement to avoid stacking signup pages
-                        //   context,
-                        //   MaterialPageRoute(
-                        //     builder: (context) => const LoginSignupPage1(),
-                        //   ),
-                        // );
                       },
                     ),
-                    const SizedBox(height: 24),
-                    // Title
-                    Text(
-                      'Create \nAccount',
-                      style: jerseyStyle(64).copyWith(height: 0.8),
-                    ),
-                    // Spacing before form fields - Adjust as needed
-                    const SizedBox(
-                        height: 100), // Reduced space maybe? Adjust visually
-
-                    // --- Form Fields ---
-                    FullNameInputWidget(
-                      controller: _nameController,
-                      onValidChanged: _updateNameValidity,
-                    ),
-                    // const SizedBox(height: 5), // Reduced space between fields
-                    EmailInputWidget(
-                      controller: _emailController,
-                      onValidChanged: _updateEmailValidity,
-                    ),
-                    // const SizedBox(height: 5),
-                    PasswordInputWidget(
-                      passwordController: _passwordController,
-                      onValidChanged: _updatePasswordValidity,
-                    ),
-                    // const SizedBox(height: 5),
-                    ConfirmPasswordInputWidget(
-                      passwordController:
-                          _passwordController, // Pass original password controller
-                      confirmPasswordController:
-                          _confirmPasswordController, // Pass confirm controller
-                      onValidChanged: _updateConfirmPasswordValidity,
-                    ),
-                    const SizedBox(height: 24), // Space before button
-
-                    // --- Sign Up Button ---
-                    Center(
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF562634),
-                          disabledBackgroundColor: const Color(0xFF562634)
-                              .withOpacity(0.5), // Style for disabled state
-                          foregroundColor: Colors.white, // Text color
-                          disabledForegroundColor:
-                              Colors.white.withOpacity(0.7),
-                          fixedSize: const Size(350, 59),
-                          elevation: 0,
-                          shape: RoundedRectangleBorder(
-                            // Keep consistent style
-                            borderRadius: BorderRadius.circular(8),
-                            side: BorderSide(
-                              color: _isFormValid
-                                  ? Colors.white // Border when enabled
-                                  : Colors.white.withOpacity(
-                                      0.5), // Faded border when disabled
-                              width: 2,
-                            ),
+                  ),
+                  const SizedBox(height: 24),
+                  Text(
+                    'Create \nAccount',
+                    style: jerseyStyle(64).copyWith(height: 0.8),
+                  ),
+                  const SizedBox(height: 60), // Adjusted spacing
+                  FullNameInputWidget(
+                    controller: _nameController,
+                    onValidChanged: _updateNameValidity,
+                  ),
+                  const SizedBox(height: 16),
+                  EmailInputWidget(
+                    controller: _emailController,
+                    onValidChanged: _updateEmailValidity,
+                  ),
+                  const SizedBox(height: 16),
+                  PasswordInputWidget(
+                    passwordController: _passwordController,
+                    onValidChanged: _updatePasswordValidity,
+                  ),
+                  const SizedBox(height: 16),
+                  ConfirmPasswordInputWidget(
+                    passwordController: _passwordController,
+                    confirmPasswordController: _confirmPasswordController,
+                    onValidChanged: _updateConfirmPasswordValidity,
+                  ),
+                  const SizedBox(height: 40),
+                  Center(
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: darkMaroon,
+                        disabledBackgroundColor: darkMaroon.withOpacity(0.5),
+                        foregroundColor: brightWhite,
+                        disabledForegroundColor: brightWhite.withOpacity(0.7),
+                        minimumSize: const Size(double.infinity, 59),
+                        padding: EdgeInsets.zero,
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          side: BorderSide(
+                            color: _isFormValid
+                                ? brightWhite
+                                : brightWhite.withOpacity(0.5),
+                            width: 2,
                           ),
                         ),
-                        // Enable button only when the form is valid
-                        onPressed: _isFormValid ? _navigateToSignupPage3 : null,
-                        child: Text(
-                          'Sign up',
-                          style: jerseyStyle(
-                              24,
-                              Colors
-                                  .white), // Text color doesn't need disabled state if using foregroundColor
-                        ),
+                      ).copyWith(
+                        elevation: MaterialStateProperty.all(0),
+                      ),
+                      onPressed: _isFormValid ? _navigateToSignupPage3 : null,
+                      child: Text(
+                        'Sign up',
+                        style: jerseyStyle(24, Colors.white),
                       ),
                     ),
-                    const SizedBox(height: 16),
-
-                    // --- OR Divider ---
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Expanded(
-                          child: Padding(
-                            padding:
-                                const EdgeInsets.only(left: 40.0, right: 10.0),
-                            child: Divider(
-                              color: Color(0x9938000A),
-                              thickness: 1,
-                            ),
+                  ),
+                  const SizedBox(height: 10),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: Padding(
+                          padding:
+                              const EdgeInsets.only(left: 40.0, right: 10.0),
+                          child: Divider(
+                            color: hintMaroon,
+                            thickness: 1,
                           ),
-                        ),
-                        Text(
-                          'or',
-                          style: jerseyStyle(24, Color(0x9938000A)),
-                        ),
-                        Expanded(
-                          child: Padding(
-                            padding:
-                                const EdgeInsets.only(left: 10.0, right: 40.0),
-                            child: Divider(
-                              color: Color(0x9938000A),
-                              thickness: 1,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 16),
-
-                    // --- Log In Button ---
-                    Center(
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.white,
-                          foregroundColor: Color(0xFF9B5D6C), // Text color
-                          fixedSize: const Size(350, 59),
-                          elevation: 0,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            side: const BorderSide(
-                              color: Color(0xFF9B5D6C),
-                              width: 2,
-                            ),
-                          ),
-                        ),
-                        onPressed: () {
-                          if (!mounted) return;
-                          // Navigate to Login Page
-                          // Use pushReplacement if coming from Login/Signup choice page
-                          Navigator.pushReplacement(
-                            context,
-                            PageRouteBuilder(
-                              transitionDuration:
-                                  const Duration(milliseconds: 500),
-                              // Slide from left (opposite of sign up)
-                              pageBuilder:
-                                  (context, animation, secondaryAnimation) =>
-                                      const LoginPage1(),
-                              transitionsBuilder: (context, animation,
-                                  secondaryAnimation, child) {
-                                const begin = Offset(-1.0, 0.0); // From Left
-                                const end = Offset.zero;
-                                final tween = Tween(begin: begin, end: end)
-                                    .chain(CurveTween(curve: Curves.easeOut));
-                                final offsetAnimation = animation.drive(tween);
-                                return SlideTransition(
-                                  position: offsetAnimation,
-                                  child: child,
-                                );
-                              },
-                            ),
-                          );
-                        },
-                        child: Text(
-                          'Log in',
-                          style: jerseyStyle(24, Color(0xFF9B5D6C)),
                         ),
                       ),
+                      Text(
+                        'or',
+                        style: jerseyStyle(24, hintMaroon),
+                      ),
+                      Expanded(
+                        child: Padding(
+                          padding:
+                              const EdgeInsets.only(left: 10.0, right: 40.0),
+                          child: Divider(
+                            color: hintMaroon,
+                            thickness: 1,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  Center(
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: brightWhite,
+                        foregroundColor: lightMaroon,
+                        minimumSize: const Size(double.infinity, 59),
+                        padding: EdgeInsets.zero,
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          side: const BorderSide(
+                            color: lightMaroon,
+                            width: 2,
+                          ),
+                        ),
+                      ).copyWith(
+                        elevation: MaterialStateProperty.all(0),
+                      ),
+                      onPressed: () {
+                        if (!mounted) return;
+                        slideTo(context, LoginPage1());
+                      },
+                      child: Text(
+                        'Log in',
+                        style: jerseyStyle(24, lightMaroon),
+                      ),
                     ),
-                    const SizedBox(height: 40), // Padding at the bottom
-                  ],
-                ),
+                  ),
+                  // Added SizedBox at the end inside the Column to ensure some padding at the bottom when scrolled fully.
+                  const SizedBox(height: 5),
+                  // --- Content Widgets End ---
+                ],
               ),
             ),
-          ],
+          ),
         ),
       ),
     );
   }
 }
 
-// --- Main Function (for testing standalone) ---
-void main() {
-  runApp(MaterialApp(
-    debugShowCheckedModeBanner: false,
-    home: SignupPage1(),
-  ));
-}
+// Mock style.dart content if it's not provided, otherwise remove this section
+// Ensure you have the actual style.dart file with correct definitions
+
+/*
+// class MockStyle {
+//   static const Color lightMaroon = Color(0xFFa80040); // Example color
+//   static const Color hintMaroon = Color(0xFF8a405a); // Example color
+//   static const Color errorRed = Colors.red;
+//   static const Color darkMaroon = Color(0xFF6a002a); // Example color
+//   static const Color brightWhite = Colors.white;
+
+//   static TextStyle jerseyStyle(double size, [Color? color]) {
+//     // Assuming 'Jersey10-Regular' is added to pubspec.yaml and assets
+//     return TextStyle(
+//       fontFamily: 'Jersey10', // Use actual font name if different
+//       fontSize: size,
+//       color: color ?? lightMaroon, // Default color if not provided
+//     );
+//   }
+
+//   // Mock slideTo function for navigation
+//   static void slideTo(BuildContext context, Widget page) {
+//      Navigator.push(
+//       context,
+//       PageRouteBuilder(
+//         transitionDuration: const Duration(milliseconds: 500),
+//         pageBuilder: (context, animation, secondaryAnimation) => page,
+//         transitionsBuilder: (context, animation, secondaryAnimation, child) {
+//           const begin = Offset(1.0, 0.0); // Slide from right
+//           const end = Offset.zero;
+//           final tween = Tween(begin: begin, end: end)
+//               .chain(CurveTween(curve: Curves.easeOut));
+//           final offsetAnimation = animation.drive(tween);
+//           return SlideTransition(
+//             position: offsetAnimation,
+//             child: child,
+//           );
+//         },
+//       ),
+//     );
+//   }
+// }
+
+// // Use the mock definitions if style.dart is missing
+// final Color lightMaroon = MockStyle.lightMaroon;
+// final Color hintMaroon = MockStyle.hintMaroon;
+// final Color errorRed = MockStyle.errorRed;
+// final Color darkMaroon = MockStyle.darkMaroon;
+// final Color brightWhite = MockStyle.brightWhite;
+// TextStyle jerseyStyle(double size, [Color? color]) => MockStyle.jerseyStyle(size, color);
+// void slideTo(BuildContext context, Widget page) => MockStyle.slideTo(context, page);
+*/

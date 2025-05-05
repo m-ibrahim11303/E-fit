@@ -1,20 +1,15 @@
+// bootup_page_2.dart
 import 'package:flutter/material.dart';
 import 'bootup_page_3.dart';
+import 'package:login_signup_1/style.dart';
 
 class BootupPage2 extends StatelessWidget {
   const BootupPage2({super.key});
 
-  TextStyle jerseyStyle(double fontSize, [Color color = Colors.white]) {
-    return TextStyle(
-      fontFamily: 'Jersey 25',
-      fontSize: fontSize,
-      color: color,
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.transparent,
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
@@ -30,16 +25,21 @@ class BootupPage2 extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 24.0),
                 child: Column(
                   children: [
-                    Text(
-                      'Track Your Diet',
-                      style: jerseyStyle(48),
-                      textAlign: TextAlign.center,
+                    // Wrap Text with DefaultTextStyle
+                    DefaultTextStyle(
+                      style: jerseyStyle(48, brightWhite),
+                      child: Text(
+                        'Track Your Diet',
+                        textAlign: TextAlign.center,
+                      ),
                     ),
                     const SizedBox(height: 10),
-                    Text(
-                      'Track your meals and get custom AI advice',
-                      style: jerseyStyle(24),
-                      textAlign: TextAlign.center,
+                    DefaultTextStyle(
+                      style: jerseyStyle(24, brightWhite),
+                      child: Text(
+                        'Track your meals and get custom AI advice',
+                        textAlign: TextAlign.center,
+                      ),
                     ),
                     const SizedBox(height: 10),
                   ],
@@ -47,7 +47,6 @@ class BootupPage2 extends StatelessWidget {
               ),
               const SizedBox.shrink(),
               const SizedBox(height: 10),
-              // Modified row: dash is aligned to the left
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -58,8 +57,7 @@ class BootupPage2 extends StatelessWidget {
                       width: 35,
                       height: 5,
                       decoration: ShapeDecoration(
-                        color: const Color(
-                            0xEEE8A3B4), // 80 sets the transparency to about 50%
+                        color: lightMaroon,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(4.0),
                         ),
@@ -68,35 +66,16 @@ class BootupPage2 extends StatelessWidget {
                   ),
                 ],
               ),
-
               const SizedBox(height: 10),
               ElevatedButton(
+                key: const Key('bootupPage2NextButton'),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.white,
                   shape: const CircleBorder(),
                   padding: const EdgeInsets.all(24.0),
                 ),
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    PageRouteBuilder(
-                      transitionDuration: const Duration(milliseconds: 500),
-                      pageBuilder: (context, animation, secondaryAnimation) =>
-                          const BootupPage3(),
-                      transitionsBuilder:
-                          (context, animation, secondaryAnimation, child) {
-                        const begin = Offset(1.0, 0.0);
-                        const end = Offset.zero;
-                        final tween = Tween(begin: begin, end: end);
-                        final offsetAnimation = animation.drive(tween);
-
-                        return SlideTransition(
-                          position: offsetAnimation,
-                          child: child,
-                        );
-                      },
-                    ),
-                  );
+                  slideTo(context, const BootupPage3(), useFadeSlide: true);
                 },
                 child: Image.asset(
                   'assets/images/bootup_right_arrow_icon.png',
