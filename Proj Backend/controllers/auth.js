@@ -119,9 +119,6 @@ export const deleteUser = async (req, res) => {
     // Delete user and associated data
     await Promise.all([
       User.deleteOne({ email }),
-      UserMeals.deleteMany({ userEmail: email }),
-      waterLog.deleteMany({ email }),
-      UserExercise.deleteMany({ userEmail: email }),
     ]);
 
     return res.status(200).json({ message: "User and all associated data deleted successfully" });
